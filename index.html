@@ -5,21 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TWI - Trading With Integrity</title>
 <style>
-/* 🌌 Slow Starfield Background */
+/* 🌌 Starfield Background */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     background: black;
     color: #fff;
     text-align: center;
-    overflow-x: hidden;
 }
 body::before {
     content: "";
     position: fixed;
     top: 0; left: 0;
-    width: 200%;
-    height: 200%;
+    width: 200%; height: 200%;
     background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
     animation: moveStars 120s linear infinite;
     opacity: 0.3;
@@ -30,7 +28,7 @@ body::before {
     to { transform: translate(-300px,-300px); }
 }
 
-/* 🔥 Lightsaber Ticker Bar */
+/* 🔥 Lightsaber Ticker */
 .ticker {
     padding: 8px 0;
     font-weight: bold;
@@ -38,7 +36,6 @@ body::before {
     overflow: hidden;
     background: linear-gradient(90deg, #111, #003, #111);
     box-shadow: 0 0 20px #00f;
-    position: relative;
 }
 .ticker-text {
     display: inline-block;
@@ -48,7 +45,6 @@ body::before {
     0% { transform: translateX(100%); }
     100% { transform: translateX(-100%); }
 }
-/* Family lightsaber colors: Dad blue → Mom purple → Kids seafoam → Kids red */
 @keyframes familyColors {
     0% { color: #0000ff; text-shadow: 0 0 10px #0000ff; }
     25% { color: #800080; text-shadow: 0 0 10px #800080; }
@@ -57,12 +53,11 @@ body::before {
     100% { color: #0000ff; text-shadow: 0 0 10px #0000ff; }
 }
 
-/* ⚡ Header */
+/* ⚡ Header Glow */
 header {
     font-size: 30px;
     font-weight: bold;
     padding: 20px;
-    background: #0d1117;
     text-transform: uppercase;
     color: transparent;
     background-image: linear-gradient(90deg,#0000ff,#800080,#20B2AA,#ff0000,#0000ff);
@@ -78,10 +73,9 @@ header {
 
 /* Countdown */
 .countdown-box {
-    margin-top: -10px;
     font-size: 1.2rem;
     color: #FFD700;
-    text-shadow: 0 0 10px #FFD700, 0 0 20px #FFA500;
+    text-shadow: 0 0 10px #FFD700;
 }
 
 /* Buttons */
@@ -98,6 +92,10 @@ header {
 }
 .btn:hover {
     transform: scale(1.05);
+}
+.btn-signals {
+    background: #00BFFF;
+    box-shadow: 0 0 20px #00BFFF, 0 0 40px #00BFFF;
 }
 
 /* PayPal Buttons */
@@ -176,7 +174,7 @@ header {
 <!-- Telegram -->
 <div class="section">
     <h2>📢 Free Signals Before Launch</h2>
-    <a class="btn" style="background:#0088cc;" href="https://t.me/califorexlifystyle" target="_blank">Join Free Signals</a>
+    <a class="btn btn-signals" href="https://t.me/califorexlifystyle" target="_blank" onclick="playSaber()">Join Free Signals</a>
 </div>
 
 <!-- Plans -->
@@ -206,9 +204,7 @@ header {
 <script>
 /* Sounds */
 let saberSound = new Audio("https://www.myinstants.com/media/sounds/lightsaber_ignition.mp3");
-let humSound = new Audio("https://www.myinstants.com/media/sounds/lightsaberhum.mp3");
 let crawlMusic = new Audio("https://ia802707.us.archive.org/33/items/StarWarsTheme/StarWarsTheme.mp3");
-humSound.loop = true;
 crawlMusic.loop = true;
 crawlMusic.volume = 0.2;
 
@@ -237,17 +233,21 @@ togglePayPal("termsSignals","paypalSignals");
 function openModal() {
     document.getElementById("termsModal").style.display="flex";
     saberSound.play();
-    humSound.play();
-    crawlMusic.play();
 }
 function closeModal() {
     document.getElementById("termsModal").style.display="none";
-    humSound.pause(); humSound.currentTime=0;
-    crawlMusic.pause(); crawlMusic.currentTime=0;
 }
 
-/* Play music after first click */
-document.body.addEventListener("click",()=>{ crawlMusic.play(); },{once:true});
+/* Play Saber sound on Join Free Signals */
+function playSaber() {
+    saberSound.play();
+}
+
+/* Auto-open Disclaimer on first load */
+window.onload = () => {
+    openModal();
+    crawlMusic.play();
+};
 </script>
 
 </body>
