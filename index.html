@@ -17,7 +17,8 @@ body::before {
     content: "";
     position: fixed;
     top: 0; left: 0;
-    width: 200%; height: 200%;
+    width: 200%;
+    height: 200%;
     background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
     animation: moveStars 120s linear infinite;
     opacity: 0.3;
@@ -152,6 +153,46 @@ header {
     border-radius: 5px;
     cursor: pointer;
 }
+
+/* 📊 Strategy Section */
+.strategy-section {
+    max-width: 900px;
+    margin: 20px auto;
+}
+.strategy-title {
+    font-size: 1.5rem;
+    color: #00ffff;
+    text-shadow: 0 0 10px #00ffff;
+    margin-bottom: 20px;
+}
+.strategy-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+.strategy-box {
+    flex: 1 1 300px;
+    padding: 15px;
+    border-radius: 10px;
+    color: #fff;
+    box-shadow: 0 0 20px;
+    animation: pulseGlow 3s infinite alternate;
+}
+@keyframes pulseGlow {
+    from { box-shadow: 0 0 15px; }
+    to { box-shadow: 0 0 25px; }
+}
+.bullish {
+    background: rgba(0,0,50,0.5);
+    border: 2px solid #00BFFF;
+    box-shadow: 0 0 15px #00BFFF;
+}
+.bearish {
+    background: rgba(50,0,0,0.5);
+    border: 2px solid #FF0000;
+    box-shadow: 0 0 15px #FF0000;
+}
 </style>
 </head>
 <body>
@@ -174,7 +215,7 @@ header {
 <!-- Telegram -->
 <div class="section">
     <h2>📢 Free Signals Before Launch</h2>
-    <a class="btn btn-signals" href="https://t.me/califorexlifystyle" target="_blank" onclick="playSaber()">Join Free Signals</a>
+    <a class="btn btn-signals" href="https://t.me/califorexlifystyle" target="_blank">Join Free Signals</a>
 </div>
 
 <!-- Plans -->
@@ -182,10 +223,10 @@ header {
     <h2>💳 Subscription Plans</h2>
     <p>Indicator Pro (Jedi Blue): $39.99/month</p>
     <label><input type="checkbox" id="termsPro"> I agree to <a onclick="openModal()">Terms & Disclaimer</a></label><br>
-    <a id="paypalPro" class="paypal-btn" style="background:#0000ff;" href="https://www.paypal.com/paypalme/alandrum24/39.99">PayPal</a>
+    <a id="paypalPro" class="paypal-btn" style="background:#0000ff;" href="https://paypal.me/alandrum24/39.99">PayPal</a>
     <p>Signals Only (Sith Red): $19.99/month</p>
     <label><input type="checkbox" id="termsSignals"> I agree to <a onclick="openModal()">Terms & Disclaimer</a></label><br>
-    <a id="paypalSignals" class="paypal-btn" style="background:#8B0000;" href="https://www.paypal.com/paypalme/alandrum24/19.99">PayPal</a>
+    <a id="paypalSignals" class="paypal-btn" style="background:#8B0000;" href="https://paypal.me/alandrum24/19.99">PayPal</a>
 </div>
 
 <!-- Disclaimer Modal -->
@@ -201,13 +242,40 @@ header {
     </div>
 </div>
 
-<script>
-/* Sounds */
-let saberSound = new Audio("https://www.myinstants.com/media/sounds/lightsaber_ignition.mp3");
-let crawlMusic = new Audio("https://ia802707.us.archive.org/33/items/StarWarsTheme/StarWarsTheme.mp3");
-crawlMusic.loop = true;
-crawlMusic.volume = 0.2;
+<!-- 📊 Strategy Section -->
+<div class="section strategy-section">
+    <div class="strategy-title">📊 Example Strategies Detected by TWI Scalper Pro</div>
+    <div class="strategy-container">
+        <!-- Bullish Box -->
+        <div class="strategy-box bullish">
+            <h3>📈 CADJPY Bullish Setup</h3>
+            <ul style="text-align:left;">
+                <li>Trend: Strong Bull on M15 + H1</li>
+                <li>Volume: Increasing on breakout</li>
+                <li>RSI: Near Low (oversold reversal)</li>
+                <li>Momentum: Strong bullish push</li>
+                <li>Entry: Long on EMA21 break</li>
+                <li>SL: Below recent swing low</li>
+                <li>TP: Resistance zone or liquidity area</li>
+            </ul>
+        </div>
+        <!-- Bearish Box -->
+        <div class="strategy-box bearish">
+            <h3>📉 CHFJPY Bearish Setup</h3>
+            <ul style="text-align:left;">
+                <li>Trend: Strong Bear on M15 + H1</li>
+                <li>Volume: Low during pullback</li>
+                <li>RSI: Near High (overbought)</li>
+                <li>Momentum: Strong bearish pressure</li>
+                <li>Entry: Short on EMA21 break</li>
+                <li>SL: Above recent swing high</li>
+                <li>TP: Support zone or liquidity area</li>
+            </ul>
+        </div>
+    </div>
+</div>
 
+<script>
 /* Countdown */
 function updateCountdown() {
     const launchDate = new Date("August 24, 2025").getTime();
@@ -232,22 +300,10 @@ togglePayPal("termsSignals","paypalSignals");
 /* Modal */
 function openModal() {
     document.getElementById("termsModal").style.display="flex";
-    saberSound.play();
 }
 function closeModal() {
     document.getElementById("termsModal").style.display="none";
 }
-
-/* Play Saber sound on Join Free Signals */
-function playSaber() {
-    saberSound.play();
-}
-
-/* Auto-open Disclaimer on first load */
-window.onload = () => {
-    openModal();
-    crawlMusic.play();
-};
 </script>
 
 </body>
