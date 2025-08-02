@@ -31,7 +31,7 @@
         to { transform: translate(-500px,-500px); }
     }
 
-    /* 🔥 Lightsaber Ticker Bar */
+    /* 🔥 Lightsaber Ticker */
     .ticker {
         background: linear-gradient(90deg, #111, #003, #111);
         padding: 8px 0;
@@ -40,19 +40,6 @@
         white-space: nowrap;
         box-shadow: 0 0 10px #00f, 0 0 20px #0ff;
         position: relative;
-    }
-    .ticker::after {
-        content: "";
-        position: absolute;
-        top: 0; left: -50%;
-        width: 50%;
-        height: 100%;
-        background: linear-gradient(120deg, transparent, rgba(0,255,255,0.4), transparent);
-        animation: saberSweep 3s infinite;
-    }
-    @keyframes saberSweep {
-        from { left: -50%; }
-        to { left: 100%; }
     }
     .ticker-text {
         display: inline-block;
@@ -78,17 +65,9 @@
         letter-spacing: 2px;
         color: transparent;
         animation: lightsaberGlow 3s linear infinite;
-        background-image: linear-gradient(
-            90deg,
-            #00bfff,
-            #00ffff,
-            #00ff99,
-            #00ffff,
-            #00bfff
-        );
+        background-image: linear-gradient(90deg,#00bfff,#00ffff,#00ff99,#00ffff,#00bfff);
         background-size: 300% auto;
         -webkit-background-clip: text;
-        text-shadow: 0 0 10px #00ffff;
     }
     @keyframes lightsaberGlow {
         0% { background-position: 0% 50%; }
@@ -109,30 +88,6 @@
         to { text-shadow: 0 0 15px #FFA500, 0 0 30px #FFD700; }
     }
 
-    /* Buttons */
-    .btn {
-        display: inline-block;
-        padding: 12px 20px;
-        margin: 15px;
-        text-decoration: none;
-        border-radius: 5px;
-        font-weight: bold;
-        transition: all 0.3s ease;
-        background: #b22222;
-        color: #fff;
-        box-shadow: 0 0 10px #b22222;
-        animation: glowPulse 1.5s infinite alternate;
-    }
-    .btn:hover {
-        background: #ff4040;
-        box-shadow: 0 0 20px #ff4040;
-        transform: scale(1.05);
-    }
-    @keyframes glowPulse {
-        from { box-shadow: 0 0 10px #ff4040, 0 0 20px #ff4040; }
-        to { box-shadow: 0 0 15px #ff6666, 0 0 25px #ff6666; }
-    }
-
     /* PayPal Buttons */
     .paypal-btn {
         display: inline-block;
@@ -143,29 +98,21 @@
         text-decoration: none;
         opacity: 0.4;
         pointer-events: none;
-        transition: all 0.3s ease;
     }
     .paypal-enabled {
         opacity: 1;
         pointer-events: auto;
         animation: glowPaypal 1.5s infinite alternate;
     }
-    .paypal-jedi {
-        background: #003087;
-        box-shadow: 0 0 10px #00bfff;
-    }
+    .paypal-jedi { background: #003087; box-shadow: 0 0 10px #00bfff; }
     @keyframes glowPaypal {
-        from { box-shadow: 0 0 10px #00bfff, 0 0 20px #00bfff; }
-        to { box-shadow: 0 0 15px #00ffff, 0 0 30px #00ffff; }
+        from { box-shadow: 0 0 10px #00bfff; }
+        to { box-shadow: 0 0 15px #00ffff; }
     }
-    .paypal-sith {
-        background: #8B0000;
-        box-shadow: 0 0 10px #ff0000;
-        animation: glowSith 1.5s infinite alternate;
-    }
+    .paypal-sith { background: #8B0000; animation: glowSith 1.5s infinite alternate; }
     @keyframes glowSith {
-        from { box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000; }
-        to { box-shadow: 0 0 15px #ff5555, 0 0 30px #ff0000; }
+        from { box-shadow: 0 0 10px #ff0000; }
+        to { box-shadow: 0 0 15px #ff5555; }
     }
 
     /* Sections */
@@ -175,11 +122,6 @@
         margin: 20px auto;
         border-radius: 10px;
         max-width: 800px;
-        box-shadow: 0 0 15px rgba(0,0,0,0.8);
-    }
-    h2 {
-        color: #00bfff;
-        text-shadow: 0 0 10px #00bfff;
     }
 
     /* Modal */
@@ -191,52 +133,54 @@
         width: 100%; height: 100%;
         justify-content: center;
         align-items: center;
-        backdrop-filter: blur(3px);
+        background: black;
+        perspective: 800px;
+        overflow: hidden;
     }
     .modal-content {
         width: 80%;
         max-width: 500px;
-        height: 70%;
-        background: black;
+        height: 80%;
+        position: relative;
         overflow: hidden;
         border: 2px solid #00ffff;
         border-radius: 10px;
+        background: black;
         box-shadow: 0 0 30px #00ffff;
-        position: relative;
     }
 
-    /* Scrolling Starfield inside Modal */
     .modal-stars {
         position: absolute;
         top: 0; left: 0;
         width: 200%;
         height: 200%;
         background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
-        animation: moveModalStars 40s linear infinite;
+        animation: moveModalStars 60s linear infinite;
         z-index: 0;
     }
     @keyframes moveModalStars {
         from { transform: translate(0,0); }
-        to { transform: translate(-300px,-300px); }
+        to { transform: translate(-400px,-400px); }
     }
 
-    /* Crawl Text */
+    /* Crawl */
     .crawl {
-        position: relative;
-        z-index: 1;
+        position: absolute;
+        bottom: -100%;
+        width: 100%;
         font-size: 1.5rem;
         font-weight: bold;
         color: #FFD700;
         text-shadow: 0 0 10px #FFD700, 0 0 20px #FFA500;
-        animation: crawlAnim 8s ease-out forwards;
         transform-origin: 50% 100%;
-        padding: 20px;
+        animation: crawlAnim 20s linear forwards;
+        z-index: 1;
         text-align: center;
     }
     @keyframes crawlAnim {
-        0% { transform: rotateX(25deg) translateY(200px) scale(1.2); opacity: 0; }
-        30% { opacity: 1; }
-        100% { transform: rotateX(25deg) translateY(-300px) scale(0.7); opacity: 1; }
+        0% { transform: rotateX(25deg) translateY(300px) scale(1.2); opacity: 1; }
+        50% { transform: rotateX(25deg) translateY(-100px) scale(0.8); opacity: 1; }
+        100% { transform: rotateX(25deg) translateY(-600px) scale(0.5); opacity: 0; }
     }
 
     .close-btn {
@@ -245,13 +189,10 @@
         background: #b22222;
         padding: 10px;
         border-radius: 5px;
-        text-align: center;
         color: #fff;
         cursor: pointer;
-        width: 100px;
-        text-decoration: none;
-        position: relative;
         z-index: 2;
+        position: relative;
     }
 </style>
 </head>
@@ -265,40 +206,25 @@
 </div>
 
 <!-- ⚡ Lightsaber Header -->
-<header>
-🚀 TWI - Trading With Integrity
-</header>
+<header>🚀 TWI - Trading With Integrity</header>
 
 <!-- Countdown -->
-<div class="countdown-box">
-Launch in <span id="headerCountdown"></span>
-</div>
+<div class="countdown-box">Launch in <span id="headerCountdown"></span></div>
 
 <!-- Sections -->
 <div class="section">
-    <h2>📢 Free Signals Before Launch (8/24)</h2>
+    <h2>📢 Free Signals Before Launch</h2>
     <a class="btn" href="https://t.me/califorexlifystyle" target="_blank">Join Free Signals</a>
 </div>
 
 <div class="section">
-    <h2>💡 About TWI Scalper Pro</h2>
-    <ul>
-        <li>✅ Trend detection across multiple timeframes</li>
-        <li>✅ Strong momentum filtering</li>
-        <li>✅ Alerts for sniper entry setups</li>
-        <li>✅ Visual dashboard for trend, volume, and signal status</li>
-    </ul>
-</div>
-
-<div class="section">
     <h2>💳 Subscription Plans</h2>
-    <p><strong>Indicator Pro Status (Jedi Blue):</strong> $39.99/month</p>
-    <label><input type="checkbox" id="termsPro"> I agree to <a onclick="openModal()">Terms & Disclaimer</a></label><br>
-    <a id="paypalPro" class="paypal-btn paypal-jedi" href="https://www.paypal.com/paypalme/alandrum24/39.99" target="_blank">Subscribe via PayPal</a>
-
-    <p><strong>Signals Only (Sith Red):</strong> $19.99/month</p>
-    <label><input type="checkbox" id="termsSignals"> I agree to <a onclick="openModal()">Terms & Disclaimer</a></label><br>
-    <a id="paypalSignals" class="paypal-btn paypal-sith" href="https://www.paypal.com/paypalme/alandrum24/19.99" target="_blank">Subscribe via PayPal</a>
+    <p>Indicator Pro (Jedi Blue): $39.99/month</p>
+    <label><input type="checkbox" id="termsPro"> I agree to <a onclick="openModal()">Terms</a></label><br>
+    <a id="paypalPro" class="paypal-btn paypal-jedi" href="https://www.paypal.com/paypalme/alandrum24/39.99">PayPal</a>
+    <p>Signals Only (Sith Red): $19.99/month</p>
+    <label><input type="checkbox" id="termsSignals"> I agree to <a onclick="openModal()">Terms</a></label><br>
+    <a id="paypalSignals" class="paypal-btn paypal-sith" href="https://www.paypal.com/paypalme/alandrum24/19.99">PayPal</a>
 </div>
 
 <!-- Modal -->
@@ -307,10 +233,10 @@ Launch in <span id="headerCountdown"></span>
         <div class="modal-stars"></div>
         <div class="crawl">
             📜 Terms & Disclaimer<br><br>
-            Trading involves substantial risk and is not suitable for all investors.<br>
-            Past performance does not guarantee future results.<br>
-            No guarantees are made for profits or returns.<br>
-            Only trade with money you can afford to lose.
+            Trading involves substantial risk.<br>
+            Past performance does not guarantee results.<br>
+            No guarantees are made for profits.<br>
+            Only trade money you can afford to lose.
         </div>
         <a class="close-btn" onclick="closeModal()">Close</a>
     </div>
@@ -321,39 +247,35 @@ let saberSound = new Audio("https://www.myinstants.com/media/sounds/lightsaber_i
 let humSound = new Audio("https://www.myinstants.com/media/sounds/lightsaberhum.mp3");
 let crawlMusic = new Audio("https://ia802707.us.archive.org/33/items/StarWarsTheme/StarWarsTheme.mp3");
 humSound.loop = true;
-crawlMusic.loop = false;
 crawlMusic.volume = 0.4;
 
 function updateCountdown() {
-    const launchDate = new Date("August 24, 2025 00:00:00").getTime();
+    const launchDate = new Date("August 24, 2025").getTime();
     const now = new Date().getTime();
-    const distance = launchDate - now;
-    document.getElementById("tickerCountdown").innerHTML =
-    document.getElementById("headerCountdown").innerHTML =
-    distance < 0 ? "🚀 Launched!" :
-    `${Math.floor(distance / (1000 * 60 * 60 * 24))}d ${Math.floor((distance / (1000 * 60 * 60)) % 24)}h ${Math.floor((distance / (1000 * 60)) % 60)}m ${Math.floor((distance / 1000) % 60)}s`;
+    const d = launchDate - now;
+    const time = d < 0 ? "🚀 Launched!" :
+    `${Math.floor(d/(1000*60*60*24))}d ${Math.floor((d/(1000*60*60))%24)}h ${Math.floor((d/(1000*60))%60)}m ${Math.floor((d/1000)%60)}s`;
+    document.getElementById("tickerCountdown").innerHTML = time;
+    document.getElementById("headerCountdown").innerHTML = time;
 }
-setInterval(updateCountdown, 1000);
+setInterval(updateCountdown,1000);
 
-function togglePayPal(termsId, paypalId) {
-    document.getElementById(termsId).addEventListener("change", e => {
-        document.getElementById(paypalId).classList.toggle("paypal-enabled", e.target.checked);
+function togglePayPal(t,p) {
+    document.getElementById(t).addEventListener("change",e=>{
+        document.getElementById(p).classList.toggle("paypal-enabled", e.target.checked);
     });
 }
-togglePayPal("termsPro", "paypalPro");
-togglePayPal("termsSignals", "paypalSignals");
+togglePayPal("termsPro","paypalPro");
+togglePayPal("termsSignals","paypalSignals");
 
 function openModal() {
     document.getElementById("termsModal").style.display = "flex";
-    saberSound.play();
-    humSound.play();
-    crawlMusic.currentTime = 0;
-    crawlMusic.play();
+    saberSound.play(); humSound.play(); crawlMusic.currentTime=0; crawlMusic.play();
 }
 function closeModal() {
     document.getElementById("termsModal").style.display = "none";
-    humSound.pause(); humSound.currentTime = 0;
-    crawlMusic.pause(); crawlMusic.currentTime = 0;
+    humSound.pause(); humSound.currentTime=0;
+    crawlMusic.pause(); crawlMusic.currentTime=0;
 }
 </script>
 </body>
