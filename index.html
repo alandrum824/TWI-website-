@@ -1,221 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TWI - Trading With Integrity</title>
-  <style>
-    body { margin:0; font-family:Arial,sans-serif; background:#000; color:#fff; text-align:center; }
-
-    /* Ticker */
-    .ticker {
-      background:#111; color:#FFD700; padding:8px 0;
-      font-weight:bold; text-shadow:0 0 5px #FFD700, 0 0 10px #FFD700;
-      overflow:hidden; white-space:nowrap;
-      box-shadow:0 0 5px #FFD700,0 0 15px #FFD700;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TWI - Trading With Integrity</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #000;
+        color: #fff;
+        text-align: center;
     }
-    .ticker-text { display:inline-block; animation:scrollText 15s linear infinite; }
-    @keyframes scrollText { 0%{transform:translateX(100%);} 100%{transform:translateX(-100%);} }
-
-    /* Lightsaber Bar */
-    .lightsaber-bar { position:relative; width:100%; height:6px; margin-bottom:10px; overflow:hidden; }
-    .lightsaber-blade { position:absolute; height:6px; width:50%; background:linear-gradient(90deg,#00BFFF,#1E90FF,white); animation:lightsaberMove 2.5s infinite linear,saberColorCycle 6s infinite linear; }
-    @keyframes lightsaberMove { 0%{left:-50%;} 100%{left:100%;} }
-    @keyframes saberColorCycle {
-      0%{background:linear-gradient(90deg,#00BFFF,#1E90FF,white);}
-      33%{background:linear-gradient(90deg,#32CD32,#00FF00,white);}
-      66%{background:linear-gradient(90deg,#FF4500,#FF0000,white);}
-      100%{background:linear-gradient(90deg,#00BFFF,#1E90FF,white);}
+    header {
+        background: #0d1117;
+        padding: 20px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #00bfff;
     }
-
-    /* Countdown */
-    .countdown { font-size:1.5rem; margin-bottom:20px; animation:saberColors 3s infinite; }
-    @keyframes saberColors {
-      0%{color:#00BFFF;text-shadow:0 0 10px #00BFFF;}
-      33%{color:#32CD32;text-shadow:0 0 10px #00FF00;}
-      66%{color:#FF4500;text-shadow:0 0 10px #FF0000;}
-      100%{color:#00BFFF;text-shadow:0 0 10px #00BFFF;}
+    .btn {
+        display: inline-block;
+        padding: 12px 20px;
+        margin: 15px;
+        background: #b22222;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
     }
-    .launch-flash { animation:launchIgnition 0.5s infinite alternate; }
-    @keyframes launchIgnition {
-      0%{color:#FF0000;text-shadow:0 0 5px #FFD700;}
-      100%{color:#FFD700;text-shadow:0 0 5px #FF0000;}
+    .section {
+        padding: 20px;
+        background: #111;
+        margin: 20px;
+        border-radius: 8px;
     }
-
-    /* Buttons */
-    .btn, .paypal-btn { border-radius:8px; text-decoration:none; display:inline-block; transition:0.3s; }
-    .btn { background:#b22222; padding:15px 30px; color:#fff; margin-top:20px; }
-    .btn:hover { background:#ff4040; }
-    .paypal-btn { margin-top:10px; padding:12px 25px; pointer-events:none; opacity:0.5; }
-    .paypal-enabled { pointer-events:auto; opacity:1; }
-    .paypal-error { outline:2px solid red; box-shadow:0 0 10px red; }
-    .paypal-blue { background:#003087; }
-    .paypal-green { background:#006400; }
-
-    /* Pricing */
-    .pricing { display:flex; flex-direction:column; gap:20px; margin:30px auto; max-width:600px; }
-    .pricing-card { background:#111; padding:20px; border-radius:10px; }
-
-    /* Proof Section */
-    .proof-section { margin:30px auto; max-width:900px; }
-    .proof-gallery { display:flex; flex-wrap:wrap; justify-content:center; gap:15px; margin-top:15px; }
-    .proof-img-container { width:250px; position:relative; }
-    .proof-img { width:100%; border-radius:8px; cursor:pointer; transition:0.3s; }
-    .proof-img:hover { transform:scale(1.05); }
-    .caption { font-size:0.9rem; margin-top:5px; color:#FFD700; }
-
-    /* LIVE Badge */
-    .live-badge {
-      position:absolute; top:8px; left:8px;
-      background:red; color:white;
-      padding:3px 6px; font-size:0.8rem; font-weight:bold;
-      border-radius:4px; animation:flashLive 1s infinite alternate;
+    .price-box {
+        background: #1e1e1e;
+        border: 1px solid #333;
+        padding: 15px;
+        margin: 15px auto;
+        width: 80%;
+        border-radius: 8px;
     }
-    @keyframes flashLive {
-      0% { opacity:1; }
-      100% { opacity:0.3; }
+    footer {
+        font-size: 12px;
+        color: #aaa;
+        padding: 15px;
     }
-
-    /* Lightbox */
-    .lightbox { display:none; position:fixed; z-index:999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.9); justify-content:center; align-items:center; }
-    .lightbox img { max-width:90%; max-height:90%; border:2px solid #00CED1; }
-    .lightbox:target { display:flex; }
-
-    /* Live Example */
-    .live-example { margin:30px auto; max-width:900px; }
-    .live-example h2 { color:#FFD700; text-shadow:0 0 10px #FFD700; }
-    .live-gif { width:100%; max-width:800px; border-radius:8px; border:2px solid #FFD700; box-shadow:0 0 10px #FFD700; }
-
-    /* Features */
-    .features { margin:30px auto; max-width:900px; text-align:left; padding:0 20px; }
-    .features h2 { color:#FFD700; text-align:center; text-shadow:0 0 10px #FFD700; }
-    .features ul { list-style:none; padding:0; }
-    .features li { background:rgba(255,255,255,0.05); margin:10px 0; padding:10px; border-left:3px solid #FFD700; }
-
-    /* Disclaimer */
-    .disclaimer { margin:30px auto; max-width:700px; font-size:0.9rem; color:#ff6666; background:rgba(50,0,0,0.6); padding:10px; border-radius:8px; }
-  </style>
+</style>
 </head>
 <body>
 
-  <!-- Ticker -->
-  <div class="ticker">
-    <div class="ticker-text">
-      🚨 Join Now Before Launch — Free Signals Until 8/24 — Launch in <span id="tickerCountdown"></span> — Don’t Miss Out!
-    </div>
-  </div>
+<header>
+🚀 TWI - Trading With Integrity
+</header>
 
-  <!-- Lightsaber Animation -->
-  <div class="lightsaber-bar"><div class="lightsaber-blade"></div></div>
-  
-  <!-- Countdown -->
-  <div class="countdown" id="countdown">Loading countdown...</div>
+<div class="section">
+    <h2>📢 Free Signals Before Launch (8/24)</h2>
+    <a class="btn" href="https://t.me/califorexlifystyle" target="_blank">Join Free Signals</a>
+</div>
 
-  <header>
-    <h1>TWI - Trading With Integrity</h1>
-    <p>🚀 Free Signals Live Before Launch (8/24)</p>
-    <a href="tg://resolve?domain=califorexlifystyle" onclick="window.location='https://t.me/califorexlifystyle';" target="_blank" class="btn">Join Free Signals</a>
-  </header>
-
-  <!-- Pricing -->
-  <section>
-    <h2>🔥 Pricing Plans</h2>
-    <div class="pricing">
-      <div class="pricing-card">
-        <h3>Indicator Pro Status</h3>
-        <p>$39.99 / month</p>
-        <label><input type="checkbox" id="termsPro"> I agree to terms & disclaimer</label><br>
-        <a id="paypalPro" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=alandrum24@gmail.com&item_name=TWI+Indicator+Pro&amount=39.99&currency_code=USD" target="_blank" class="paypal-btn paypal-blue">Subscribe via PayPal</a>
-      </div>
-      <div class="pricing-card">
-        <h3>Daily Signals (1–3 Signals / Day)</h3>
-        <p>$19.99 / month</p>
-        <label><input type="checkbox" id="termsSignals"> I agree to terms & disclaimer</label><br>
-        <a id="paypalSignals" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=alandrum24@gmail.com&item_name=TWI+Daily+Signals&amount=19.99&currency_code=USD" target="_blank" class="paypal-btn paypal-green">Subscribe via PayPal</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Proof Section -->
-  <section class="proof-section">
-    <h2>📸 Proof of Results</h2>
-    <div class="proof-gallery">
-      <div class="proof-img-container">
-        <a href="#lightbox1"><img src="https://i.imgur.com/vAb8jPi.jpeg" alt="Proof 1" class="proof-img"></a>
-        <div class="caption">CADJPY – Strong Bull Trend Setup</div>
-      </div>
-      <div class="proof-img-container">
-        <a href="#lightbox2"><img src="https://i.imgur.com/nbMsvmK.jpeg" alt="Proof 2" class="proof-img"></a>
-        <div class="caption">CHFJPY – Strong Bear Short Entry</div>
-      </div>
-      <div class="proof-img-container">
-        <a href="#lightbox3"><img src="https://i.imgur.com/vpvQn3b.jpeg" alt="Proof 3" class="proof-img"></a>
-        <div class="caption">CHFJPY – Weak Bear Trend Setup</div>
-      </div>
-      <div class="proof-img-container">
-        <div class="live-badge">LIVE</div>
-        <a href="https://t.me/califorexlifystyle" target="_blank">
-          <img src="https://t.me/califorexlifystyle/latest" alt="Live Proof" class="proof-img">
-        </a>
-        <div class="caption">📡 Live Trade Update (Click to View on Telegram)</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Lightbox -->
-  <div id="lightbox1" class="lightbox"><a href="#"><img src="https://i.imgur.com/vAb8jPi.jpeg"></a></div>
-  <div id="lightbox2" class="lightbox"><a href="#"><img src="https://i.imgur.com/nbMsvmK.jpeg"></a></div>
-  <div id="lightbox3" class="lightbox"><a href="#"><img src="https://i.imgur.com/vpvQn3b.jpeg"></a></div>
-
-  <!-- Live Example -->
-  <section class="live-example">
-    <h2>🎥 Live Example</h2>
-    <img src="live_example.gif" alt="Clean Scalper Pro in Action" class="live-gif">
-  </section>
-
-  <!-- Features -->
-  <section class="features">
-    <h2>🛠 How Clean Scalper Pro Works</h2>
-    <ul>
-      <li>✅ Sniper Entries Only – Filters out noise for high-quality trades only when market aligns.</li>
-      <li>📊 Multi-Timeframe Trend Filter – Confirms entries with 15m & 1H trends in agreement.</li>
-      <li>⚡ EMA Precision – Uses EMA8, EMA21 & EMA50 for trend strength & price alignment.</li>
-      <li>📈 Volume Surge Detection – Requires 1.6× average volume for trade confirmation.</li>
-      <li>🎯 ATR-Based Risk Management – Automatic SL & TP based on ATR multipliers.</li>
-      <li>🚫 Avoids Choppy Zones – Filters out trades near recent highs/lows to avoid fakeouts.</li>
-      <li>📌 Key Level Mapping – Auto-draws support/resistance zones for sniper precision.</li>
-      <li>🖥 Compact Dashboard – Real-time trend, volume, RSI, and trade readiness display.</li>
+<div class="section">
+    <h2>💡 About TWI Scalper Pro</h2>
+    <p>
+        Our precision scalper indicator uses trend analysis, volume confirmation, 
+        and sniper entries to identify high-probability trades.
+    </p>
+    <ul style="text-align:left; max-width:600px; margin:auto;">
+        <li>✅ Trend detection across multiple timeframes</li>
+        <li>✅ Strong momentum filtering</li>
+        <li>✅ Alerts for sniper entry setups</li>
+        <li>✅ Visual dashboard for trend, volume, and signal status</li>
     </ul>
-  </section>
+</div>
 
-  <!-- Disclaimer -->
-  <div class="disclaimer">
-    ⚠️ No refunds. Results are not guaranteed. Trading involves risk. Past performance does not guarantee future results.
-  </div>
+<div class="section">
+    <h2>💳 Subscription Plans</h2>
+    <div class="price-box">
+        <p><strong>Indicator Pro Status:</strong> $39.99/month</p>
+        <a class="btn" href="https://www.paypal.com/paypalme/alandrum24/39.99" target="_blank">Subscribe Now</a>
+    </div>
+    <div class="price-box">
+        <p><strong>Signals Only (1-3 daily):</strong> $19.99/month</p>
+        <a class="btn" href="https://www.paypal.com/paypalme/alandrum24/19.99" target="_blank">Subscribe Now</a>
+    </div>
+</div>
 
-  <script>
-    function updateCountdown(){
-      const launchDate=new Date("August 24, 2025 00:00:00").getTime();
-      const now=new Date().getTime();
-      const distance=launchDate-now;
-      const el=document.getElementById("countdown");
-      const ticker=document.getElementById("tickerCountdown");
-      if(distance<0){ el.innerHTML="🚀 Launch Day!"; ticker.innerHTML="0d 0h 0m 0s"; el.classList.add("launch-flash"); return; }
-      const d=Math.floor(distance/(1000*60*60*24));
-      const h=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-      const m=Math.floor((distance%(1000*60*60))/(1000*60));
-      const s=Math.floor((distance%(1000*60))/1000);
-      el.innerHTML=`⏳ ${d}d ${h}h ${m}m ${s}s until Launch`;
-      ticker.innerHTML=`${d}d ${h}h ${m}m ${s}s`;
-    }
-    setInterval(updateCountdown,1000); updateCountdown();
-    function togglePayPal(terms,paypal){
-      const c=document.getElementById(terms),b=document.getElementById(paypal);
-      c.addEventListener("change",()=>{ c.checked?b.classList.add("paypal-enabled"):b.classList.remove("paypal-enabled"); });
-      b.addEventListener("click",e=>{ if(!c.checked){ e.preventDefault(); b.classList.add("paypal-error"); }});
-    }
-    togglePayPal("termsPro","paypalPro");
-    togglePayPal("termsSignals","paypalSignals");
-  </script>
+<footer>
+⚠ Disclaimer: No refunds. Trading results are not guaranteed.  
+Only trade with money you can afford to lose.
+</footer>
+
 </body>
 </html>
