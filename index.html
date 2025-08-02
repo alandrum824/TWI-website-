@@ -5,195 +5,155 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TWI - Trading With Integrity</title>
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: radial-gradient(ellipse at center, #000 0%, #050505 100%);
-        color: #fff;
-        text-align: center;
-        overflow-x: hidden;
-    }
+/* 🌌 Slow Starfield Background */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: black;
+    color: #fff;
+    text-align: center;
+    overflow-x: hidden;
+}
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 200%;
+    height: 200%;
+    background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+    animation: moveStars 120s linear infinite;
+    opacity: 0.3;
+    z-index: -1;
+}
+@keyframes moveStars {
+    from { transform: translate(0,0); }
+    to { transform: translate(-300px,-300px); }
+}
 
-    /* 🌌 Starfield Background */
-    body::before {
-        content: "";
-        position: fixed;
-        top: 0; left: 0;
-        width: 200%;
-        height: 200%;
-        background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
-        animation: moveStars 60s linear infinite;
-        opacity: 0.3;
-        z-index: -1;
-    }
-    @keyframes moveStars {
-        from { transform: translate(0,0); }
-        to { transform: translate(-500px,-500px); }
-    }
+/* 🔥 Lightsaber Ticker Bar */
+.ticker {
+    padding: 8px 0;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    background: linear-gradient(90deg, #111, #003, #111);
+    box-shadow: 0 0 20px #00f;
+    position: relative;
+}
+.ticker-text {
+    display: inline-block;
+    animation: scrollText 15s linear infinite, familyColors 8s linear infinite;
+}
+@keyframes scrollText {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+/* Family lightsaber colors: Dad blue → Mom purple → Kids seafoam → Kids red */
+@keyframes familyColors {
+    0% { color: #0000ff; text-shadow: 0 0 10px #0000ff; }
+    25% { color: #800080; text-shadow: 0 0 10px #800080; }
+    50% { color: #20B2AA; text-shadow: 0 0 10px #20B2AA; }
+    75% { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
+    100% { color: #0000ff; text-shadow: 0 0 10px #0000ff; }
+}
 
-    /* 🔥 Lightsaber Ticker */
-    .ticker {
-        background: linear-gradient(90deg, #111, #003, #111);
-        padding: 8px 0;
-        font-weight: bold;
-        overflow: hidden;
-        white-space: nowrap;
-        box-shadow: 0 0 10px #00f, 0 0 20px #0ff;
-        position: relative;
-    }
-    .ticker-text {
-        display: inline-block;
-        animation: scrollText 15s linear infinite, duelColors 3s infinite alternate;
-    }
-    @keyframes scrollText {
-        0% { transform: translateX(100%); }
-        100% { transform: translateX(-100%); }
-    }
-    @keyframes duelColors {
-        0% { color: #00bfff; text-shadow: 0 0 5px #00bfff, 0 0 15px #00bfff; }
-        50% { color: #ff0000; text-shadow: 0 0 5px #ff0000, 0 0 15px #ff0000; }
-        100% { color: #00bfff; text-shadow: 0 0 5px #00bfff, 0 0 15px #00bfff; }
-    }
+/* ⚡ Header */
+header {
+    font-size: 30px;
+    font-weight: bold;
+    padding: 20px;
+    background: #0d1117;
+    text-transform: uppercase;
+    color: transparent;
+    background-image: linear-gradient(90deg,#0000ff,#800080,#20B2AA,#ff0000,#0000ff);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    animation: saberGlow 6s linear infinite;
+}
+@keyframes saberGlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 
-    /* ⚡ Lightsaber Header */
-    header {
-        font-size: 30px;
-        font-weight: bold;
-        padding: 20px;
-        background: #0d1117;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        color: transparent;
-        animation: lightsaberGlow 3s linear infinite;
-        background-image: linear-gradient(90deg,#00bfff,#00ffff,#00ff99,#00ffff,#00bfff);
-        background-size: 300% auto;
-        -webkit-background-clip: text;
-    }
-    @keyframes lightsaberGlow {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
+/* Countdown */
+.countdown-box {
+    margin-top: -10px;
+    font-size: 1.2rem;
+    color: #FFD700;
+    text-shadow: 0 0 10px #FFD700, 0 0 20px #FFA500;
+}
 
-    /* Countdown */
-    .countdown-box {
-        margin-top: -10px;
-        font-size: 1.2rem;
-        color: #FFD700;
-        text-shadow: 0 0 10px #FFD700, 0 0 20px #FFA500;
-        animation: glowTimer 1.5s infinite alternate;
-    }
-    @keyframes glowTimer {
-        from { text-shadow: 0 0 10px #FFD700, 0 0 20px #FFA500; }
-        to { text-shadow: 0 0 15px #FFA500, 0 0 30px #FFD700; }
-    }
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    margin: 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    color: #fff;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px currentColor;
+}
+.btn:hover {
+    transform: scale(1.05);
+}
 
-    /* PayPal Buttons */
-    .paypal-btn {
-        display: inline-block;
-        padding: 12px 20px;
-        margin-top: 10px;
-        border-radius: 5px;
-        color: #fff;
-        text-decoration: none;
-        opacity: 0.4;
-        pointer-events: none;
-    }
-    .paypal-enabled {
-        opacity: 1;
-        pointer-events: auto;
-        animation: glowPaypal 1.5s infinite alternate;
-    }
-    .paypal-jedi { background: #003087; box-shadow: 0 0 10px #00bfff; }
-    @keyframes glowPaypal {
-        from { box-shadow: 0 0 10px #00bfff; }
-        to { box-shadow: 0 0 15px #00ffff; }
-    }
-    .paypal-sith { background: #8B0000; animation: glowSith 1.5s infinite alternate; }
-    @keyframes glowSith {
-        from { box-shadow: 0 0 10px #ff0000; }
-        to { box-shadow: 0 0 15px #ff5555; }
-    }
+/* PayPal Buttons */
+.paypal-btn {
+    display: inline-block;
+    padding: 12px 20px;
+    margin-top: 10px;
+    border-radius: 5px;
+    color: #fff;
+    text-decoration: none;
+    opacity: 0.4;
+    pointer-events: none;
+}
+.paypal-enabled {
+    opacity: 1;
+    pointer-events: auto;
+}
 
-    /* Sections */
-    .section {
-        padding: 20px;
-        background: rgba(30,30,30,0.9);
-        margin: 20px auto;
-        border-radius: 10px;
-        max-width: 800px;
-    }
+/* Sections */
+.section {
+    padding: 20px;
+    background: rgba(30,30,30,0.9);
+    margin: 20px auto;
+    border-radius: 10px;
+    max-width: 800px;
+}
 
-    /* Modal */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 999;
-        left: 0; top: 0;
-        width: 100%; height: 100%;
-        justify-content: center;
-        align-items: center;
-        background: black;
-        perspective: 800px;
-        overflow: hidden;
-    }
-    .modal-content {
-        width: 80%;
-        max-width: 500px;
-        height: 80%;
-        position: relative;
-        overflow: hidden;
-        border: 2px solid #00ffff;
-        border-radius: 10px;
-        background: black;
-        box-shadow: 0 0 30px #00ffff;
-    }
-
-    .modal-stars {
-        position: absolute;
-        top: 0; left: 0;
-        width: 200%;
-        height: 200%;
-        background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
-        animation: moveModalStars 60s linear infinite;
-        z-index: 0;
-    }
-    @keyframes moveModalStars {
-        from { transform: translate(0,0); }
-        to { transform: translate(-400px,-400px); }
-    }
-
-    /* Crawl */
-    .crawl {
-        position: absolute;
-        bottom: -100%;
-        width: 100%;
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #FFD700;
-        text-shadow: 0 0 10px #FFD700, 0 0 20px #FFA500;
-        transform-origin: 50% 100%;
-        animation: crawlAnim 20s linear forwards;
-        z-index: 1;
-        text-align: center;
-    }
-    @keyframes crawlAnim {
-        0% { transform: rotateX(25deg) translateY(300px) scale(1.2); opacity: 1; }
-        50% { transform: rotateX(25deg) translateY(-100px) scale(0.8); opacity: 1; }
-        100% { transform: rotateX(25deg) translateY(-600px) scale(0.5); opacity: 0; }
-    }
-
-    .close-btn {
-        display: block;
-        margin: 10px auto;
-        background: #b22222;
-        padding: 10px;
-        border-radius: 5px;
-        color: #fff;
-        cursor: pointer;
-        z-index: 2;
-        position: relative;
-    }
+/* Modal Disclaimer */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.95);
+}
+.modal-content {
+    background: black;
+    padding: 20px;
+    max-width: 500px;
+    border: 2px solid #00ffff;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 30px #00ffff;
+    color: #FFD700;
+}
+.close-btn {
+    display: block;
+    margin: 10px auto;
+    background: #b22222;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
 </style>
 </head>
 <body>
@@ -201,65 +161,70 @@
 <!-- 🔥 Ticker -->
 <div class="ticker">
   <div class="ticker-text">
-    🚨 Join Now Before Launch — Free Signals Until 8/24 — Launch in <span id="tickerCountdown"></span> — Don’t Miss Out!
+    🚨 Free Signals Until 8/24 — Launch in <span id="tickerCountdown"></span> — Don’t Miss Out!
   </div>
 </div>
 
-<!-- ⚡ Lightsaber Header -->
-<header>🚀 TWI - Trading With Integrity</header>
+<!-- ⚡ Header -->
+<header>
+🚀 TWI - Trading With Integrity
+</header>
 
 <!-- Countdown -->
 <div class="countdown-box">Launch in <span id="headerCountdown"></span></div>
 
-<!-- Sections -->
+<!-- Telegram -->
 <div class="section">
     <h2>📢 Free Signals Before Launch</h2>
-    <a class="btn" href="https://t.me/califorexlifystyle" target="_blank">Join Free Signals</a>
+    <a class="btn" style="background:#0088cc;" href="https://t.me/califorexlifystyle" target="_blank">Join Free Signals</a>
 </div>
 
+<!-- Plans -->
 <div class="section">
     <h2>💳 Subscription Plans</h2>
     <p>Indicator Pro (Jedi Blue): $39.99/month</p>
-    <label><input type="checkbox" id="termsPro"> I agree to <a onclick="openModal()">Terms</a></label><br>
-    <a id="paypalPro" class="paypal-btn paypal-jedi" href="https://www.paypal.com/paypalme/alandrum24/39.99">PayPal</a>
+    <label><input type="checkbox" id="termsPro"> I agree to <a onclick="openModal()">Terms & Disclaimer</a></label><br>
+    <a id="paypalPro" class="paypal-btn" style="background:#0000ff;" href="https://www.paypal.com/paypalme/alandrum24/39.99">PayPal</a>
     <p>Signals Only (Sith Red): $19.99/month</p>
-    <label><input type="checkbox" id="termsSignals"> I agree to <a onclick="openModal()">Terms</a></label><br>
-    <a id="paypalSignals" class="paypal-btn paypal-sith" href="https://www.paypal.com/paypalme/alandrum24/19.99">PayPal</a>
+    <label><input type="checkbox" id="termsSignals"> I agree to <a onclick="openModal()">Terms & Disclaimer</a></label><br>
+    <a id="paypalSignals" class="paypal-btn" style="background:#8B0000;" href="https://www.paypal.com/paypalme/alandrum24/19.99">PayPal</a>
 </div>
 
-<!-- Modal -->
+<!-- Disclaimer Modal -->
 <div id="termsModal" class="modal">
     <div class="modal-content">
-        <div class="modal-stars"></div>
-        <div class="crawl">
-            📜 Terms & Disclaimer<br><br>
-            Trading involves substantial risk.<br>
-            Past performance does not guarantee results.<br>
-            No guarantees are made for profits.<br>
-            Only trade money you can afford to lose.
-        </div>
+        <h3>📜 Terms & Disclaimer</h3>
+        <p>Trading involves substantial risk and is not suitable for all investors.<br>
+        Past performance does not guarantee future results.<br>
+        No guarantees are made for profits or returns.<br>
+        You should only trade with money you can afford to lose.<br>
+        No refunds will be issued after purchase.</p>
         <a class="close-btn" onclick="closeModal()">Close</a>
     </div>
 </div>
 
 <script>
+/* Sounds */
 let saberSound = new Audio("https://www.myinstants.com/media/sounds/lightsaber_ignition.mp3");
 let humSound = new Audio("https://www.myinstants.com/media/sounds/lightsaberhum.mp3");
 let crawlMusic = new Audio("https://ia802707.us.archive.org/33/items/StarWarsTheme/StarWarsTheme.mp3");
 humSound.loop = true;
-crawlMusic.volume = 0.4;
+crawlMusic.loop = true;
+crawlMusic.volume = 0.2;
 
+/* Countdown */
 function updateCountdown() {
     const launchDate = new Date("August 24, 2025").getTime();
     const now = new Date().getTime();
     const d = launchDate - now;
-    const time = d < 0 ? "🚀 Launched!" :
+    const t = d < 0 ? "🚀 Launched!" :
     `${Math.floor(d/(1000*60*60*24))}d ${Math.floor((d/(1000*60*60))%24)}h ${Math.floor((d/(1000*60))%60)}m ${Math.floor((d/1000)%60)}s`;
-    document.getElementById("tickerCountdown").innerHTML = time;
-    document.getElementById("headerCountdown").innerHTML = time;
+    document.getElementById("tickerCountdown").innerHTML = t;
+    document.getElementById("headerCountdown").innerHTML = t;
 }
 setInterval(updateCountdown,1000);
 
+/* PayPal Enable */
 function togglePayPal(t,p) {
     document.getElementById(t).addEventListener("change",e=>{
         document.getElementById(p).classList.toggle("paypal-enabled", e.target.checked);
@@ -268,15 +233,22 @@ function togglePayPal(t,p) {
 togglePayPal("termsPro","paypalPro");
 togglePayPal("termsSignals","paypalSignals");
 
+/* Modal */
 function openModal() {
-    document.getElementById("termsModal").style.display = "flex";
-    saberSound.play(); humSound.play(); crawlMusic.currentTime=0; crawlMusic.play();
+    document.getElementById("termsModal").style.display="flex";
+    saberSound.play();
+    humSound.play();
+    crawlMusic.play();
 }
 function closeModal() {
-    document.getElementById("termsModal").style.display = "none";
+    document.getElementById("termsModal").style.display="none";
     humSound.pause(); humSound.currentTime=0;
     crawlMusic.pause(); crawlMusic.currentTime=0;
 }
+
+/* Play music after first click */
+document.body.addEventListener("click",()=>{ crawlMusic.play(); },{once:true});
 </script>
+
 </body>
 </html>
