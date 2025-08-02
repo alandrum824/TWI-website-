@@ -6,8 +6,18 @@
   <title>TWI - Trading With Integrity</title>
   <style>
     body { margin:0; font-family:Arial,sans-serif; background:#000; color:#fff; text-align:center; }
-    
-    /* Lightsaber Animation Bar */
+
+    /* Ticker */
+    .ticker {
+      background:#111; color:#FFD700; padding:8px 0;
+      font-weight:bold; text-shadow:0 0 5px #FFD700, 0 0 10px #FFD700;
+      overflow:hidden; white-space:nowrap;
+      box-shadow:0 0 5px #FFD700,0 0 15px #FFD700;
+    }
+    .ticker-text { display:inline-block; animation:scrollText 15s linear infinite; }
+    @keyframes scrollText { 0%{transform:translateX(100%);} 100%{transform:translateX(-100%);} }
+
+    /* Lightsaber Bar */
     .lightsaber-bar { position:relative; width:100%; height:6px; margin-bottom:10px; overflow:hidden; }
     .lightsaber-blade { position:absolute; height:6px; width:50%; background:linear-gradient(90deg,#00BFFF,#1E90FF,white); animation:lightsaberMove 2.5s infinite linear,saberColorCycle 6s infinite linear; }
     @keyframes lightsaberMove { 0%{left:-50%;} 100%{left:100%;} }
@@ -49,15 +59,29 @@
     /* Proof Section */
     .proof-section { margin:30px auto; max-width:900px; }
     .proof-gallery { display:flex; flex-wrap:wrap; justify-content:center; gap:15px; margin-top:15px; }
-    .proof-img { width:250px; border-radius:8px; cursor:pointer; transition:0.3s; }
+    .proof-img-container { width:250px; position:relative; }
+    .proof-img { width:100%; border-radius:8px; cursor:pointer; transition:0.3s; }
     .proof-img:hover { transform:scale(1.05); }
+    .caption { font-size:0.9rem; margin-top:5px; color:#FFD700; }
+
+    /* LIVE Badge */
+    .live-badge {
+      position:absolute; top:8px; left:8px;
+      background:red; color:white;
+      padding:3px 6px; font-size:0.8rem; font-weight:bold;
+      border-radius:4px; animation:flashLive 1s infinite alternate;
+    }
+    @keyframes flashLive {
+      0% { opacity:1; }
+      100% { opacity:0.3; }
+    }
 
     /* Lightbox */
     .lightbox { display:none; position:fixed; z-index:999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.9); justify-content:center; align-items:center; }
     .lightbox img { max-width:90%; max-height:90%; border:2px solid #00CED1; }
     .lightbox:target { display:flex; }
 
-    /* Live Example GIF */
+    /* Live Example */
     .live-example { margin:30px auto; max-width:900px; }
     .live-example h2 { color:#FFD700; text-shadow:0 0 10px #FFD700; }
     .live-gif { width:100%; max-width:800px; border-radius:8px; border:2px solid #FFD700; box-shadow:0 0 10px #FFD700; }
@@ -73,7 +97,18 @@
   </style>
 </head>
 <body>
+
+  <!-- Ticker -->
+  <div class="ticker">
+    <div class="ticker-text">
+      🚨 Join Now Before Launch — Free Signals Until 8/24 — Launch in <span id="tickerCountdown"></span> — Don’t Miss Out!
+    </div>
+  </div>
+
+  <!-- Lightsaber Animation -->
   <div class="lightsaber-bar"><div class="lightsaber-blade"></div></div>
+  
+  <!-- Countdown -->
   <div class="countdown" id="countdown">Loading countdown...</div>
 
   <header>
@@ -105,16 +140,32 @@
   <section class="proof-section">
     <h2>📸 Proof of Results</h2>
     <div class="proof-gallery">
-      <a href="#lightbox1"><img src="screenshot1.jpg" alt="Proof 1" class="proof-img"></a>
-      <a href="#lightbox2"><img src="screenshot2.jpg" alt="Proof 2" class="proof-img"></a>
-      <a href="#lightbox3"><img src="screenshot3.jpg" alt="Proof 3" class="proof-img"></a>
+      <div class="proof-img-container">
+        <a href="#lightbox1"><img src="https://i.imgur.com/vAb8jPi.jpeg" alt="Proof 1" class="proof-img"></a>
+        <div class="caption">CADJPY – Strong Bull Trend Setup</div>
+      </div>
+      <div class="proof-img-container">
+        <a href="#lightbox2"><img src="https://i.imgur.com/nbMsvmK.jpeg" alt="Proof 2" class="proof-img"></a>
+        <div class="caption">CHFJPY – Strong Bear Short Entry</div>
+      </div>
+      <div class="proof-img-container">
+        <a href="#lightbox3"><img src="https://i.imgur.com/vpvQn3b.jpeg" alt="Proof 3" class="proof-img"></a>
+        <div class="caption">CHFJPY – Weak Bear Trend Setup</div>
+      </div>
+      <div class="proof-img-container">
+        <div class="live-badge">LIVE</div>
+        <a href="https://t.me/califorexlifystyle" target="_blank">
+          <img src="https://t.me/califorexlifystyle/latest" alt="Live Proof" class="proof-img">
+        </a>
+        <div class="caption">📡 Live Trade Update (Click to View on Telegram)</div>
+      </div>
     </div>
   </section>
 
   <!-- Lightbox -->
-  <div id="lightbox1" class="lightbox"><a href="#"><img src="screenshot1.jpg"></a></div>
-  <div id="lightbox2" class="lightbox"><a href="#"><img src="screenshot2.jpg"></a></div>
-  <div id="lightbox3" class="lightbox"><a href="#"><img src="screenshot3.jpg"></a></div>
+  <div id="lightbox1" class="lightbox"><a href="#"><img src="https://i.imgur.com/vAb8jPi.jpeg"></a></div>
+  <div id="lightbox2" class="lightbox"><a href="#"><img src="https://i.imgur.com/nbMsvmK.jpeg"></a></div>
+  <div id="lightbox3" class="lightbox"><a href="#"><img src="https://i.imgur.com/vpvQn3b.jpeg"></a></div>
 
   <!-- Live Example -->
   <section class="live-example">
@@ -126,14 +177,14 @@
   <section class="features">
     <h2>🛠 How Clean Scalper Pro Works</h2>
     <ul>
-      <li>✅ **Sniper Entries Only** – Filters out noise for high-quality trades only when market aligns.</li>
-      <li>📊 **Multi-Timeframe Trend Filter** – Confirms entries with 15m & 1H trends in agreement.</li>
-      <li>⚡ **EMA Precision** – Uses EMA8, EMA21 & EMA50 for trend strength & price alignment.</li>
-      <li>📈 **Volume Surge Detection** – Requires 1.6× average volume for trade confirmation.</li>
-      <li>🎯 **ATR-Based Risk Management** – Automatic SL & TP based on ATR multipliers.</li>
-      <li>🚫 **Avoids Choppy Zones** – Filters out trades near recent highs/lows to avoid fakeouts.</li>
-      <li>📌 **Key Level Mapping** – Auto-draws support/resistance zones for sniper precision.</li>
-      <li>🖥 **Compact Dashboard** – Real-time trend, volume, RSI, and trade readiness display.</li>
+      <li>✅ Sniper Entries Only – Filters out noise for high-quality trades only when market aligns.</li>
+      <li>📊 Multi-Timeframe Trend Filter – Confirms entries with 15m & 1H trends in agreement.</li>
+      <li>⚡ EMA Precision – Uses EMA8, EMA21 & EMA50 for trend strength & price alignment.</li>
+      <li>📈 Volume Surge Detection – Requires 1.6× average volume for trade confirmation.</li>
+      <li>🎯 ATR-Based Risk Management – Automatic SL & TP based on ATR multipliers.</li>
+      <li>🚫 Avoids Choppy Zones – Filters out trades near recent highs/lows to avoid fakeouts.</li>
+      <li>📌 Key Level Mapping – Auto-draws support/resistance zones for sniper precision.</li>
+      <li>🖥 Compact Dashboard – Real-time trend, volume, RSI, and trade readiness display.</li>
     </ul>
   </section>
 
@@ -148,12 +199,14 @@
       const now=new Date().getTime();
       const distance=launchDate-now;
       const el=document.getElementById("countdown");
-      if(distance<0){ el.innerHTML="🚀 Launch Day!"; el.classList.add("launch-flash"); return; }
+      const ticker=document.getElementById("tickerCountdown");
+      if(distance<0){ el.innerHTML="🚀 Launch Day!"; ticker.innerHTML="0d 0h 0m 0s"; el.classList.add("launch-flash"); return; }
       const d=Math.floor(distance/(1000*60*60*24));
       const h=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
       const m=Math.floor((distance%(1000*60*60))/(1000*60));
       const s=Math.floor((distance%(1000*60))/1000);
       el.innerHTML=`⏳ ${d}d ${h}h ${m}m ${s}s until Launch`;
+      ticker.innerHTML=`${d}d ${h}h ${m}m ${s}s`;
     }
     setInterval(updateCountdown,1000); updateCountdown();
     function togglePayPal(terms,paypal){
