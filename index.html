@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>ENG Heads Up!</title>
+  <title>Disney Animated Classics – Heads Up!</title>
   <meta name="theme-color" content="#0b1020" />
   <style>
     :root{
@@ -53,7 +53,7 @@ select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;bo
   <div class="wrap">
     <!-- SCREEN: HOME -->
     <section id="home" class="screen active">
-      <h1>Emperor's New Groove – Heads Up!</h1>
+      <h1>Disney Animated Classics – Heads Up!</h1>
       <p class="small">Play locally on one phone. Tilt/gestures optional; big buttons included.</p>
       <div class="card pad section">
         <h2>Choose Category</h2>
@@ -76,8 +76,7 @@ select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;bo
           <li><b>Correct</b> = +1, <b>Pass</b> = skip. 60s default.</li>
           <li>Swipe right = Correct, left = Pass (optional).</li>
         </ol>
-        <p class="small">Tip: Turn on your phone’s Do Not Disturb.
-        </p>
+        <p class="small">Tip: Turn on your phone’s Do Not Disturb.</p>
       </div>
     </section><!-- SCREEN: GAME -->
 <section id="game" class="screen">
@@ -111,13 +110,36 @@ select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;bo
   </div>  <script>
     // --- DATA ---
     const categories = {
-      "Characters":["Kuzco","Pacha","Yzma","Kronk","Chicha","Chaca","Tipo","Bucky the Squirrel","Theme Song Guy","Old Man","Guard Captain","Chef at Diner","Shoulder Angel","Shoulder Devil","Village Elder","Royal Scribe","Delivery Llama","Waitress at Diner"],
-      "Places":["The Palace","Secret Lab","Mudka's Meat Hut","Kuzcotopia","Pacha's Village","The Jungle","Suspension Bridge","River Rapids","Cliffside","Canyon","Marketplace","Yzma's Lair Entrance","Throne Room","Hilltop Home","Cart Path","Temple Ruins","Rooftops","Back Alley"],
-      "Items & Objects":["Llama Potion","Blue Vial","Labels","Spinach Puffs","Poncho","Map","Lever","Throne","Birthday Cake","Backpack","Squeaky Acorn","Rope","Spyglass","Dinner Menu","Poison","Cactus","Torch","Trapdoor Button"],
-      "Actions (Act It Out)": ["Pull the lever","Make squirrel noises","Flip a lever wrong","Sneak through kitchen","Carry a heavy llama","Row the raft","Tiptoe past guards","Zip on roller coaster","Balance on a bridge","Mix potions","Whip up spinach puffs","Hide behind a statue","Do the theme song pose","Talk to shoulder angel","Dodge falling rocks","Dance celebration","Paddle against rapids","Climb a cliff"],
-      "Phrases (Say Without The Words)": ["No touchy!","Wrong lever!","Squeak squeakity","Boom, baby!","By all accounts, it doesn’t make sense","Pull the lever, Kronk!","Uh-huh, uh-huh","Duh...","Just think of the village","Llama face!","Why do we even have that lever?","Oh yeah...","Poison for Kuzco","Spinach puffs!","Squeak, squeak, squeakers"],
-      "Situations": ["Dinner rush at the diner","Secret lab reveal","Chase through the jungle","Birthday surprise gone wrong","Potion mix-up","Bridge collapse","Cat Yzma moment","Restaurant disguise","Map gets ruined","Cart crash","Wrong door maze","Campfire talk","Lightning storm","Stuck on a ledge","Trapdoor drop"],
-      "Wildcards": ["Describe without hands","One-word clues only","Act like a llama","Hum a dramatic theme","Clues in whispers","No verbs allowed","Only sound effects","Statue-poses only","Switch clue-giver mid-round","Reverse: guesser talks","Freeze if you say filler word","Speed round: 3 seconds per clue","Mime cooking","Speak like Kronk","Clues as a villain"]
+      "Movies": [
+        "Snow White and the Seven Dwarfs","Pinocchio","Fantasia","Dumbo","Bambi","Cinderella","Alice in Wonderland","Peter Pan","Lady and the Tramp","Sleeping Beauty","One Hundred and One Dalmatians","The Sword in the Stone","The Jungle Book","The Aristocats","Robin Hood","The Many Adventures of Winnie the Pooh","The Rescuers","The Fox and the Hound","The Black Cauldron","The Great Mouse Detective","Oliver & Company","The Little Mermaid","The Rescuers Down Under","Beauty and the Beast","Aladdin","The Lion King","Pocahontas","The Hunchback of Notre Dame","Hercules","Mulan","Tarzan","Fantasia 2000","The Emperor's New Groove","Atlantis: The Lost Empire","Lilo & Stitch","Treasure Planet","Brother Bear","Home on the Range","Chicken Little","Meet the Robinsons","Bolt","The Princess and the Frog","Tangled","Wreck-It Ralph","Frozen","Big Hero 6","Zootopia","Moana","Ralph Breaks the Internet","Frozen II","Raya and the Last Dragon","Encanto","Strange World","Wish"
+      ],
+      "Heroes & Heroines": [
+        "Snow White","Cinderella","Aurora","Ariel","Belle","Jasmine","Aladdin","Simba","Nala","Pocahontas","Mulan","Tarzan","Quasimodo","Hercules","Tiana","Rapunzel","Flynn Rider","Anna","Elsa","Moana","Mirabel","Hiro Hamada","Judy Hopps","Nick Wilde","Lilo","Stitch","Kuzco","Pacha","Jim Hawkins","Milo Thatch"
+      ],
+      "Villains": [
+        "The Evil Queen","Maleficent","Ursula","Jafar","Scar","Hades","Shan Yu","Gaston","Dr. Facilier","Mother Gothel","Yzma","Captain Hook","Cruella de Vil","Queen of Hearts","Claude Frollo","Governor Ratcliffe","Prince Hans","Tamatoa","Te Kā","Professor Ratigan","The Horned King","Dawn Bellwether"
+      ],
+      "Sidekicks": [
+        "Genie","Abu","Iago","Timon","Pumbaa","Mushu","Cri-Kee","Sebastian","Flounder","Lumière","Cogsworth","Mrs. Potts","Chip","Olaf","Sven","Pascal","Maximus","Baymax","Heihei","Pua","Meeko","Flit","Zazu","Baloo","Bagheera","Jiminy Cricket","Kala","Phil (Philoctetes)","Pain & Panic"
+      ],
+      "Songs (Say the Title)": [
+        "A Dream Is a Wish Your Heart Makes","Part of Your World","Under the Sea","Be Our Guest","Beauty and the Beast","A Whole New World","Friend Like Me","Hakuna Matata","Circle of Life","Colors of the Wind","Go the Distance","Reflection","You'll Be in My Heart","Almost There","I See the Light","Let It Go","Do You Want to Build a Snowman?","How Far I'll Go","You're Welcome","We Don't Talk About Bruno","Try Everything","When You Wish Upon a Star","Once Upon a Dream","I Just Can't Wait to Be King"
+      ],
+      "Places & Kingdoms": [
+        "Pride Rock","Agrabah","Arendelle","Corona (Kingdom)","Motunui","Atlantica","The Enchanted Forest","The Bayou","San Fransokyo","Zootopia City","The Jungle","Never Land","The Hundred Acre Wood","The Beast's Castle","The Sultan's Palace","The Cave of Wonders","The Great Wall","Te Fiti's Island","Atlantis","The Forbidden Mountain","Mad Tea Party Garden","Nottingham Forest","The Snuggly Duckling","Casita (Encanto)"
+      ],
+      "Items & Magic": [
+        "Magic Lamp","Poisoned Apple","Glass Slipper","Spinning Wheel","Enchanted Rose","Trident","Magic Carpet","Shell Necklace","Spell Book","Sword in the Stone","Magic Mirror","Bow and Arrows","Honey Pot","Golden Flower","Ice Powers","Heart of Te Fiti","Magic Door","Baymax Armor","Rapunzel's Frying Pan","Triton's Crown","Beast's Hand Mirror"
+      ],
+      "Actions (Act It Out)": [
+        "Ride a magic carpet","Present a glass slipper","Roar like a lion king","Shoot an arrow like a hero","Cast a spell with a wand","Dance at a royal ball","Pull the sword from the stone","Swim like a mermaid","Be a helpful snowman","Row a canoe across waves","Sneak through a palace","Skate on ice magic","Cook beignets","Transform into a bear (mime)","Train with a tiny dragon","Surf on jungle vines","High-five a healthcare robot","Tiptoe past a sleeping dragon"
+      ],
+      "Phrases (Say Without These Words)": [
+        "Bibbidi-Bobbidi-Boo","Hakuna Matata","Let It Go","Be Prepared","Go the Distance","Circle of Life","Under the Sea","Be Our Guest","A Whole New World","When You Wish Upon a Star","Just Keep Swimming"
+      ],
+      "Wildcards": [
+        "One-word clues only","Act it all out (no talking)","Whisper clues","Robot voice only","Rhymes only (no exact words)","Switch clue-giver now","Reverse round: guesser talks","Freeze if you say 'um'","Speed round: 3 seconds per card","Animal sounds only","Describe using shapes","Clue in questions only"
+      ]
     };
 
     // --- STATE ---
@@ -135,9 +157,10 @@ select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;bo
 
     // Populate category select
     const catSel = document.getElementById('category');
-    Object.keys(categories).forEach(c=>{
-      const o=document.createElement('option'); o.value=c; o.textContent=c; catSel.appendChild(o);
-    });
+    const catNames = Object.keys(categories);
+    // Add a mixed option first
+    const mixOpt = document.createElement('option'); mixOpt.value = '__ALL__'; mixOpt.textContent = 'All (Mix)'; catSel.appendChild(mixOpt);
+    catNames.forEach(c=>{ const o=document.createElement('option'); o.value=c; o.textContent=c; catSel.appendChild(o); });
 
     // Elements
     const screens={
@@ -162,15 +185,23 @@ select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;bo
       const seconds = Math.max(20, Math.min(180, +document.getElementById('roundTime').value||60));
       const allowRepeats = document.getElementById('allowRepeats').checked;
 
-      activeCat = cat;
-      pool = [...categories[cat]];
-      if(!allowRepeats){ pool = pool.filter(w=>!used.has(`${cat}|${w}`)); }
-      if(pool.length===0){ pool = [...categories[cat]]; used.clear(); }
+      activeCat = (cat === '__ALL__' ? 'All (Mix)' : cat);
+      if(cat === '__ALL__'){
+        pool = Object.values(categories).flat();
+      } else {
+        pool = [...categories[cat]];
+      }
+      if(!allowRepeats){ pool = pool.filter(w=>!used.has(`${activeCat}|${w}`)); }
+      if(pool.length===0){
+        // Reset the used set if we've exhausted the pool
+        used.clear();
+        pool = (cat==='__ALL__') ? Object.values(categories).flat() : [...categories[cat]];
+      }
       shuffle(pool);
       roundList = pool.slice();
       idx = 0; score = 0; remaining = seconds;
 
-      liveCat.textContent = cat; bigCat.textContent = cat; leftEl.textContent = roundList.length;
+      liveCat.textContent = activeCat; bigCat.textContent = activeCat; leftEl.textContent = roundList.length;
       scoreEl.textContent = '0';
       nextCard();
       show('game');
