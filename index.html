@@ -28,8 +28,8 @@
 select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;border-radius:14px;border:1px solid #1f2b59;background:#0f1730;color:var(--ink);font-size:16px}
 
 /* Game screen */
-.screen{display:none}
-.screen.active{display:block}
+.screen{display:block} /* safer default */
+.screen:not(.active){display:none}
 .bigCard{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:56vh;border-radius:24px;padding:22px;margin-top:14px;background:
   radial-gradient(1200px 400px at 50% -200px, rgba(124,248,255,.15), transparent),
   linear-gradient(180deg,#111a36,#08112a);
@@ -46,15 +46,17 @@ select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;bo
 .small{font-size:12px;color:var(--muted)}
 .center{display:flex;justify-content:center;align-items:center}
 .hidden{display:none!important}
+#debug{background:#222;border-bottom:1px solid #444;padding:8px 12px;font-size:12px}
 
   </style>
 </head>
 <body>
+  <div id="debug">App loaded. If this stays visible after a few seconds, something blocked the script.</div>
   <div class="wrap">
     <!-- SCREEN: HOME -->
     <section id="home" class="screen active">
       <h1>Mixed Movie Magic – Heads Up!</h1>
-      <p class="small">Play locally on one phone. Swipe → for Correct, ← for Pass. Big buttons included.</p>
+      <p class="small">Play on one phone. Swipe → for Correct, ← for Pass. Big buttons included.</p>
       <div class="card pad section">
         <h2>Choose Category</h2>
         <select id="category"></select>
@@ -108,6 +110,12 @@ select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;bo
 </section>
 
   </div>  <script>
+    // Hide debug banner after JS begins
+    (function(){
+      const dbg = document.getElementById('debug');
+      if(dbg) setTimeout(()=>{ dbg.style.display='none'; }, 600);
+    })();
+
     // --- DATA ---
     const categories = {
       "Emperor's New Groove": [
@@ -188,7 +196,6 @@ select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;bo
       }
       if(noRepeats){ pool = pool.filter(w=>!used.has(`${activeCat}|${w}`)); }
       if(pool.length===0){
-        // Reset the used set if we've exhausted the pool
         used.clear();
         pool = (cat==='__ALL__') ? Object.values(categories).flat() : [...categories[cat]];
       }
@@ -271,10 +278,7 @@ select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;bo
       if(wakeLock){ try{ wakeLock.release(); }catch(e){} }
     }
 
-    document.getElementById('again').addEventListener('click',()=>{
-      // restart same settings quickly
-      show('home'); document.getElementById('startBtn').click();
-    });
+    document.getElementById('again').addEventListener('click',()=>{ show('home'); document.getElementById('startBtn').click(); });
     document.getElementById('homeBtn').addEventListener('click',()=>{ show('home'); });
 
     // Keyboard (for desktop testing): left/right arrows
@@ -283,5 +287,14 @@ select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;bo
       if(e.key==='ArrowRight') correct();
       if(e.key==='ArrowLeft') pass();
     });
-  </script></body>
-  </html>
+
+    // Surface any JS errors on-screen so it's never blank
+    window.addEventListener('error', (e)=>{
+      const dbg=document.getElementById('debug');
+      if(dbg){ dbg.style.display='block'; dbg.textContent = 'Error: '+ (e.message||'unknown'); }
+    });
+  </script>  <noscript>
+    <div style="padding:12px;background:#222;color:#fff">This game needs JavaScript enabled.</div>
+  </noscript>
+</body>
+</html>
