@@ -1,239 +1,263 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TWI NovaStrike Pro EA – Dual Mode AI for Gold</title>
-<style>
-/* 🌌 Starfield Background */
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: black;
-    color: #fff;
-    text-align: center;
-}
-body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0;
-    width: 200%;
-    height: 200%;
-    background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
-    animation: moveStars 120s linear infinite;
-    opacity: 0.3;
-    z-index: -1;
-}
-@keyframes moveStars {
-    from { transform: translate(0,0); }
-    to { transform: translate(-300px,-300px); }
-}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>ENG Heads Up!</title>
+  <meta name="theme-color" content="#0b1020" />
+  <style>
+    :root{
+      --bg:#0b1020; --card:#121a33; --ink:#eaf2ff; --muted:#9fb3ff; --accent:#7cf8ff; --accent2:#a788ff; --good:#33d17a; --bad:#ff6b6b; --warn:#ffd166;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--ink);}
+    .wrap{max-width:720px;margin:0 auto;padding:clamp(12px,2.5vw,24px);}
+    h1{font-size:clamp(22px,6vw,36px);margin:12px 0 8px;letter-spacing:.5px}
+    h2{font-size:clamp(16px,4vw,22px);margin:8px 0 6px;color:var(--muted)}
+    .card{background:linear-gradient(180deg,#121a33,#0f1730);border:1px solid #1e2a55;border-radius:22px;box-shadow:0 12px 30px rgba(0,0,0,.35);}
+    .pad{padding:18px}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .row > *{flex:1}
+    .chip{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;border:1px solid #223263;background:#0f1730;color:var(--ink);font-size:14px}
+    button{appearance:none;border:none;background:#182248;color:var(--ink);padding:14px 16px;border-radius:16px;font-size:16px;font-weight:700;letter-spacing:.25px;box-shadow:0 6px 16px rgba(0,0,0,.25);}
+    button:active{transform:scale(.98)}
+    button.primary{background:linear-gradient(180deg,#2a6fff,#5df3ff);color:#001025}
+    button.good{background:linear-gradient(180deg,#2bd67b,#7dffc0);color:#001b0b}
+    button.bad{background:linear-gradient(180deg,#ff6b6b,#ffb3b3);color:#220000}
+    button.warn{background:linear-gradient(180deg,#ffd166,#ffe29e);color:#221700}.section{margin:16px 0}
+select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;border-radius:14px;border:1px solid #1f2b59;background:#0f1730;color:var(--ink);font-size:16px}
 
-/* 🔥 Lightsaber Ticker */
-.ticker {
-    padding: 8px 0;
-    font-weight: bold;
-    white-space: nowrap;
-    overflow: hidden;
-    background: linear-gradient(90deg, #111, #003, #111);
-    box-shadow: 0 0 20px #00f;
+/* Game screen */
+.screen{display:none}
+.screen.active{display:block}
+.bigCard{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:56vh;border-radius:24px;padding:22px;margin-top:14px;background:
+  radial-gradient(1200px 400px at 50% -200px, rgba(124,248,255,.15), transparent),
+  linear-gradient(180deg,#111a36,#08112a);
+  border:1px solid #1e2a55;
 }
-.ticker-text {
-    display: inline-block;
-    animation: scrollText 15s linear infinite, familyColors 8s linear infinite;
-}
-@keyframes scrollText {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
-}
-@keyframes familyColors {
-    0% { color: #0000ff; text-shadow: 0 0 10px #0000ff; }
-    25% { color: #800080; text-shadow: 0 0 10px #800080; }
-    50% { color: #20B2AA; text-shadow: 0 0 10px #20B2AA; }
-    75% { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
-    100% { color: #0000ff; text-shadow: 0 0 10px #0000ff; }
-}
+.bigCat{font-size:14px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase}
+.bigWord{font-size:clamp(28px,8vw,44px);font-weight:900;margin-top:10px;line-height:1.12}
+.timer{font-variant-numeric:tabular-nums;font-size:clamp(34px,10vw,54px);font-weight:800;margin-top:8px;color:var(--accent)}
+.count{font-size:14px;color:var(--muted)}
+.glass{backdrop-filter:blur(8px);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:12px}
+.footBar{display:flex;gap:10px;position:sticky;bottom:0;margin-top:14px}
+.footBar > button{flex:1}
 
-/* ⚡ Header Glow */
-header {
-    font-size: 30px;
-    font-weight: bold;
-    padding: 20px;
-    text-transform: uppercase;
-    color: transparent;
-    background-image: linear-gradient(90deg,#0000ff,#800080,#20B2AA,#ff0000,#0000ff);
-    background-size: 300% auto;
-    -webkit-background-clip: text;
-    animation: saberGlow 6s linear infinite;
-}
-@keyframes saberGlow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
+.small{font-size:12px;color:var(--muted)}
+.center{display:flex;justify-content:center;align-items:center}
+.hidden{display:none!important}
 
-/* Countdown */
-.countdown-box {
-    font-size: 1.2rem;
-    color: #FFD700;
-    text-shadow: 0 0 10px #FFD700;
-}
-
-/* Buttons */
-.btn {
-    display: inline-block;
-    padding: 12px 20px;
-    margin: 15px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    color: #fff;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 15px currentColor;
-}
-.btn:hover {
-    transform: scale(1.05);
-}
-.btn-gumroad {
-    background: #0000FF;
-    box-shadow: 0 0 20px #0000FF, 0 0 40px #00BFFF;
-    opacity: 0.4;
-    pointer-events: none;
-}
-.btn-enabled {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-/* Sections */
-.section {
-    padding: 20px;
-    background: rgba(30,30,30,0.9);
-    margin: 20px auto;
-    border-radius: 10px;
-    max-width: 800px;
-}
-
-/* Modal Disclaimer */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 999;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    justify-content: center;
-    align-items: center;
-    background: rgba(0,0,0,0.95);
-}
-.modal-content {
-    background: black;
-    padding: 20px;
-    max-width: 500px;
-    border: 2px solid #00ffff;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 0 30px #00ffff;
-    color: #FFD700;
-}
-.close-btn {
-    display: block;
-    margin: 10px auto;
-    background: #b22222;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-/* Mobile Optimization */
-@media (max-width: 600px) {
-    header { font-size: 22px; }
-    .countdown-box { font-size: 1rem; }
-    .btn { padding: 10px 15px; font-size: 14px; }
-}
-</style>
+  </style>
 </head>
 <body>
-
-<!-- 🔥 Ticker -->
-<div class="ticker">
-  <div class="ticker-text">
-    🚨 Pre‑Launch Offer Ends 8/24 — Launch in <span id="tickerCountdown"></span> — Don’t Miss Out!
+  <div class="wrap">
+    <!-- SCREEN: HOME -->
+    <section id="home" class="screen active">
+      <h1>Emperor's New Groove – Heads Up!</h1>
+      <p class="small">Play locally on one phone. Tilt/gestures optional; big buttons included.</p>
+      <div class="card pad section">
+        <h2>Choose Category</h2>
+        <select id="category"></select>
+        <div class="row" style="margin-top:10px">
+          <div class="chip">⏱ Round Time: <input type="number" id="roundTime" min="20" max="180" step="5" value="60" style="width:110px"></div>
+          <div class="chip">🔁 Allow Repeats: <input type="checkbox" id="allowRepeats"></div>
+        </div>
+      </div>
+      <div class="row section">
+        <button class="warn" id="howTo">How to Play</button>
+        <button class="primary" id="startBtn">Start Round</button>
+      </div>
+      <div id="howToBox" class="card pad section hidden">
+        <h2>How it works</h2>
+        <ol>
+          <li>Pick a category and tap <b>Start Round</b>.</li>
+          <li>Hold the phone to the guesser’s forehead <span class="small">(or just look)</span>.</li>
+          <li>Teammates give clues without using card words.</li>
+          <li><b>Correct</b> = +1, <b>Pass</b> = skip. 60s default.</li>
+          <li>Swipe right = Correct, left = Pass (optional).</li>
+        </ol>
+        <p class="small">Tip: Turn on your phone’s Do Not Disturb.
+        </p>
+      </div>
+    </section><!-- SCREEN: GAME -->
+<section id="game" class="screen">
+  <div class="row">
+    <div class="glass">Category: <b id="liveCat"></b></div>
+    <div class="glass">Score: <b id="score">0</b></div>
+    <div class="glass">Left: <b id="left">0</b></div>
   </div>
-</div>
+  <div class="bigCard" id="bigCard">
+    <div class="bigCat" id="bigCat"></div>
+    <div class="bigWord" id="bigWord">—</div>
+    <div class="timer" id="timer">60</div>
+    <div class="count small">(tap Correct / Pass or swipe)</div>
+  </div>
+  <div class="footBar">
+    <button class="bad" id="passBtn">Pass</button>
+    <button class="good" id="correctBtn">Correct</button>
+  </div>
+</section>
 
-<!-- ⚡ Header -->
-<header>
-🚀 TWI NovaStrike Pro EA – Dual Mode AI for Gold
-</header>
+<!-- SCREEN: RESULTS -->
+<section id="results" class="screen">
+  <h2>Round Results</h2>
+  <div class="card pad section" id="summary"></div>
+  <div class="row">
+    <button id="again" class="primary">Play Again</button>
+    <button id="homeBtn">Back Home</button>
+  </div>
+</section>
 
-<!-- Countdown -->
-<div class="countdown-box">Launch in <span id="headerCountdown"></span></div>
+  </div>  <script>
+    // --- DATA ---
+    const categories = {
+      "Characters":["Kuzco","Pacha","Yzma","Kronk","Chicha","Chaca","Tipo","Bucky the Squirrel","Theme Song Guy","Old Man","Guard Captain","Chef at Diner","Shoulder Angel","Shoulder Devil","Village Elder","Royal Scribe","Delivery Llama","Waitress at Diner"],
+      "Places":["The Palace","Secret Lab","Mudka's Meat Hut","Kuzcotopia","Pacha's Village","The Jungle","Suspension Bridge","River Rapids","Cliffside","Canyon","Marketplace","Yzma's Lair Entrance","Throne Room","Hilltop Home","Cart Path","Temple Ruins","Rooftops","Back Alley"],
+      "Items & Objects":["Llama Potion","Blue Vial","Labels","Spinach Puffs","Poncho","Map","Lever","Throne","Birthday Cake","Backpack","Squeaky Acorn","Rope","Spyglass","Dinner Menu","Poison","Cactus","Torch","Trapdoor Button"],
+      "Actions (Act It Out)": ["Pull the lever","Make squirrel noises","Flip a lever wrong","Sneak through kitchen","Carry a heavy llama","Row the raft","Tiptoe past guards","Zip on roller coaster","Balance on a bridge","Mix potions","Whip up spinach puffs","Hide behind a statue","Do the theme song pose","Talk to shoulder angel","Dodge falling rocks","Dance celebration","Paddle against rapids","Climb a cliff"],
+      "Phrases (Say Without The Words)": ["No touchy!","Wrong lever!","Squeak squeakity","Boom, baby!","By all accounts, it doesn’t make sense","Pull the lever, Kronk!","Uh-huh, uh-huh","Duh...","Just think of the village","Llama face!","Why do we even have that lever?","Oh yeah...","Poison for Kuzco","Spinach puffs!","Squeak, squeak, squeakers"],
+      "Situations": ["Dinner rush at the diner","Secret lab reveal","Chase through the jungle","Birthday surprise gone wrong","Potion mix-up","Bridge collapse","Cat Yzma moment","Restaurant disguise","Map gets ruined","Cart crash","Wrong door maze","Campfire talk","Lightning storm","Stuck on a ledge","Trapdoor drop"],
+      "Wildcards": ["Describe without hands","One-word clues only","Act like a llama","Hum a dramatic theme","Clues in whispers","No verbs allowed","Only sound effects","Statue-poses only","Switch clue-giver mid-round","Reverse: guesser talks","Freeze if you say filler word","Speed round: 3 seconds per clue","Mime cooking","Speak like Kronk","Clues as a villain"]
+    };
 
-<!-- Telegram -->
-<div class="section">
-    <h2>📢 Stay Updated Before Launch</h2>
-    <a class="btn" style="background:#00BFFF;" href="https://t.me/califorexlifystyle" target="_blank">Join Telegram Alerts</a>
-</div>
+    // --- STATE ---
+    let pool=[], used=new Set(), roundList=[], idx=0, score=0, timerId=null, remaining=60, activeCat="";
 
-<!-- Gumroad Purchase -->
-<div class="section">
-    <h2>💳 Purchase TWI NovaStrike Pro EA</h2>
-    <p>Launch Price: <b>$129</b> (Dual Mode License – Safe + Growth)</p>
-    <label><input type="checkbox" id="terms"> I agree to <a onclick="openModal()">Terms & Disclaimer</a></label><br><br>
-    <a id="gumroadBtn" class="btn btn-gumroad" href="https://alandrum.gumroad.com/l/octtmm" target="_blank">Buy Now on Gumroad</a>
-</div>
+    // Utility
+    const shuffle = (arr)=>arr.sort(()=>Math.random()-0.5);
+    const vibrate = (ms)=>{ if(navigator.vibrate) navigator.vibrate(ms); };
 
-<!-- EA Features -->
-<div class="section">
-  <h2>⚡ TWI NovaStrike Pro EA Features</h2>
-  <ul style="text-align:left; max-width:600px; margin:auto;">
-    <li>✅ Dual Mode – Safe Mode (Prop Firms) + Growth Mode ($100 accounts)</li>
-    <li>✅ XAUUSD Optimized – M1/M5/H1 Precision Trading</li>
-    <li>✅ News Filter – Avoids High-Impact Events</li>
-    <li>✅ Equity Protection & Daily Drawdown Limits</li>
-    <li>✅ Fully Automated – No Manual Intervention Needed</li>
-  </ul>
-</div>
+    // Wake Lock (best effort)
+    let wakeLock;
+    async function requestWakeLock(){
+      try{ if('wakeLock' in navigator){ wakeLock = await navigator.wakeLock.request('screen'); } }catch(e){}
+    }
 
-<!-- Disclaimer Modal -->
-<div id="termsModal" class="modal">
-    <div class="modal-content">
-        <h3>📜 Terms & Disclaimer</h3>
-        <p>Trading involves substantial risk and is not suitable for all investors.<br>
-        Past performance does not guarantee future results.<br>
-        No guarantees are made for profits or returns.<br>
-        You should only trade with money you can afford to lose.<br>
-        All sales are final, no refunds will be issued.</p>
-        <a class="close-btn" onclick="closeModal()">Close</a>
-    </div>
-</div>
+    // Populate category select
+    const catSel = document.getElementById('category');
+    Object.keys(categories).forEach(c=>{
+      const o=document.createElement('option'); o.value=c; o.textContent=c; catSel.appendChild(o);
+    });
 
-<script>
-/* Countdown */
-function updateCountdown() {
-    const launchDate = new Date("August 24, 2025").getTime();
-    const now = new Date().getTime();
-    const d = launchDate - now;
-    const t = d < 0 ? "🚀 Launched!" :
-    `${Math.floor(d/(1000*60*60*24))}d ${Math.floor((d/(1000*60*60))%24)}h ${Math.floor((d/(1000*60))%60)}m ${Math.floor((d/1000)%60)}s`;
-    document.getElementById("tickerCountdown").innerHTML = t;
-    document.getElementById("headerCountdown").innerHTML = t;
-}
-setInterval(updateCountdown,1000);
+    // Elements
+    const screens={
+      home:document.getElementById('home'),
+      game:document.getElementById('game'),
+      results:document.getElementById('results')
+    };
+    const liveCat = document.getElementById('liveCat');
+    const bigCat = document.getElementById('bigCat');
+    const bigWord = document.getElementById('bigWord');
+    const timerEl = document.getElementById('timer');
+    const scoreEl = document.getElementById('score');
+    const leftEl = document.getElementById('left');
+    const howTo = document.getElementById('howTo');
+    const howToBox = document.getElementById('howToBox');
 
-/* Terms Checkbox Unlock */
-document.getElementById("terms").addEventListener("change", function() {
-    document.getElementById("gumroadBtn").classList.toggle("btn-enabled", this.checked);
-});
+    function show(name){ Object.values(screens).forEach(s=>s.classList.remove('active')); screens[name].classList.add('active'); }
 
-/* Modal */
-function openModal() {
-    document.getElementById("termsModal").style.display="flex";
-}
-function closeModal() {
-    document.getElementById("termsModal").style.display="none";
-}
-</script>
+    // Start Round
+    document.getElementById('startBtn').addEventListener('click',()=>{
+      const cat = catSel.value;
+      const seconds = Math.max(20, Math.min(180, +document.getElementById('roundTime').value||60));
+      const allowRepeats = document.getElementById('allowRepeats').checked;
 
-</body>
-</html>
+      activeCat = cat;
+      pool = [...categories[cat]];
+      if(!allowRepeats){ pool = pool.filter(w=>!used.has(`${cat}|${w}`)); }
+      if(pool.length===0){ pool = [...categories[cat]]; used.clear(); }
+      shuffle(pool);
+      roundList = pool.slice();
+      idx = 0; score = 0; remaining = seconds;
+
+      liveCat.textContent = cat; bigCat.textContent = cat; leftEl.textContent = roundList.length;
+      scoreEl.textContent = '0';
+      nextCard();
+      show('game');
+      tick();
+      requestWakeLock();
+    });
+
+    function nextCard(){
+      const left = Math.max(0, roundList.length - idx);
+      leftEl.textContent = left;
+      if(left<=0){ endRound(); return; }
+      const word = roundList[idx];
+      bigWord.textContent = word;
+    }
+
+    function correct(){
+      score++; scoreEl.textContent = score;
+      recordUse(true);
+      idx++; nextCard(); vibrate(30);
+    }
+    function pass(){
+      recordUse(false);
+      idx++; nextCard(); vibrate(10);
+    }
+    function recordUse(ok){
+      const key = `${activeCat}|${roundList[idx]}`;
+      used.add(key);
+      resultsLog.push({word:roundList[idx], ok});
+    }
+
+    // Timer
+    function tick(){
+      timerEl.textContent = remaining;
+      if(remaining<=5) timerEl.style.color = getComputedStyle(document.documentElement).getPropertyValue('--warn');
+      timerId = setTimeout(()=>{
+        remaining--; if(remaining<0){ endRound(); } else { tick(); }
+      }, 1000);
+    }
+
+    // Gesture controls (swipe)
+    let startX=null;
+    const cardEl = document.getElementById('bigCard');
+    cardEl.addEventListener('touchstart',e=>{ startX = e.changedTouches[0].clientX; });
+    cardEl.addEventListener('touchend',e=>{
+      if(startX==null) return; const dx = e.changedTouches[0].clientX - startX; startX=null;
+      if(Math.abs(dx) < 40) return; // ignore tiny swipes
+      if(dx>0) correct(); else pass();
+    });
+
+    // Buttons
+    document.getElementById('correctBtn').addEventListener('click', correct);
+    document.getElementById('passBtn').addEventListener('click', pass);
+
+    // How-to toggle
+    howTo.addEventListener('click',()=> howToBox.classList.toggle('hidden'));
+
+    // Results handling
+    let resultsLog=[];
+    function endRound(){
+      try{ if(timerId) clearTimeout(timerId); }catch(e){}
+      timerId=null;
+      const list = resultsLog.map((r,i)=>`<li>${r.ok?"✅":"⏭️"} ${r.word}</li>`).join('');
+      document.getElementById('summary').innerHTML = `
+        <div class="row" style="margin-bottom:10px">
+          <div class="glass">Category: <b>${activeCat}</b></div>
+          <div class="glass">Score: <b>${score}</b></div>
+          <div class="glass">Cards Seen: <b>${resultsLog.length}</b></div>
+        </div>
+        <ol>${list}</ol>`;
+      show('results');
+      resultsLog=[];
+      if(wakeLock){ try{ wakeLock.release(); }catch(e){} }
+    }
+
+    document.getElementById('again').addEventListener('click',()=>{
+      // restart same settings quickly
+      show('home'); document.getElementById('startBtn').click();
+    });
+    document.getElementById('homeBtn').addEventListener('click',()=>{
+      show('home');
+    });
+
+    // Keyboard (for desktop testing): left/right arrows
+    window.addEventListener('keydown',e=>{
+      if(!screens.game.classList.contains('active')) return;
+      if(e.key==='ArrowRight') correct();
+      if(e.key==='ArrowLeft') pass();
+    });
+  </script></body>
+    </html>
