@@ -28,7 +28,7 @@
 select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;border-radius:14px;border:1px solid #1f2b59;background:#0f1730;color:var(--ink);font-size:16px}
 
 /* Game screen */
-.screen{display:block} /* safer default */
+.screen{display:block}
 .screen:not(.active){display:none}
 .bigCard{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:56vh;border-radius:24px;padding:22px;margin-top:14px;background:
   radial-gradient(1200px 400px at 50% -200px, rgba(124,248,255,.15), transparent),
@@ -51,19 +51,21 @@ select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;bo
   </style>
 </head>
 <body>
-  <div id="debug">App loaded. If this stays visible after a few seconds, something blocked the script.</div>
+  <div id="debug">App loaded. If this stays visible, something blocked the script.</div>
   <div class="wrap">
     <!-- SCREEN: HOME -->
     <section id="home" class="screen active">
       <h1>Mixed Movie Magic – Heads Up!</h1>
-      <p class="small">Play on one phone. Swipe → for Correct, ← for Pass. Big buttons included.</p>
+      <p class="small">Swipe → = Correct, ← = Pass. Or turn on tilt controls: flip down = Correct, flip up = Pass.</p>
       <div class="card pad section">
         <h2>Choose Category</h2>
         <select id="category"></select>
         <div class="row" style="margin-top:10px">
           <div class="chip">⏱ Round Time: <input type="number" id="roundTime" min="20" max="180" step="5" value="60" style="width:110px"></div>
           <div class="chip">🔁 No Repeats: <input type="checkbox" id="noRepeats" checked></div>
+          <div class="chip">📱 Tilt Controls: <input type="checkbox" id="tiltToggle"></div>
         </div>
+        <div class="small">If using tilt on iPhone, you'll be asked to allow motion access.</div>
       </div>
       <div class="row section">
         <button class="warn" id="howTo">How to Play</button>
@@ -74,11 +76,9 @@ select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;bo
         <ol>
           <li>Pick a category or <b>All (Mix)</b> and tap <b>Start Round</b>.</li>
           <li>Hold to the guesser’s forehead (or just show the screen).</li>
-          <li>Teammates give clues without saying the word(s) on the card.</li>
-          <li><b>Correct</b> = +1, <b>Pass</b> = skip. Default 60s per round.</li>
-          <li>Swipe right = Correct, left = Pass (or use the buttons).</li>
+          <li>No saying the word(s) on the card. Correct = +1, Pass = skip.</li>
+          <li>Controls: Swipe, Buttons, or <b>Tilt</b> (flip down = Correct, flip up = Pass).</li>
         </ol>
-        <p class="small">Tip: enable Do Not Disturb so notifications don't interrupt.</p>
       </div>
     </section><!-- SCREEN: GAME -->
 <section id="game" class="screen">
@@ -86,12 +86,13 @@ select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;bo
     <div class="glass">Category: <b id="liveCat"></b></div>
     <div class="glass">Score: <b id="score">0</b></div>
     <div class="glass">Left: <b id="left">0</b></div>
+    <div class="glass" id="tiltStatus" style="display:none">Tilt: <b id="tiltState">OFF</b></div>
   </div>
   <div class="bigCard" id="bigCard">
     <div class="bigCat" id="bigCat"></div>
     <div class="bigWord" id="bigWord">—</div>
     <div class="timer" id="timer">60</div>
-    <div class="count small">(tap Correct / Pass or swipe)</div>
+    <div class="count small">(tap buttons, swipe, or tilt)</div>
   </div>
   <div class="footBar">
     <button class="bad" id="passBtn">Pass</button>
@@ -111,10 +112,7 @@ select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;bo
 
   </div>  <script>
     // Hide debug banner after JS begins
-    (function(){
-      const dbg = document.getElementById('debug');
-      if(dbg) setTimeout(()=>{ dbg.style.display='none'; }, 600);
-    })();
+    (function(){ const dbg = document.getElementById('debug'); if(dbg) setTimeout(()=>{ dbg.style.display='none'; }, 600); })();
 
     // --- DATA ---
     const categories = {
@@ -152,106 +150,82 @@ select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;bo
     // --- STATE ---
     let pool=[], used=new Set(), roundList=[], idx=0, score=0, timerId=null, remaining=60, activeCat="";
 
+    // Tilt state
+    let tiltEnabled=false, neutral=0, tilting=false, armed=true, tiltListener=null, calTimer=null;
+
     // Utility
     const shuffle = (arr)=>arr.sort(()=>Math.random()-0.5);
     const vibrate = (ms)=>{ if(navigator.vibrate) navigator.vibrate(ms); };
 
     // Wake Lock (best effort)
-    let wakeLock;
-    async function requestWakeLock(){
-      try{ if('wakeLock' in navigator){ wakeLock = await navigator.wakeLock.request('screen'); } }catch(e){}
-    }
+    let wakeLock; async function requestWakeLock(){ try{ if('wakeLock' in navigator){ wakeLock = await navigator.wakeLock.request('screen'); } }catch(e){} }
 
     // Populate category select
     const catSel = document.getElementById('category');
     const catNames = Object.keys(categories);
-    // Add a mixed option first
-    const mixOpt = document.createElement('option'); mixOpt.value = '__ALL__'; mixOpt.textContent = 'All (Mix)'; catSel.appendChild(mixOpt);
+    const mixOpt = document.createElement('option'); mixOpt.value='__ALL__'; mixOpt.textContent='All (Mix)'; catSel.appendChild(mixOpt);
     catNames.forEach(c=>{ const o=document.createElement('option'); o.value=c; o.textContent=c; catSel.appendChild(o); });
 
     // Elements
     const screens={ home:document.getElementById('home'), game:document.getElementById('game'), results:document.getElementById('results') };
-    const liveCat = document.getElementById('liveCat');
-    const bigCat = document.getElementById('bigCat');
-    const bigWord = document.getElementById('bigWord');
-    const timerEl = document.getElementById('timer');
-    const scoreEl = document.getElementById('score');
-    const leftEl = document.getElementById('left');
-    const howTo = document.getElementById('howTo');
-    const howToBox = document.getElementById('howToBox');
+    const liveCat=document.getElementById('liveCat');
+    const bigCat=document.getElementById('bigCat');
+    const bigWord=document.getElementById('bigWord');
+    const timerEl=document.getElementById('timer');
+    const scoreEl=document.getElementById('score');
+    const leftEl=document.getElementById('left');
+    const howTo=document.getElementById('howTo');
+    const howToBox=document.getElementById('howToBox');
+    const tiltToggle=document.getElementById('tiltToggle');
+    const tiltStatus=document.getElementById('tiltStatus');
+    const tiltState=document.getElementById('tiltState');
 
     function show(name){ Object.values(screens).forEach(s=>s.classList.remove('active')); screens[name].classList.add('active'); }
 
     // Start Round
-    document.getElementById('startBtn').addEventListener('click',()=>{
+    document.getElementById('startBtn').addEventListener('click', async ()=>{
       const cat = catSel.value;
       const seconds = Math.max(20, Math.min(180, +document.getElementById('roundTime').value||60));
       const noRepeats = document.getElementById('noRepeats').checked;
+      tiltEnabled = !!tiltToggle.checked;
+      tiltStatus.style.display = tiltEnabled ? 'block' : 'none';
+      tiltState.textContent = tiltEnabled ? 'Calibrating…' : 'OFF';
 
       activeCat = (cat === '__ALL__' ? 'All (Mix)' : cat);
-      if(cat === '__ALL__'){
-        pool = Object.values(categories).flat();
-      } else {
-        pool = [...categories[cat]];
-      }
+      pool = (cat === '__ALL__') ? Object.values(categories).flat() : [...categories[cat]];
       if(noRepeats){ pool = pool.filter(w=>!used.has(`${activeCat}|${w}`)); }
-      if(pool.length===0){
-        used.clear();
-        pool = (cat==='__ALL__') ? Object.values(categories).flat() : [...categories[cat]];
-      }
-      shuffle(pool);
-      roundList = pool.slice();
-      idx = 0; score = 0; remaining = seconds;
+      if(pool.length===0){ used.clear(); pool = (cat==='__ALL__') ? Object.values(categories).flat() : [...categories[cat]]; }
+      shuffle(pool); roundList = pool.slice(); idx = 0; score = 0; remaining = seconds;
 
       liveCat.textContent = activeCat; bigCat.textContent = activeCat; leftEl.textContent = roundList.length;
       scoreEl.textContent = '0'; timerEl.textContent = remaining; timerEl.style.color = getComputedStyle(document.documentElement).getPropertyValue('--accent');
-      nextCard();
-      show('game');
-      tick();
-      requestWakeLock();
+      nextCard(); show('game'); tick(); requestWakeLock();
+
+      if(tiltEnabled){ await enableTilt(); }
     });
 
     function nextCard(){
       const left = Math.max(0, roundList.length - idx);
       leftEl.textContent = left;
       if(left<=0){ endRound(); return; }
-      const word = roundList[idx];
-      bigWord.textContent = word;
+      bigWord.textContent = roundList[idx];
     }
 
-    function correct(){
-      score++; scoreEl.textContent = score;
-      recordUse(true);
-      idx++; nextCard(); vibrate(30);
-    }
-    function pass(){
-      recordUse(false);
-      idx++; nextCard(); vibrate(10);
-    }
-    function recordUse(ok){
-      const key = `${activeCat}|${roundList[idx]}`;
-      used.add(key);
-      resultsLog.push({word:roundList[idx], ok});
-    }
+    function correct(){ score++; scoreEl.textContent = score; recordUse(true); idx++; nextCard(); vibrate(30); }
+    function pass(){ recordUse(false); idx++; nextCard(); vibrate(10); }
+    function recordUse(ok){ const key=`${activeCat}|${roundList[idx]}`; used.add(key); resultsLog.push({word:roundList[idx], ok}); }
 
     // Timer
     function tick(){
       timerEl.textContent = remaining;
       if(remaining<=5) timerEl.style.color = getComputedStyle(document.documentElement).getPropertyValue('--warn');
-      timerId = setTimeout(()=>{
-        remaining--; if(remaining<0){ endRound(); } else { tick(); }
-      }, 1000);
+      timerId = setTimeout(()=>{ remaining--; (remaining<0)? endRound() : tick(); }, 1000);
     }
 
     // Gesture controls (swipe)
-    let startX=null;
-    const cardEl = document.getElementById('bigCard');
+    let startX=null; const cardEl=document.getElementById('bigCard');
     cardEl.addEventListener('touchstart',e=>{ startX = e.changedTouches[0].clientX; });
-    cardEl.addEventListener('touchend',e=>{
-      if(startX==null) return; const dx = e.changedTouches[0].clientX - startX; startX=null;
-      if(Math.abs(dx) < 40) return; // ignore tiny swipes
-      if(dx>0) correct(); else pass();
-    });
+    cardEl.addEventListener('touchend',e=>{ if(startX==null) return; const dx=e.changedTouches[0].clientX-startX; startX=null; if(Math.abs(dx)<40) return; (dx>0)?correct():pass(); });
 
     // Buttons
     document.getElementById('correctBtn').addEventListener('click', correct);
@@ -264,8 +238,10 @@ select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;bo
     let resultsLog=[];
     function endRound(){
       try{ if(timerId) clearTimeout(timerId); }catch(e){}
+      if(tiltListener){ window.removeEventListener('deviceorientation', tiltListener); tiltListener=null; }
+      if(calTimer){ clearTimeout(calTimer); }
       timerId=null;
-      const list = resultsLog.map((r)=>`<li>${r.ok?"✅":"⏭️"} ${r.word}</li>`).join('');
+      const list = resultsLog.map(r=>`<li>${r.ok?"✅":"⏭️"} ${r.word}</li>`).join('');
       document.getElementById('summary').innerHTML = `
         <div class="row" style="margin-bottom:10px">
           <div class="glass">Category: <b>${activeCat}</b></div>
@@ -273,28 +249,53 @@ select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;bo
           <div class="glass">Cards Seen: <b>${resultsLog.length}</b></div>
         </div>
         <ol>${list}</ol>`;
-      show('results');
-      resultsLog=[];
-      if(wakeLock){ try{ wakeLock.release(); }catch(e){} }
+      show('results'); resultsLog=[]; if(wakeLock){ try{ wakeLock.release(); }catch(e){} }
     }
 
     document.getElementById('again').addEventListener('click',()=>{ show('home'); document.getElementById('startBtn').click(); });
     document.getElementById('homeBtn').addEventListener('click',()=>{ show('home'); });
 
-    // Keyboard (for desktop testing): left/right arrows
-    window.addEventListener('keydown',e=>{
-      if(!screens.game.classList.contains('active')) return;
-      if(e.key==='ArrowRight') correct();
-      if(e.key==='ArrowLeft') pass();
-    });
+    // Keyboard (for desktop testing)
+    window.addEventListener('keydown',e=>{ if(!screens.game.classList.contains('active')) return; if(e.key==='ArrowRight') correct(); if(e.key==='ArrowLeft') pass(); });
+
+    // ---- Tilt Controls ----
+    async function enableTilt(){
+      // iOS permission
+      try{
+        if(typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function'){
+          const res = await DeviceOrientationEvent.requestPermission(); if(res!=='granted'){ tiltState.textContent='Denied'; tiltEnabled=false; return; }
+        }
+      }catch(e){ /* ignore */ }
+      // Calibrate neutral beta (face-forward) for 800ms
+      let samples=[]; neutral=0; tiltState.textContent='Calibrating…';
+      const calib = (e)=>{ if(typeof e.beta==='number') samples.push(e.beta); };
+      window.addEventListener('deviceorientation', calib, {once:false, passive:true});
+      await new Promise(r=>{ calTimer=setTimeout(r, 800); });
+      window.removeEventListener('deviceorientation', calib);
+      if(samples.length){ neutral = samples.reduce((a,b)=>a+b,0)/samples.length; }
+      tiltState.textContent='Ready'; armed=true; tilting=false;
+
+      // Listen for tilt actions
+      const THRESH = 25; // degrees from neutral
+      const HYST = 10;   // must come back within this to re-arm
+      tiltListener = (e)=>{
+        if(typeof e.beta !== 'number') return; // front/back tilt in degrees
+        const delta = e.beta - neutral;
+        // Flip down (toward ground) => Correct; Flip up (toward sky) => Pass
+        if(armed){
+          if(delta > THRESH){ tilting='down'; armed=false; correct(); tiltState.textContent='Down → Correct'; setTimeout(()=>tiltState.textContent='Ready',500); }
+          else if(delta < -THRESH){ tilting='up'; armed=false; pass(); tiltState.textContent='Up → Pass'; setTimeout(()=>tiltState.textContent='Ready',500); }
+        } else {
+          // Re-arm when user returns near neutral
+          if(Math.abs(delta) < HYST){ armed=true; }
+        }
+      };
+      window.addEventListener('deviceorientation', tiltListener, {passive:true});
+    }
 
     // Surface any JS errors on-screen so it's never blank
-    window.addEventListener('error', (e)=>{
-      const dbg=document.getElementById('debug');
-      if(dbg){ dbg.style.display='block'; dbg.textContent = 'Error: '+ (e.message||'unknown'); }
-    });
-  </script>  <noscript>
-    <div style="padding:12px;background:#222;color:#fff">This game needs JavaScript enabled.</div>
-  </noscript>
+    window.addEventListener('error', (e)=>{ const dbg=document.getElementById('debug'); if(dbg){ dbg.style.display='block'; dbg.textContent = 'Error: '+ (e.message||'unknown'); } });
+  </script><noscript><div style="padding:12px;background:#222;color:#fff">This game needs JavaScript enabled.</div></noscript>
+
 </body>
 </html>
