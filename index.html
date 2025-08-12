@@ -8,102 +8,62 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* ===== Kuzco Theme Palette ===== */
-    :root{
-      --bg:#0d0a1a;           /* night sky */
-      --bg2:#111133;          /* royal shadow */
-      --gold:#ffd54d;         /* kuzco gold */
-      --gold2:#ffb300;        /* deep gold */
-      --purple:#7c4dff;       /* royal purple */
-      --teal:#15d1c1;         /* jungle teal */
-      --lime:#6df59a;         /* success */
-      --rose:#ff6b9e;         /* pass */
-      --ink:#eef3ff;          /* text */
-      --muted:#aab7ff;        /* subtext */
-      --warn:#ffe08a;
-    }
-
+    :root{ --bg:#0d0a1a; --bg2:#111133; --gold:#ffd54d; --gold2:#ffb300; --purple:#7c4dff; --teal:#15d1c1; --lime:#6df59a; --rose:#ff6b9e; --ink:#eef3ff; --muted:#aab7ff; --warn:#ffe08a; }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{margin:0;font-family:'Nunito',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--ink);}
-
-    /* Animated royal backdrop */
-    .backdrop{
-      position:fixed; inset:0; z-index:-1;
-      background:
-        radial-gradient(1000px 400px at 50% -200px, rgba(124,248,255,.12), transparent),
-        repeating-linear-gradient(45deg, rgba(124,248,255,.06) 0 18px, transparent 18px 36px),
-        radial-gradient(circle at 10% 120%, rgba(255,213,77,.12), transparent 50%),
-        linear-gradient(180deg, var(--bg2), var(--bg));
-      overflow:hidden;
-    }
-    .stars span{position:absolute; width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.15); filter:blur(1px); animation:float 12s linear infinite;}
-    @keyframes float{ to{ transform:translateY(-120vh) rotate(360deg);} }
-
+    .backdrop{position:fixed; inset:0; z-index:-1; background:
+      radial-gradient(1000px 400px at 50% -200px, rgba(124,248,255,.12), transparent),
+      repeating-linear-gradient(45deg, rgba(124,248,255,.06) 0 18px, transparent 18px 36px),
+      radial-gradient(circle at 10% 120%, rgba(255,213,77,.12), transparent 50%),
+      linear-gradient(180deg, var(--bg2), var(--bg));}
+    .stars span{position:absolute;width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);filter:blur(1px);animation:float 12s linear infinite}
+    @keyframes float{to{transform:translateY(-120vh) rotate(360deg)}}
     .wrap{max-width:760px;margin:0 auto;padding:clamp(12px,2.5vw,24px);}  
     header{display:flex;align-items:center;gap:12px;margin-top:8px}
     .crown{font-family:'Baloo 2', cursive; font-size:clamp(26px,7vw,42px); letter-spacing:.5px}
     .crown .accent{color:var(--gold)}
     header .tag{margin-left:auto;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:6px 10px;border-radius:999px;color:var(--muted);font-size:12px}
-
     h1{font-family:'Baloo 2', cursive; font-size:clamp(22px,6vw,34px);margin:8px 0 6px}
     h2{font-size:clamp(16px,4vw,20px);margin:8px 0 6px;color:var(--muted)}
-
-    .card{position:relative;background:linear-gradient(180deg, rgba(124,77,255,.18), rgba(21,209,193,.12));
-      border:1px solid rgba(255,255,255,.18); border-radius:22px; box-shadow:0 12px 40px rgba(0,0,0,.4); overflow:hidden}
+    .card{position:relative;background:linear-gradient(180deg, rgba(124,77,255,.18), rgba(21,209,193,.12)); border:1px solid rgba(255,255,255,.18); border-radius:22px; box-shadow:0 12px 40px rgba(0,0,0,.4); overflow:hidden}
     .card:before{content:""; position:absolute; inset:0; background:
       radial-gradient(200px 80px at 20% -30px, rgba(255,213,77,.35), transparent),
       radial-gradient(400px 160px at 80% 120%, rgba(21,209,193,.18), transparent),
       repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 16px, transparent 16px 32px);
       pointer-events:none}
-
     .pad{padding:18px}
     .row{display:flex;gap:10px;flex-wrap:wrap}
     .row > *{flex:1}
     .chip{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.2);color:var(--ink);font-size:14px}
-
     button{appearance:none;border:none;background:linear-gradient(180deg, var(--gold), var(--gold2));color:#2b1b00;padding:14px 16px;border-radius:16px;font-size:16px;font-weight:800;letter-spacing:.25px;box-shadow:0 10px 24px rgba(255,179,0,.35);} 
     button:active{transform:translateY(1px)}
     button.primary{background:linear-gradient(180deg, var(--purple), #4f2bd6); color:#eef3ff}
     button.good{background:linear-gradient(180deg, var(--lime), #00d38a); color:#001b0b}
     button.bad{background:linear-gradient(180deg, var(--rose), #ff3b6e); color:#2b0010}
     button.warn{background:linear-gradient(180deg, var(--gold), var(--gold2)); color:#2b1b00}
-
     .section{margin:16px 0}
-    select, input[type="number"], input[type="text"]{width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.25);color:var(--ink);font-size:16px}
-
-    /* Screens */
-    .screen{display:block}
-    .screen:not(.active){display:none}
-
-    /* Big card */
-    .bigCard{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:58vh;border-radius:24px;padding:22px;margin-top:14px;
-      background:
-        radial-gradient(1200px 400px at 50% -200px, rgba(124,248,255,.12), transparent),
-        conic-gradient(from 0deg at 50% 50%, rgba(255,213,77,.08), rgba(124,77,255,.08), rgba(21,209,193,.08), rgba(255,213,77,.08));
-      border:2px solid var(--gold); box-shadow:0 0 0 4px rgba(255,213,77,.2), 0 20px 60px rgba(0,0,0,.5);
-      position:relative; overflow:hidden}
+    select, input[type=number], input[type=text]{width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.25);color:var(--ink);font-size:16px}
+    .screen{display:block}.screen:not(.active){display:none}
+    .bigCard{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:58vh;border-radius:24px;padding:22px;margin-top:14px; background:
+      radial-gradient(1200px 400px at 50% -200px, rgba(124,248,255,.12), transparent),
+      conic-gradient(from 0deg at 50% 50%, rgba(255,213,77,.08), rgba(124,77,255,.08), rgba(21,209,193,.08), rgba(255,213,77,.08));
+      border:2px solid var(--gold); box-shadow:0 0 0 4px rgba(255,213,77,.2), 0 20px 60px rgba(0,0,0,.5); position:relative; overflow:hidden}
     .bigCard:after{content:""; position:absolute; inset:0; background:
       radial-gradient(200px 60px at 50% -30px, rgba(255,213,77,.25), transparent),
       repeating-linear-gradient(60deg, rgba(255,255,255,.06) 0 14px, transparent 14px 28px);
       mix-blend-mode:screen; pointer-events:none}
-
     .bigCat{font-size:13px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
     .bigWord{font-family:'Baloo 2', cursive; font-size:clamp(30px,9vw,48px);font-weight:900;margin-top:10px;line-height:1.1; text-shadow:0 2px 8px rgba(0,0,0,.5)}
     .timer{font-variant-numeric:tabular-nums;font-size:clamp(34px,10vw,54px);font-weight:800;margin-top:8px;color:var(--gold)}
     .count{font-size:14px;color:var(--muted)}
     .glass{backdrop-filter:blur(8px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:12px}
     .footBar{display:flex;gap:10px;position:sticky;bottom:0;margin-top:14px}
-    .footBar > button{flex:1}
-
+    .footBar>button{flex:1}
     .small{font-size:12px;color:var(--muted)}
     .hidden{display:none!important}
-
-    /* Toast */
     #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:#1b1236;color:var(--ink);border:1px solid rgba(255,255,255,.2);padding:10px 14px;border-radius:12px;opacity:0;transition:.25s;box-shadow:0 10px 24px rgba(0,0,0,.45);z-index:30}
     #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-    /* Confetti */
     .confetti{position:fixed;inset:0; pointer-events:none; overflow:hidden}
     .confetti i{position:absolute;width:10px;height:14px;border-radius:2px;opacity:.9;animation:fall 1.1s linear forwards}
     @keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
@@ -117,10 +77,9 @@
       <div class="tag">Theme: Emperor's New Groove</div>
     </header>
 
-    <!-- SCREEN: HOME -->
     <section id="home" class="screen active">
       <h1>No touchy? No problem.</h1>
-      <p class="small">Swipe → = Correct, ← = Pass. Or turn on tilt: flip down = Correct, flip up = Pass.</p>
+      <p class="small">Swipe → = Correct, ← = Pass. Or tilt: flip down = Correct, flip up = Pass.</p>
       <div class="card pad section">
         <h2>Choose Category</h2>
         <select id="category"></select>
@@ -129,7 +88,7 @@
           <div class="chip">🔁 No Repeats <input type="checkbox" id="noRepeats" checked></div>
           <div class="chip">📱 Tilt Controls <input type="checkbox" id="tiltToggle"></div>
         </div>
-        <div class="small">Tip: Safari on iPhone will ask to allow Motion & Orientation—tap Allow.</div>
+        <div class="small">iPhone may ask to allow Motion & Orientation—tap Allow. Android works automatically on HTTPS (GitHub Pages is HTTPS).</div>
       </div>
       <div class="row section">
         <button class="warn" id="howTo">How to Play</button>
@@ -146,7 +105,6 @@
       </div>
     </section>
 
-    <!-- SCREEN: GAME -->
     <section id="game" class="screen">
       <div class="row">
         <div class="glass">Category: <b id="liveCat"></b></div>
@@ -166,7 +124,6 @@
       </div>
     </section>
 
-    <!-- SCREEN: RESULTS -->
     <section id="results" class="screen">
       <h2>Round Results</h2>
       <div class="card pad section" id="summary"></div>
@@ -177,24 +134,16 @@
     </section>
   </div>
 
-  <!-- Toast + Confetti layer -->
   <div id="toast"></div>
   <div class="confetti" id="confetti"></div>
 
   <script>
-    // Sparkly stars
-    (function(){
-      const s=document.getElementById('stars');
-      for(let i=0;i<24;i++){ const n=document.createElement('span'); n.style.left=Math.random()*100+'%'; n.style.bottom=(-10+Math.random()*100)+'vh'; n.style.animationDelay=(Math.random()*6)+'s'; n.style.opacity=.3+Math.random()*.5; s.appendChild(n); }
-    })();
+    // backdrop shimmer
+    (function(){ const s=document.getElementById('stars'); for(let i=0;i<24;i++){ const n=document.createElement('span'); n.style.left=Math.random()*100+'%'; n.style.bottom=(-10+Math.random()*100)+'vh'; n.style.animationDelay=(Math.random()*6)+'s'; n.style.opacity=.3+Math.random()*.5; s.appendChild(n);} })();
 
-    // --- DATA --- (heavily ENG-themed but includes your requested sets)
-    const categories = {
-      "Emperor's New Groove (Core)": [
-        "Kuzco","Pacha","Yzma","Kronk","Chicha","Chaca","Tipo","Bucky the Squirrel",
-        "Spinach Puffs","Pull the lever","Secret Lab","Llama Potion","No touchy!","Boom, baby!","Kuzcotopia",
-        "Mudka's Meat Hut","Suspension Bridge","Wrong lever!","Theme Song Guy","Shoulder Angel","Shoulder Devil"
-      ],
+    // Categories (ENG-heavy plus requested sets)
+    const categories={
+      "Emperor's New Groove (Core)": ["Kuzco","Pacha","Yzma","Kronk","Chicha","Chaca","Tipo","Bucky the Squirrel","Spinach Puffs","Pull the lever","Secret Lab","Llama Potion","No touchy!","Boom, baby!","Kuzcotopia","Mudka's Meat Hut","Suspension Bridge","Wrong lever!","Theme Song Guy","Shoulder Angel","Shoulder Devil"],
       "Zootopia": ["Judy Hopps","Nick Wilde","Chief Bogo","Dawn Bellwether","Flash","Gazelle","Finnick","Mr. Big","Tundratown","ZPD","Carrot Pen"],
       "Freaky Friday": ["Anna Coleman","Tess Coleman","Magic Fortune Cookie","The Switch","The Wedding","Guitar Audition","Therapy Session","School Band"],
       "Ratatouille": ["Remy","Linguini","Colette","Anton Ego","Gusteau","Emile","Skinner","Anyone Can Cook","Ratatouille Dish"],
@@ -203,127 +152,110 @@
       "Wildcards": ["One-word clues only","Act it out (no talking)","Whisper clues","Robot voice only","Rhymes only (no exact words)","Switch clue-giver now","Reverse round: guesser talks","Speed round: 3 seconds per card"]
     };
 
-    // --- STATE ---
+    // STATE
     let pool=[], used=new Set(), roundList=[], idx=0, score=0, timerId=null, remaining=60, activeCat="";
-    let tiltEnabled=false, neutral=0, tiltListener=null, calTimer=null, armed=true;
+    let tiltEnabled=false, neutral=0, armed=true, sensorMode=''; // sensorMode: 'orientation' | 'motion'
+    let tiltListener=null, calibListener=null, calTimer=null;
 
     // Utils
-    const shuffle = (arr)=>arr.sort(()=>Math.random()-0.5);
-    const vibrate = (ms)=>{ if(navigator.vibrate) navigator.vibrate(ms); };
-    const toast = (m)=>{ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1200); };
-    const confetti = ()=>{ const c=document.getElementById('confetti'); for(let i=0;i<18;i++){ const p=document.createElement('i'); p.style.left=(5+Math.random()*90)+'%'; p.style.top='-10px'; p.style.background=`hsl(${Math.random()*360}, 90%, 60%)`; p.style.animationDelay=(Math.random()*0.4)+'s'; c.appendChild(p); setTimeout(()=>p.remove(),1200);} };
+    const shuffle=a=>a.sort(()=>Math.random()-0.5);
+    const vibrate=ms=>{ if(navigator.vibrate) navigator.vibrate(ms); };
+    const toast=m=>{ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1200); };
+    const confetti=()=>{ const c=document.getElementById('confetti'); for(let i=0;i<18;i++){ const p=document.createElement('i'); p.style.left=(5+Math.random()*90)+'%'; p.style.top='-10px'; p.style.background=`hsl(${Math.random()*360}, 90%, 60%)`; p.style.animationDelay=(Math.random()*0.4)+'s'; c.appendChild(p); setTimeout(()=>p.remove(),1200);} };
 
     // Wake Lock
-    let wakeLock; async function requestWakeLock(){ try{ if('wakeLock' in navigator){ wakeLock = await navigator.wakeLock.request('screen'); } }catch(e){} }
+    let wakeLock; async function requestWakeLock(){ try{ if('wakeLock' in navigator){ wakeLock=await navigator.wakeLock.request('screen'); } }catch(e){} }
 
-    // Populate category select
-    const catSel = document.getElementById('category');
-    const catNames = Object.keys(categories);
-    const mixOpt = document.createElement('option'); mixOpt.value='__ALL__'; mixOpt.textContent='All (Mix)'; catSel.appendChild(mixOpt);
-    catNames.forEach(c=>{ const o=document.createElement('option'); o.value=c; o.textContent=c; catSel.appendChild(o);});
+    // Populate select
+    const catSel=document.getElementById('category');
+    const catNames=Object.keys(categories);
+    const mixOpt=document.createElement('option'); mixOpt.value='__ALL__'; mixOpt.textContent='All (Mix)'; catSel.appendChild(mixOpt);
+    catNames.forEach(c=>{ const o=document.createElement('option'); o.value=c; o.textContent=c; catSel.appendChild(o); });
 
     // Elements
-    const screens={ home:document.getElementById('home'), game:document.getElementById('game'), results:document.getElementById('results') };
-    const liveCat=document.getElementById('liveCat');
-    const bigCat=document.getElementById('bigCat');
-    const bigWord=document.getElementById('bigWord');
-    const timerEl=document.getElementById('timer');
-    const scoreEl=document.getElementById('score');
-    const leftEl=document.getElementById('left');
-    const howTo=document.getElementById('howTo');
-    const howToBox=document.getElementById('howToBox');
-    const tiltToggle=document.getElementById('tiltToggle');
-    const tiltStatus=document.getElementById('tiltStatus');
-    const tiltState=document.getElementById('tiltState');
+    const screens={home:document.getElementById('home'),game:document.getElementById('game'),results:document.getElementById('results')};
+    const liveCat=document.getElementById('liveCat'); const bigCat=document.getElementById('bigCat'); const bigWord=document.getElementById('bigWord');
+    const timerEl=document.getElementById('timer'); const scoreEl=document.getElementById('score'); const leftEl=document.getElementById('left');
+    const howTo=document.getElementById('howTo'); const howToBox=document.getElementById('howToBox');
+    const tiltToggle=document.getElementById('tiltToggle'); const tiltStatus=document.getElementById('tiltStatus'); const tiltState=document.getElementById('tiltState');
 
     function show(name){ Object.values(screens).forEach(s=>s.classList.remove('active')); screens[name].classList.add('active'); }
 
     // Start Round
     document.getElementById('startBtn').addEventListener('click', async ()=>{
-      const cat = catSel.value;
-      const seconds = Math.max(20, Math.min(180, +document.getElementById('roundTime').value||60));
-      const noRepeats = document.getElementById('noRepeats').checked;
-      tiltEnabled = !!tiltToggle.checked;
-      tiltStatus.style.display = tiltEnabled ? 'block' : 'none';
-      tiltState.textContent = tiltEnabled ? 'Calibrating…' : 'OFF';
-
-      activeCat = (cat==='__ALL__' ? 'All (Mix)' : cat);
-      pool = (cat==='__ALL__') ? Object.values(categories).flat() : [...categories[cat]];
-      if(noRepeats){ pool = pool.filter(w=>!used.has(`${activeCat}|${w}`)); }
-      if(pool.length===0){ used.clear(); pool = (cat==='__ALL__') ? Object.values(categories).flat() : [...categories[cat]]; }
-      shuffle(pool); roundList = pool.slice(); idx=0; score=0; remaining=seconds;
-
-      liveCat.textContent = activeCat; bigCat.textContent = activeCat; leftEl.textContent = roundList.length;
-      scoreEl.textContent='0'; timerEl.textContent=remaining; timerEl.style.color='var(--gold)';
-      nextCard(); show('game'); tick(); requestWakeLock();
-
-      if(tiltEnabled){ await enableTilt(); }
+      const cat=catSel.value; const seconds=Math.max(20, Math.min(180, +document.getElementById('roundTime').value||60));
+      const noRepeats=document.getElementById('noRepeats').checked; tiltEnabled=!!tiltToggle.checked; tiltStatus.style.display=tiltEnabled?'block':'none'; tiltState.textContent=tiltEnabled?'Calibrating…':'OFF';
+      activeCat=(cat==='__ALL__'?'All (Mix)':cat); pool=(cat==='__ALL__')?Object.values(categories).flat():[...categories[cat]];
+      if(noRepeats){ pool=pool.filter(w=>!used.has(`${activeCat}|${w}`)); }
+      if(pool.length===0){ used.clear(); pool=(cat==='__ALL__')?Object.values(categories).flat():[...categories[cat]]; }
+      shuffle(pool); roundList=pool.slice(); idx=0; score=0; remaining=seconds;
+      liveCat.textContent=activeCat; bigCat.textContent=activeCat; leftEl.textContent=roundList.length; scoreEl.textContent='0'; timerEl.textContent=remaining; timerEl.style.color='var(--gold)';
+      nextCard(); show('game'); tick(); requestWakeLock(); if(tiltEnabled){ await enableTilt(); }
     });
 
     function nextCard(){ const left=Math.max(0, roundList.length-idx); leftEl.textContent=left; if(left<=0){ endRound(); return;} bigWord.textContent=roundList[idx]; }
-
     function correct(){ score++; scoreEl.textContent=score; recordUse(true); idx++; nextCard(); vibrate(30); confetti(); }
     function pass(){ recordUse(false); idx++; nextCard(); vibrate(10); }
     function recordUse(ok){ const key=`${activeCat}|${roundList[idx]}`; used.add(key); resultsLog.push({word:roundList[idx], ok}); }
 
-    // Timer
     function tick(){ timerEl.textContent=remaining; if(remaining<=5) timerEl.style.color='var(--warn)'; timerId=setTimeout(()=>{ remaining--; (remaining<0)? endRound() : tick(); }, 1000); }
 
-    // Swipe controls
+    // Swipe
     let startX=null; const cardEl=document.getElementById('bigCard');
-    cardEl.addEventListener('touchstart',e=>{ startX = e.changedTouches[0].clientX; });
+    cardEl.addEventListener('touchstart',e=>{ startX=e.changedTouches[0].clientX; });
     cardEl.addEventListener('touchend',e=>{ if(startX==null) return; const dx=e.changedTouches[0].clientX-startX; startX=null; if(Math.abs(dx)<40) return; (dx>0)?correct():pass(); });
 
-    // Buttons
     document.getElementById('correctBtn').addEventListener('click', correct);
     document.getElementById('passBtn').addEventListener('click', pass);
-
-    // How-to toggle
     howTo.addEventListener('click',()=> howToBox.classList.toggle('hidden'));
 
-    // Results handling
     let resultsLog=[];
-    function endRound(){ try{ if(timerId) clearTimeout(timerId);}catch(e){}; if(tiltListener){ window.removeEventListener('deviceorientation', tiltListener); tiltListener=null;} if(calTimer){ clearTimeout(calTimer);} timerId=null;
-      const list=resultsLog.map(r=>`<li>${r.ok?"✅":"⏭️"} ${r.word}</li>`).join('');
-      document.getElementById('summary').innerHTML=`
-        <div class="row" style="margin-bottom:10px">
-          <div class="glass">Category: <b>${activeCat}</b></div>
-          <div class="glass">Score: <b>${score}</b></div>
-          <div class="glass">Cards Seen: <b>${resultsLog.length}</b></div>
-        </div><ol>${list}</ol>`;
-      show('results'); resultsLog=[]; if(wakeLock){ try{ wakeLock.release(); }catch(e){} }
+    function endRound(){ try{ if(timerId) clearTimeout(timerId);}catch(e){}; if(tiltListener){ window.removeEventListener(sensorMode==='orientation'?'deviceorientation':'devicemotion', tiltListener); tiltListener=null;} if(calibListener){ window.removeEventListener(sensorMode==='orientation'?'deviceorientation':'devicemotion', calibListener);} if(calTimer){ clearTimeout(calTimer);} timerId=null;
+      const list=resultsLog.map(r=>`<li>${r.ok?"✅":"⏭️"} ${r.word}</li>`).join(''); document.getElementById('summary').innerHTML=`<div class="row" style="margin-bottom:10px"><div class="glass">Category: <b>${activeCat}</b></div><div class="glass">Score: <b>${score}</b></div><div class="glass">Cards Seen: <b>${resultsLog.length}</b></div></div><ol>${list}</ol>`; show('results'); resultsLog=[]; if(wakeLock){ try{ wakeLock.release(); }catch(e){} }
     }
 
-    document.getElementById('again').addEventListener('click',()=>{ show('home'); document.getElementById('startBtn').click(); });
-    document.getElementById('homeBtn').addEventListener('click',()=>{ show('home'); });
-
-    // Keyboard (desktop test)
     window.addEventListener('keydown',e=>{ if(!screens.game.classList.contains('active')) return; if(e.key==='ArrowRight') correct(); if(e.key==='ArrowLeft') pass(); });
 
-    // Tilt Controls
+    // ===== Tilt Controls with Android fallback =====
+    function computeBetaFromMotion(a){ // estimate pitch from acceleration including gravity
+      if(!a) return null; const ax=a.x||0, ay=a.y||0, az=a.z||0; const beta = -Math.atan2(ax, Math.hypot(ay,az)) * 180/Math.PI; return beta; }
+
     async function enableTilt(){
-      try{ if(typeof DeviceOrientationEvent!== 'undefined' && typeof DeviceOrientationEvent.requestPermission==='function'){ const res=await DeviceOrientationEvent.requestPermission(); if(res!=='granted'){ tiltState.textContent='Denied'; tiltEnabled=false; return; } } }catch(e){}
-      let samples=[]; tiltState.textContent='Calibrating…';
-      const calib=(e)=>{ if(typeof e.beta==='number') samples.push(e.beta); };
-      window.addEventListener('deviceorientation', calib, {once:false, passive:true});
+      // iOS permission (Android ignores)
+      try{ if(typeof DeviceOrientationEvent!=='undefined' && typeof DeviceOrientationEvent.requestPermission==='function'){ const res=await DeviceOrientationEvent.requestPermission(); if(res!=='granted'){ tiltState.textContent='Denied'; tiltEnabled=false; return;} } }catch(e){}
+
+      // Choose sensor: prefer deviceorientation if it fires; otherwise use devicemotion
+      sensorMode='orientation'; let orientationSeen=false; let motionSeen=false; let samples=[]; neutral=0; armed=true; tiltState.textContent='Calibrating…';
+
+      calibListener=(e)=>{ if(typeof e.beta==='number'){ orientationSeen=true; samples.push(e.beta); } };
+      window.addEventListener('deviceorientation', calibListener, {passive:true});
+
+      const motionCalib=(e)=>{ const b=computeBetaFromMotion(e.accelerationIncludingGravity); if(typeof b==='number' && !Number.isNaN(b)){ motionSeen=true; samples.push(b);} };
+      window.addEventListener('devicemotion', motionCalib, {passive:true});
+
       await new Promise(r=>{ calTimer=setTimeout(r, 800); });
-      window.removeEventListener('deviceorientation', calib);
-      const avg = samples.length ? samples.reduce((a,b)=>a+b,0)/samples.length : 0; neutral=avg; tiltState.textContent='Ready'; armed=true;
-      const THRESH=24, HYST=9;
-      tiltListener=(e)=>{
-        if(typeof e.beta!=='number') return; const delta=e.beta-neutral; // down = +, up = -
-        if(armed){ if(delta>THRESH){ armed=false; toast('Down → Correct'); correct(); setTimeout(()=>tiltState.textContent='Ready',400);} else if(delta<-THRESH){ armed=false; toast('Up → Pass'); pass(); setTimeout(()=>tiltState.textContent='Ready',400);} }
-        else if(Math.abs(delta)<HYST){ armed=true; }
+      window.removeEventListener('deviceorientation', calibListener); window.removeEventListener('devicemotion', motionCalib);
+
+      if(!orientationSeen && motionSeen){ sensorMode='motion'; }
+      neutral = samples.length ? samples.reduce((a,b)=>a+b,0)/samples.length : 0;
+      tiltState.textContent='Ready';
+
+      const THRESH=22, HYST=8;
+      tiltListener=(sensorMode==='orientation') ? (e)=>{
+        const beta = (typeof e.beta==='number')? e.beta : null; if(beta==null) return; const delta=beta-neutral; if(armed){ if(delta>THRESH){ armed=false; toast('Down → Correct'); correct(); setTimeout(()=>tiltState.textContent='Ready',400);} else if(delta<-THRESH){ armed=false; toast('Up → Pass'); pass(); setTimeout(()=>tiltState.textContent='Ready',400);} } else if(Math.abs(delta)<HYST){ armed=true; }
+      } : (e)=>{
+        const beta = computeBetaFromMotion(e.accelerationIncludingGravity); if(beta==null) return; const delta=beta-neutral; if(armed){ if(delta>THRESH){ armed=false; toast('Down → Correct'); correct(); setTimeout(()=>tiltState.textContent='Ready',400);} else if(delta<-THRESH){ armed=false; toast('Up → Pass'); pass(); setTimeout(()=>tiltState.textContent='Ready',400);} } else if(Math.abs(delta)<HYST){ armed=true; }
       };
-      window.addEventListener('deviceorientation', tiltListener, {passive:true});
+
+      window.addEventListener(sensorMode==='orientation'?'deviceorientation':'devicemotion', tiltListener, {passive:true});
     }
 
-    // Easter egg: three passes in a row shows "Wrong lever!"
-    (function(){ let streak=0; const origPass=pass; pass=function(){ streak++; if(streak>=3){ toast('WRONG LEVER!!'); streak=0; } origPass(); }; const origCorrect=correct; correct=function(){ streak=0; origCorrect(); }; })();
+    // Fun: wrong lever easter egg
+    (function(){ let streak=0; const _pass=pass, _correct=correct; pass=function(){ streak++; if(streak>=3){ toast('WRONG LEVER!!'); streak=0; } _pass(); }; correct=function(){ streak=0; _correct(); }; })();
   </script>
 </body>
 </html>
 
 
-{"updates":[{"pattern":".*","multiple":true,"replacement":"<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="utf-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />\n  <title>Kuzco's Heads Up! – Emperor's New Groove</title>\n  <meta name="theme-color" content="#0d0a1a" />\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">\n  <style>\n    :root{ --bg:#0d0a1a; --bg2:#111133; --gold:#ffd54d; --gold2:#ffb300; --purple:#7c4dff; --teal:#15d1c1; --lime:#6df59a; --rose:#ff6b9e; --ink:#eef3ff; --muted:#aab7ff; --warn:#ffe08a; }\n    *{box-sizing:border-box}\n    html,body{height:100%}\n    body{margin:0;font-family:'Nunito',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--ink);}\n    .backdrop{position:fixed; inset:0; z-index:-1; background:\n      radial-gradient(1000px 400px at 50% -200px, rgba(124,248,255,.12), transparent),\n      repeating-linear-gradient(45deg, rgba(124,248,255,.06) 0 18px, transparent 18px 36px),\n      radial-gradient(circle at 10% 120%, rgba(255,213,77,.12), transparent 50%),\n      linear-gradient(180deg, var(--bg2), var(--bg));}\n    .stars span{position:absolute;width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);filter:blur(1px);animation:float 12s linear infinite}\n    @keyframes float{to{transform:translateY(-120vh) rotate(360deg)}}\n    .wrap{max-width:760px;margin:0 auto;padding:clamp(12px,2.5vw,24px);}  \n    header{display:flex;align-items:center;gap:12px;margin-top:8px}\n    .crown{font-family:'Baloo 2', cursive; font-size:clamp(26px,7vw,42px); letter-spacing:.5px}\n    .crown .accent{color:var(--gold)}\n    header .tag{margin-left:auto;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:6px 10px;border-radius:999px;color:var(--muted);font-size:12px}\n    h1{font-family:'Baloo 2', cursive; font-size:clamp(22px,6vw,34px);margin:8px 0 6px}\n    h2{font-size:clamp(16px,4vw,20px);margin:8px 0 6px;color:var(--muted)}\n    .card{position:relative;background:linear-gradient(180deg, rgba(124,77,255,.18), rgba(21,209,193,.12)); border:1px solid rgba(255,255,255,.18); border-radius:22px; box-shadow:0 12px 40px rgba(0,0,0,.4); overflow:hidden}\n    .card:before{content:""; position:absolute; inset:0; background:\n      radial-gradient(200px 80px at 20% -30px, rgba(255,213,77,.35), transparent),\n      radial-gradient(400px 160px at 80% 120%, rgba(21,209,193,.18), transparent),\n      repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 16px, transparent 16px 32px);\n      pointer-events:none}\n    .pad{padding:18px}\n    .row{display:flex;gap:10px;flex-wrap:wrap}\n    .row > *{flex:1}\n    .chip{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.2);color:var(--ink);font-size:14px}\n    button{appearance:none;border:none;background:linear-gradient(180deg, var(--gold), var(--gold2));color:#2b1b00;padding:14px 16px;border-radius:16px;font-size:16px;font-weight:800;letter-spacing:.25px;box-shadow:0 10px 24px rgba(255,179,0,.35);} \n    button:active{transform:translateY(1px)}\n    button.primary{background:linear-gradient(180deg, var(--purple), #4f2bd6); color:#eef3ff}\n    button.good{background:linear-gradient(180deg, var(--lime), #00d38a); color:#001b0b}\n    button.bad{background:linear-gradient(180deg, var(--rose), #ff3b6e); color:#2b0010}\n    button.warn{background:linear-gradient(180deg, var(--gold), var(--gold2)); color:#2b1b00}\n    .section{margin:16px 0}\n    select, input[type=number], input[type=text]{width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.25);color:var(--ink);font-size:16px}\n    .screen{display:block}.screen:not(.active){display:none}\n    .bigCard{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:58vh;border-radius:24px;padding:22px;margin-top:14px; background:\n      radial-gradient(1200px 400px at 50% -200px, rgba(124,248,255,.12), transparent),\n      conic-gradient(from 0deg at 50% 50%, rgba(255,213,77,.08), rgba(124,77,255,.08), rgba(21,209,193,.08), rgba(255,213,77,.08));\n      border:2px solid var(--gold); box-shadow:0 0 0 4px rgba(255,213,77,.2), 0 20px 60px rgba(0,0,0,.5); position:relative; overflow:hidden}\n    .bigCard:after{content:""; position:absolute; inset:0; background:\n      radial-gradient(200px 60px at 50% -30px, rgba(255,213,77,.25), transparent),\n      repeating-linear-gradient(60deg, rgba(255,255,255,.06) 0 14px, transparent 14px 28px);\n      mix-blend-mode:screen; pointer-events:none}\n    .bigCat{font-size:13px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}\n    .bigWord{font-family:'Baloo 2', cursive; font-size:clamp(30px,9vw,48px);font-weight:900;margin-top:10px;line-height:1.1; text-shadow:0 2px 8px rgba(0,0,0,.5)}\n    .timer{font-variant-numeric:tabular-nums;font-size:clamp(34px,10vw,54px);font-weight:800;margin-top:8px;color:var(--gold)}\n    .count{font-size:14px;color:var(--muted)}\n    .glass{backdrop-filter:blur(8px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:12px}\n    .footBar{display:flex;gap:10px;position:sticky;bottom:0;margin-top:14px}\n    .footBar>button{flex:1}\n    .small{font-size:12px;color:var(--muted)}\n    .hidden{display:none!important}\n    #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:#1b1236;color:var(--ink);border:1px solid rgba(255,255,255,.2);padding:10px 14px;border-radius:12px;opacity:0;transition:.25s;box-shadow:0 10px 24px rgba(0,0,0,.45);z-index:30}\n    #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}\n    .confetti{position:fixed;inset:0; pointer-events:none; overflow:hidden}\n    .confetti i{position:absolute;width:10px;height:14px;border-radius:2px;opacity:.9;animation:fall 1.1s linear forwards}\n    @keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}\n  </style>\n</head>\n<body>\n  <div class="backdrop"><div class="stars" id="stars"></div></div>\n  <div class="wrap">\n    <header>\n      <div class="crown"><span class="accent">👑 Kuzco</span>'s Heads Up!</div>\n      <div class="tag">Theme: Emperor's New Groove</div>\n    </header>\n\n    <section id="home" class="screen active">\n      <h1>No touchy? No problem.</h1>\n      <p class="small">Swipe → = Correct, ← = Pass. Or tilt: flip down = Correct, flip up = Pass.</p>\n      <div class="card pad section">\n        <h2>Choose Category</h2>\n        <select id="category"></select>\n        <div class="row" style="margin-top:10px">\n          <div class="chip">⏱ Round Time <input type="number" id="roundTime" min="20" max="180" step="5" value="60" style="width:110px"></div>\n          <div class="chip">🔁 No Repeats <input type="checkbox" id="noRepeats" checked></div>\n          <div class="chip">📱 Tilt Controls <input type="checkbox" id="tiltToggle"></div>\n        </div>\n        <div class="small">iPhone may ask to allow Motion & Orientation—tap Allow. Android works automatically on HTTPS (GitHub Pages is HTTPS).</div>\n      </div>\n      <div class="row section">\n        <button class="warn" id="howTo">How to Play</button>\n        <button class="primary" id="startBtn">Start Round</button>\n      </div>\n      <div id="howToBox" class="card pad section hidden">\n        <h2>Kuzco Mode</h2>\n        <ol>\n          <li>Pick a category or <b>All (Mix)</b> and tap <b>Start Round</b>.</li>\n          <li>Hold to the guesser’s forehead. No saying the word(s) on the card.</li>\n          <li>Correct = +1, Pass = skip. Finish with the most points to win.</li>\n          <li>Bonus rule: get 5 in a row and shout <b>“Boom, baby!”</b></li>\n        </ol>\n      </div>\n    </section>\n\n    <section id="game" class="screen">\n      <div class="row">\n        <div class="glass">Category: <b id="liveCat"></b></div>\n        <div class="glass">Score: <b id="score">0</b></div>\n        <div class="glass">Left: <b id="left">0</b></div>\n        <div class="glass" id="tiltStatus" style="display:none">Tilt: <b id="tiltState">OFF</b></div>\n      </div>\n      <div class="bigCard" id="bigCard">\n        <div class="bigCat" id="bigCat"></div>\n        <div class="bigWord" id="bigWord">—</div>\n        <div class="timer" id="timer">60</div>\n        <div class="count small">(tap buttons, swipe, or tilt)</div>\n      </div>\n      <div class="footBar">\n        <button class="bad" id="passBtn">Wrong lever! (Pass)</button>\n        <button class="good" id="correctBtn">No touchy (Correct)</button>\n      </div>\n    </section>\n\n    <section id="results" class="screen">\n      <h2>Round Results</h2>\n      <div class="card pad section" id="summary"></div>\n      <div class="row">\n        <button id="again" class="primary">Play Again</button>\n        <button id="homeBtn">Back Home</button>\n      </div>\n    </section>\n  </div>\n\n  <div id="toast"></div>\n  <div class="confetti" id="confetti"></div>\n\n  <script>\n    // backdrop shimmer\n    (function(){ const s=document.getElementById('stars'); for(let i=0;i<24;i++){ const n=document.createElement('span'); n.style.left=Math.random()*100+'%'; n.style.bottom=(-10+Math.random()*100)+'vh'; n.style.animationDelay=(Math.random()6)+'s'; n.style.opacity=.3+Math.random().5; s.appendChild(n);} })();\n\n    // Categories (ENG-heavy plus requested sets)\n    const categories={\n      "Emperor's New Groove (Core)": ["Kuzco","Pacha","Yzma","Kronk","Chicha","Chaca","Tipo","Bucky the Squirrel","Spinach Puffs","Pull the lever","Secret Lab","Llama Potion","No touchy!","Boom, baby!","Kuzcotopia","Mudka's Meat Hut","Suspension Bridge
+{"updates":[{"pattern":".*","multiple":true,"replacement":"<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="utf-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />\n  <title>Kuzco's Heads Up! – Emperor's New Groove</title>\n  <meta name="theme-color" content="#0d0a1a" />\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">\n  <style>\n    :root{ --bg:#0d0a1a; --bg2:#111133; --gold:#ffd54d; --gold2:#ffb300; --purple:#7c4dff; --teal:#15d1c1; --lime:#6df59a; --rose:#ff6b9e; --ink:#eef3ff; --muted:#aab7ff; --warn:#ffe08a; }\n    *{box-sizing:border-box}\n    html,body{height:100%}\n    body{margin:0;font-family:'Nunito',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--ink);}\n    .backdrop{position:fixed; inset:0; z-index:-1; background:\n      radial-gradient(1000px 400px at 50% -200px, rgba(124,248,255,.12), transparent),\n      repeating-linear-gradient(45deg, rgba(124,248,255,.06) 0 18px, transparent 18px 36px),\n      radial-gradient(circle at 10% 120%, rgba(255,213,77,.12), transparent 50%),\n      linear-gradient(180deg, var(--bg2), var(--bg));}\n    .stars span{position:absolute;width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);filter:blur(1px);animation:float 12s linear infinite}\n    @keyframes float{to{transform:translateY(-120vh) rotate(360deg)}}\n    .wrap{max-width:760px;margin:0 auto;padding:clamp(12px,2.5vw,24px);}  \n    header{display:flex;align-items:center;gap:12px;margin-top:8px}\n    .crown{font-family:'Baloo 2', cursive; font-size:clamp(26px,7vw,42px); letter-spacing:.5px}\n    .crown .accent{color:var(--gold)}\n    header .tag{margin-left:auto;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:6px 10px;border-radius:999px;color:var(--muted);font-size:12px}\n    h1{font-family:'Baloo 2', cursive; font-size:clamp(22px,6vw,34px);margin:8px 0 6px}\n    h2{font-size:clamp(16px,4vw,20px);margin:8px 0 6px;color:var(--muted)}\n    .card{position:relative;background:linear-gradient(180deg, rgba(124,77,255,.18), rgba(21,209,193,.12)); border:1px solid rgba(255,255,255,.18); border-radius:22px; box-shadow:0 12px 40px rgba(0,0,0,.4); overflow:hidden}\n    .card:before{content:""; position:absolute; inset:0; background:\n      radial-gradient(200px 80px at 20% -30px, rgba(255,213,77,.35), transparent),\n      radial-gradient(400px 160px at 80% 120%, rgba(21,209,193,.18), transparent),\n      repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 16px, transparent 16px 32px);\n      pointer-events:none}\n    .pad{padding:18px}\n    .row{display:flex;gap:10px;flex-wrap:wrap}\n    .row > *{flex:1}\n    .chip{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.2);color:var(--ink);font-size:14px}\n    button{appearance:none;border:none;background:linear-gradient(180deg, var(--gold), var(--gold2));color:#2b1b00;padding:14px 16px;border-radius:16px;font-size:16px;font-weight:800;letter-spacing:.25px;box-shadow:0 10px 24px rgba(255,179,0,.35);} \n    button:active{transform:translateY(1px)}\n    button.primary{background:linear-gradient(180deg, var(--purple), #4f2bd6); color:#eef3ff}\n    button.good{background:linear-gradient(180deg, var(--lime), #00d38a); color:#001b0b}\n    button.bad{background:linear-gradient(180deg, var(--rose), #ff3b6e); color:#2b0010}\n    button.warn{background:linear-gradient(180deg, var(--gold), var(--gold2)); color:#2b1b00}\n    .section{margin:16px 0}\n    select, input[type=number], input[type=text]{width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.25);color:var(--ink);font-size:16px}\n    .screen{display:block}.screen:not(.active){display:none}\n    .bigCard{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:58vh;border-radius:24px;padding:22px;margin-top:14px; background:\n      radial-gradient(1200
 
