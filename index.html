@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,12 +25,15 @@
     .bad{color:#7f0909;font-weight:700}
     .toast{position:fixed;right:12px;bottom:80px;background:#111;color:#fff;padding:8px 12px;border-radius:8px;opacity:0;transition:.3s}
     .toast.show{opacity:1}
+    .prize-list{list-style:none;padding:0;}
+    .prize-item{margin-bottom:8px;}
   </style>
 </head>
 <body>
   <header>
     <h1>Wizarding Meal Planner ⚡</h1>
     <div>IBS‑Friendly • Dairy‑Free • No Onion/Garlic • No Walnuts or Shellfish</div>
+    <p>Log your meals, earn points for your house, and redeem magical prizes!</p>
   </header>
   <main>
     <section>
@@ -56,19 +60,24 @@
         <button id="claim" class="btn">Claim Daily Bonus</button>
         <button id="reset" class="btn">New Day Reset</button>
       </div>
+      <div class="card">
+        <h2>Prize Shop 🏆</h2>
+        <p>Redeem your points for magical rewards!</p>
+        <ul id="prizes" class="prize-list"></ul>
+      </div>
     </aside>
   </main>
   <footer style="text-align:center;padding:10px;background:#fff8e6;border-top:3px solid #2e2a23;position:fixed;bottom:0;width:100%">
-    Play the Hogwarts Feast Game: log meals, earn points, keep your house strong!
+    Play the Hogwarts Feast Game: Log meals to earn points, stay in calorie range (1800-2200) for bonuses, and redeem prizes!
   </footer>  <template id="meal-template">
     <div class="meal">
       <h3></h3>
       <div class="foods"></div>
-      <input class="name" placeholder="Custom item" />
-      <input class="cal" placeholder="Calories" type="number" />
-      <button class="btn estimate">Divine Calories</button>
+      <input class="name" placeholder="Custom item, e.g. banana or grilled chicken" />
+      <input class="cal" placeholder="Calories (leave blank to estimate)" type="number" />
+      <button class="btn estimate">Divine Calories 🪄</button>
       <button class="btn add">Conjure Item</button>
-      <button class="btn apply">Feast on Selected</button>
+      <button class="btn apply">Add Selected to Log</button>
     </div>
   </template>  <template id="food-template">
     <div class="food">
@@ -85,11 +94,52 @@
     const HOUSES=['Gryffindor','Hufflepuff','Ravenclaw','Slytherin'];
     const HOUSE_COLORS={Gryffindor:'#7f0909',Hufflepuff:'#d4af37',Ravenclaw:'#0a1172',Slytherin:'#0d6217'};
     const HOUSE_EMOJIS={Gryffindor:'🦁',Hufflepuff:'🦡',Ravenclaw:'🦅',Slytherin:'🐍'};
-    const els={meals:document.getElementById('meals'),mealTpl:document.getElementById('meal-template'),foodTpl:document.getElementById('food-template'),log:document.getElementById('log'),total:document.getElementById('total'),count:document.getElementById('count'),bar:document.getElementById('bar'),status:document.getElementById('status'),toast:document.getElementById('toast'),house:document.getElementById('house'),points:document.getElementById('points'),claim:document.getElementById('claim'),reset:document.getElementById('reset')};
+    const PRIZES = [
+      {name: 'Butterbeer Mug Badge', points: 100},
+      {name: 'Quidditch Broom Sticker', points: 200},
+      {name: 'Invisibility Cloak Emoji', points: 500},
+      {name: 'House Cup Trophy Icon', points: 1000},
+      {name: 'Golden Snitch Keychain', points: 2000}
+    ];
+    const CAL_DB = {
+      'banana': 105,
+      'blueberries': 40,
+      'strawberries': 50,
+      'orange': 62,
+      'kiwi': 42,
+      'pineapple': 82,
+      'carrot': 50,
+      'cucumber': 45,
+      'green beans': 31,
+      'lettuce': 5,
+      'potato': 160,
+      'spinach': 7,
+      'tomato': 25,
+      'zucchini': 20,
+      'chicken': 200,
+      'beef': 250,
+      'pork': 220,
+      'fish': 150,
+      'tofu': 70,
+      'tempeh': 200,
+      'egg': 70,
+      'rice': 200,
+      'quinoa': 222,
+      'oats': 150,
+      'almond milk': 30,
+      'rice milk': 120,
+      'peanut butter': 90,
+      'peanuts': 160,
+      'almonds': 160,
+      'macadamia': 200,
+      'pecans': 200,
+      'pine nuts': 190
+    };
+    const els={meals:document.getElementById('meals'),mealTpl:document.getElementById('meal-template'),foodTpl:document.getElementById('food-template'),log:document.getElementById('log'),total:document.getElementById('total'),count:document.getElementById('count'),bar:document.getElementById('bar'),status:document.getElementById('status'),toast:document.getElementById('toast'),house:document.getElementById('house'),points:document.getElementById('points'),claim:document.getElementById('claim'),reset:document.getElementById('reset'),prizes:document.getElementById('prizes')};
     const today = new Date().toISOString().slice(0,10);
     function allergenBlocked(name){return /(walnut|shrimp|prawn|lobster|crab|shellfish)/i.test(name);}
 
-function estimateCalories(name){if(/banana/i.test(name))return 105;if(/apple/i.test(name))return 95;if(/rice/i.test(name))return 200;if(/chicken/i.test(name))return 200;return 120;}
+function estimateCalories(name){name = name.toLowerCase();for(let key in CAL_DB){if(name.includes(key)){return CAL_DB[key];}}return 120;}
 
 function toast(msg){els.toast.textContent=msg;els.toast.classList.add('show');setTimeout(()=>els.toast.classList.remove('show'),1500);}
 
@@ -99,13 +149,13 @@ function updateHeader(){const h=getHouse();if(h){document.querySelector('header'
 
 function getPoints(){return +localStorage.getItem(KEY+'_points') || 0;}
 function addPoints(p){setPoints(getPoints()+p);}
-function setPoints(p){localStorage.setItem(KEY+'_points',p);els.points.textContent=p;}
+function setPoints(p){localStorage.setItem(KEY+'_points',p);els.points.textContent=p;renderPrizes();}
 
 function getLastClaim(){return localStorage.getItem(KEY+'_last_claim');}
 function setLastClaim(d){localStorage.setItem(KEY+'_last_claim',d);}
 function canClaim(){return getLastClaim() !== today;}
 
-function build(){els.meals.innerHTML='';if(!getHouse()){let h=prompt('Choose your Hogwarts House: Gryffindor, Hufflepuff, Ravenclaw, Slytherin').trim();while(!HOUSES.map(x=>x.toLowerCase()).includes(h.toLowerCase())){h=prompt('Invalid house! Choose again: Gryffindor, Hufflepuff, Ravenclaw, Slytherin').trim();}setHouse(HOUSES.find(x=>x.toLowerCase()===h.toLowerCase()));}updateHeader();setPoints(getPoints());MEALS.forEach(m=>{const node=els.mealTpl.content.cloneNode(true);node.querySelector('h3').textContent=m;const foods=node.querySelector('.foods');(STARTER[m]||[]).forEach(it=>foods.appendChild(makeFood(m,it.t,it.c)));node.querySelector('.add').onclick=()=>{const n=node.querySelector('.name').value.trim();const c=+node.querySelector('.cal').value;if(!n){toast('Enter item name, wizard!');return;}if(allergenBlocked(n)){toast('Blocked by allergen charm!');return;}const val=c||estimateCalories(n);foods.appendChild(makeFood(m,n,val,true));node.querySelector('.name').value='';node.querySelector('.cal').value='';};node.querySelector('.estimate').onclick=()=>{const n=node.querySelector('.name').value.trim();if(!n){toast('Enter item name, wizard!');return;}node.querySelector('.cal').value=estimateCalories(n);toast('Calories divined! 🪄');};node.querySelector('.apply').onclick=()=>{const cbs=[...foods.querySelectorAll('input:checked')];cbs.forEach(cb=>{addToLog({meal:m,title:cb.dataset.title,cal:+cb.dataset.cal});cb.checked=false;});};els.meals.appendChild(node);});renderLog();update();}
+function build(){els.meals.innerHTML='';if(!getHouse()){let h=prompt('Choose your Hogwarts House: Gryffindor, Hufflepuff, Ravenclaw, Slytherin').trim();while(!HOUSES.map(x=>x.toLowerCase()).includes(h.toLowerCase())){h=prompt('Invalid house! Choose again: Gryffindor, Hufflepuff, Ravenclaw, Slytherin').trim();}setHouse(HOUSES.find(x=>x.toLowerCase()===h.toLowerCase()));}updateHeader();setPoints(getPoints());MEALS.forEach(m=>{const node=els.mealTpl.content.cloneNode(true);node.querySelector('h3').textContent=m;const foods=node.querySelector('.foods');(STARTER[m]||[]).forEach(it=>foods.appendChild(makeFood(m,it.t,it.c)));node.querySelector('.add').onclick=()=>{const n=node.querySelector('.name').value.trim();const c=+node.querySelector('.cal').value;if(!n){toast('Enter item name, wizard!');return;}if(allergenBlocked(n)){toast('Blocked by allergen charm!');return;}const val=c||estimateCalories(n);foods.appendChild(makeFood(m,n,val,true));node.querySelector('.name').value='';node.querySelector('.cal').value='';};node.querySelector('.estimate').onclick=()=>{const n=node.querySelector('.name').value.trim();if(!n){toast('Enter item name, wizard!');return;}const est=estimateCalories(n);node.querySelector('.cal').value=est;toast(`Calories divined: ${est} 🪄`);};node.querySelector('.apply').onclick=()=>{const cbs=[...foods.querySelectorAll('input:checked')];cbs.forEach(cb=>{addToLog({meal:m,title:cb.dataset.title,cal:+cb.dataset.cal});cb.checked=false;});};els.meals.appendChild(node);});renderLog();update();renderPrizes();}
 
 function makeFood(meal,title,cal){const n=els.foodTpl.content.cloneNode(true);const row=n.querySelector('.food');const cb=row.querySelector('input');cb.dataset.meal=meal;cb.dataset.title=title;cb.dataset.cal=cal;row.querySelector('.title').textContent=title;row.querySelector('.cal').textContent=cal+' cal';return n;}
 
@@ -118,9 +168,11 @@ function renderLog(){const log=getLog();els.log.innerHTML='';log.forEach((x,i)=>
 
 function update(){const log=getLog();const total=log.reduce((a,b)=>a+b.cal,0);els.total.textContent=total;els.count.textContent=log.length;els.bar.style.width=Math.min(100,total/3000*100)+'%';if(total<TARGET_MIN)els.status.innerHTML='⚠️ Too low - Needs more magic!';else if(total>TARGET_MAX)els.status.innerHTML='⚠️ Too high - Overpowered!';else els.status.innerHTML='✅ Brilliant feast!';els.status.className=(total>=TARGET_MIN&&total<=TARGET_MAX)?'good':'bad';els.claim.disabled=!(total>=TARGET_MIN&&total<=TARGET_MAX&&log.length>=5&&canClaim());}
 
-els.claim.onclick=()=>{const log=getLog();const total=log.reduce((a,b)=>a+b.cal,0);if(total>=TARGET_MIN&&total<=TARGET_MAX&&log.length>=5&&canClaim()){addPoints(50);setLastClaim(today);toast('50 points to '+getHouse()+'! Expecto Patronum! ✨');update();}else{toast('Not ready yet, young wizard!');}};
+function renderPrizes(){const pts = getPoints();els.prizes.innerHTML='';PRIZES.forEach(p => {const li = document.createElement('li');li.className='prize-item';li.innerHTML = `${p.name} - ${p.points} points`;if(pts >= p.points){li.classList.add('good');li.innerHTML += ' (Available!)';}els.prizes.appendChild(li);});}
 
-els.reset.onclick=()=>{if(confirm('Reset log for a new day?')){setLog([]);toast('New day at Hogwarts!');}};
+els.claim.onclick=()=>{const log=getLog();const total=log.reduce((a,b)=>a+b.cal,0);if(total>=TARGET_MIN&&total<=TARGET_MAX&&log.length>=5&&canClaim()){addPoints(50);setLastClaim(today);toast('50 points to '+getHouse()+'! Expecto Patronum! ✨');update();}else{toast('Not ready yet, young wizard! Complete a full day\'s log in range.');}};
+
+els.reset.onclick=()=>{if(confirm('Reset log for a new day? Points remain!')){setLog([]);toast('New day at Hogwarts!');}};
 
 build();
 
