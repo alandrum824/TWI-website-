@@ -2,315 +2,128 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IBS-Friendly Meal Planner • Wizarding Edition</title>
+  <title>Wizarding Meal Planner — Hogwarts Feast Game</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family:Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --parchment:#f6f1e7; --ink:#1c1b19; --accent:#6b4f1d; --gold:#c9a227;
-      --red:#7b1113; --green:#154734; --blue:#0b3d91; --yellow:#d1a000;
-    }
-    *{box-sizing:border-box}
-    body{margin:0; background:var(--parchment); color:var(--ink); font-family:'Crimson Text', serif; line-height:1.35;
-      background-image: radial-gradient(rgba(0,0,0,.03) 1px, transparent 1px);
-      background-size: 6px 6px;}
-    header{padding:24px 16px; text-align:center; background:linear-gradient(135deg,var(--red),var(--gold)); color:#fff; border-bottom:4px double var(--accent);}
-    h1{font-family:'Cinzel', serif; letter-spacing:.5px; margin:.2rem 0 0; font-weight:900}
-    .sub{opacity:.95; font-weight:700}
-    main{max-width:1100px; margin:24px auto; padding:0 16px 120px}
-    .card{background:#fffdfa; border:2px solid #e6dcc7; border-radius:16px; box-shadow:0 10px 28px rgba(0,0,0,.09); padding:16px; margin-bottom:16px}
-    .grid{display:grid; gap:16px}
-    @media(min-width:900px){.grid-2{grid-template-columns:1.2fr .8fr} .grid-5{grid-template-columns:repeat(5,1fr)}}
-    .section-title{display:flex; align-items:center; gap:10px; margin:2px 0 12px}
-    .sigil{width:26px;height:26px;border-radius:50%;display:inline-grid;place-items:center;color:#fff;font-weight:900;background:linear-gradient(135deg,var(--blue),var(--gold))}
-    .meal{border:2px dashed #d9c9a8; border-radius:14px; padding:10px}
-    .meal h3{font-family:'Cinzel', serif; margin:0 0 8px; font-size:1.05rem}
-    .food{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px 8px; border-radius:10px}
-    .food:hover{background:#fff4d9}
-    .food label{display:flex; align-items:center; gap:10px; cursor:pointer}
-    .cal{font-variant-numeric:tabular-nums; font-weight:700}
-    .add-row{display:flex; gap:6px; margin-top:8px}
-    .input, select{flex:1; padding:10px 12px; border:1px solid #d9c9a8; border-radius:10px; background:#fffcf5}
-    .btn{padding:10px 12px; border:none; border-radius:12px; font-weight:800; cursor:pointer; background:var(--blue); color:white}
-    .btn.ghost{background:transparent; color:var(--blue); border:2px solid var(--blue)}
-    .btn:active{transform:translateY(1px)}
-    .totals{display:grid; gap:12px; align-items:start}
-    .meter-wrap{background:#fff; border:2px solid #e6dcc7; border-radius:12px; padding:10px}
-    .meter{height:16px; background:#eee2bd; border-radius:999px; overflow:hidden}
-    .meter > div{height:100%; width:0%; background:linear-gradient(90deg,var(--green),var(--gold),var(--red)); transition:width .25s ease}
-    .range{display:flex; justify-content:space-between; font-size:.9rem; opacity:.85}
-    .small{font-size:.92rem}
-    .bad{color:var(--red); font-weight:700}
-    .good{color:var(--green); font-weight:700}
-    .tips li{margin:.3rem 0}
-    .house-tabs{display:flex; gap:8px; flex-wrap:wrap}
-    .house{padding:6px 10px; border-radius:999px; cursor:pointer; font-weight:800; border:2px solid transparent}
-    .h-gryff{background:var(--red); color:#fff}
-    .h-slyth{background:var(--green); color:#fff}
-    .h-raven{background:var(--blue); color:#fff}
-    .h-huff{background:var(--yellow); color:#2b2200}
-    footer{position:fixed; bottom:0; left:0; right:0; background:#fff8e6; border-top:3px double var(--accent); padding:10px 16px; display:flex; gap:12px; justify-content:center; align-items:center}
-    /* weekly bars */
-    .bars{display:grid; grid-template-columns: repeat(7,1fr); gap:10px; align-items:end; height:160px; padding:10px; background:#fffdfa; border:1px dashed #d9c9a8; border-radius:12px}
-    .bari{position:relative; height:20px; border-radius:8px 8px 0 0; background:linear-gradient(180deg,var(--blue),var(--gold));}
-    .bari::after{content:attr(data-val); position:absolute; top:-22px; left:50%; transform:translateX(-50%); font-size:.8rem}
-    .bard{font-size:.8rem; text-align:center; margin-top:4px; opacity:.8}
+    body{margin:0;background:#f8f4e6;color:#1a1a1a;font-family:'Crimson Text',serif;}
+    header{padding:20px;text-align:center;background:linear-gradient(135deg,#7f0909,#d4af37);color:#fff;}
+    h1{font-family:'Cinzel',serif;margin:0;font-weight:900}
+    main{max-width:1100px;margin:20px auto;padding:0 16px 140px;display:grid;gap:16px;grid-template-columns:1fr .8fr}
+    .card{background:#fff;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.15);padding:16px;margin-bottom:16px}
+    .meal{border:2px solid #d4af37;border-radius:12px;padding:12px;background:#faf8ef}
+    .food{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border-radius:8px;margin-bottom:4px}
+    .food:hover{background:#fdf5d4}
+    .loglist{list-style:none;padding:0;margin:0}
+    .logitem{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border:1px dashed #ccc;border-radius:8px;margin-bottom:6px;background:#fffef9}
+    .btn{padding:6px 10px;border:none;border-radius:8px;cursor:pointer;background:#0d6217;color:#fff;font-weight:700;margin-left:4px}
+    .meter{height:16px;background:#eee;border-radius:999px;overflow:hidden;margin:6px 0}
+    .meter>div{height:100%;width:0;background:linear-gradient(90deg,#0d6217,#eee117,#7f0909);transition:width .25s}
+    .good{color:#0d6217;font-weight:700}
+    .bad{color:#7f0909;font-weight:700}
+    .toast{position:fixed;right:12px;bottom:80px;background:#111;color:#fff;padding:8px 12px;border-radius:8px;opacity:0;transition:.3s}
+    .toast.show{opacity:1}
   </style>
 </head>
 <body>
   <header>
-    <h1>Meal Planner: Wizarding Edition</h1>
-    <div class="sub">IBS‑Friendly • Dairy‑Free • No Onion/Garlic • Target: 1,800–2,200 calories/day</div>
-  </header>  <main class="grid grid-2">
+    <h1>Wizarding Meal Planner ⚡</h1>
+    <div>IBS‑Friendly • Dairy‑Free • No Onion/Garlic • No Walnuts or Shellfish</div>
+  </header>
+  <main>
     <section>
       <div class="card">
-        <div class="section-title"><span class="sigil">★</span><h2 style="margin:0">Choose Your Feasts</h2></div>
-        <div class="grid grid-5" id="meals"></div>
-      </div><div class="card">
-    <div class="section-title"><span class="sigil">ℹ</span><h2 style="margin:0">IBS‑Friendly Tips (Muggle‑Approved)</h2></div>
-    <ul class="tips">
-      <li>Avoid <b>onion & garlic</b> (use garlic‑infused oil or chive/green tops for flavor).</li>
-      <li>Stick to <b>dairy‑free</b> options (lactose‑free, plant milks, coconut yogurt).</li>
-      <li>Choose <b>low‑FODMAP</b> fruits (bananas, berries, citrus, kiwi) and grains (rice, oats, quinoa).</li>
-      <li>Mind portion sizes; test tolerance. Sip water; limit fizzy drinks around meals.</li>
-      <li>Log what works for you—every witch or wizard’s gut is unique.</li>
-    </ul>
-  </div>
-</section>
-
-<aside class="totals">
-  <div class="card">
-    <div class="section-title"><span class="sigil">⚡</span><h2 style="margin:0">Daily Magic Meter</h2></div>
-    <div class="meter-wrap">
-      <div class="meter" aria-label="Calorie progress"><div id="bar"></div></div>
-      <div class="range"><span>0 calories</span><span>1,800</span><span>2,200</span><span>3,000</span></div>
-    </div>
-    <p class="small">Total: <b id="total">0</b> calories • Selected: <span id="count">0</span> items</p>
-    <p id="status" class="small"></p>
-    <div class="house-tabs">
-      <button class="house h-gryff" data-theme="gryff">Gryffindor</button>
-      <button class="house h-slyth" data-theme="slyth">Slytherin</button>
-      <button class="house h-raven" data-theme="raven">Ravenclaw</button>
-      <button class="house h-huff" data-theme="huff">Hufflepuff</button>
-    </div>
-  </div>
-
-  <div class="card" id="historyCard">
-    <div class="section-title"><span class="sigil">📅</span><h2 style="margin:0">Daily & Weekly Tracking</h2></div>
-    <p class="small">Today: <b id="today"></b> • Saved total: <b id="savedTotal">—</b></p>
-    <div class="bars" id="bars"></div>
-    <div class="range"><span class="small">Last 7 days</span><span class="small">Avg: <b id="avg">—</b> calories</span></div>
-  </div>
-
-  <div class="card">
-    <div class="section-title"><span class="sigil">📝</span><h2 style="margin:0">Notes</h2></div>
-    <textarea id="notes" class="input" rows="8" placeholder="Add spells… or simply how you felt after today’s meals."></textarea>
-    <div style="display:flex; gap:8px; margin-top:8px">
-      <button class="btn" id="save">Save Day</button>
-      <button class="btn ghost" id="clear">Clear</button>
-    </div>
-  </div>
-</aside>
-
-  </main>  <footer>
-    <span>Tip: Aim for 450–600 calories at main meals and 200–350 calories per snack to comfortably land in the 1,800–2,200 range.</span>
+        <h2>Meals</h2>
+        <div id="meals"></div>
+      </div>
+      <div class="card">
+        <h2>Today's Log</h2>
+        <ul id="log" class="loglist"></ul>
+      </div>
+    </section>
+    <aside>
+      <div class="card">
+        <h2>Daily Magic Meter</h2>
+        <div class="meter"><div id="bar"></div></div>
+        <p>Total: <b id="total">0</b> Calories • <span id="count">0</span> items</p>
+        <p id="status"></p>
+      </div>
+      <div class="card">
+        <h2>Hogwarts House Cup</h2>
+        <p>Your House: <b id="house"></b></p>
+        <p>House Points: <b id="points">0</b></p>
+        <button id="claim" class="btn">Claim Daily Bonus</button>
+        <button id="reset" class="btn">New Day Reset</button>
+      </div>
+    </aside>
+  </main>
+  <footer style="text-align:center;padding:10px;background:#fff8e6;border-top:3px solid #2e2a23;position:fixed;bottom:0;width:100%">
+    Play the Hogwarts Feast Game: log meals, earn points, keep your house strong!
   </footer>  <template id="meal-template">
     <div class="meal">
       <h3></h3>
       <div class="foods"></div>
-      <div class="add-row">
-        <input class="input name" placeholder="Custom item (e.g., coconut yogurt)" />
-        <input class="input kcal" type="number" min="0" step="1" placeholder="calories" />
-        <button class="btn add">Add</button>
-      </div>
+      <input class="name" placeholder="Custom item" />
+      <input class="cal" placeholder="Calories" type="number" />
+      <button class="btn estimate">Divine Calories</button>
+      <button class="btn add">Conjure Item</button>
+      <button class="btn apply">Feast on Selected</button>
     </div>
   </template>  <template id="food-template">
     <div class="food">
-      <label>
-        <input type="checkbox" />
-        <span class="title"></span>
-      </label>
+      <label><input type="checkbox"><span class="title"></span></label>
       <span class="cal"></span>
     </div>
-  </template>  <script>
-    const TARGET_MIN = 1800;
-    const TARGET_MAX = 2200;
+  </template>
+  <div id="toast" class="toast"></div>
+  <script>
+    const TARGET_MIN=1800,TARGET_MAX=2200;
+    const KEY='hp_meal_planner_game';
+    const STARTER={Breakfast:[{t:'Overnight oats (almond milk)',c:380},{t:'Eggs + spinach on GF toast',c:420}],Snack1:[{t:'Rice cakes + peanut butter',c:240}],Lunch:[{t:'Grilled chicken + quinoa',c:600}],Snack2:[{t:'Protein shake (DF)',c:280}],Dinner:[{t:'Roast chicken + potatoes',c:720}]};
+    const MEALS=['Breakfast','Snack1','Lunch','Snack2','Dinner'];
+    const HOUSES=['Gryffindor','Hufflepuff','Ravenclaw','Slytherin'];
+    const HOUSE_COLORS={Gryffindor:'#7f0909',Hufflepuff:'#d4af37',Ravenclaw:'#0a1172',Slytherin:'#0d6217'};
+    const HOUSE_EMOJIS={Gryffindor:'🦁',Hufflepuff:'🦡',Ravenclaw:'🦅',Slytherin:'🐍'};
+    const els={meals:document.getElementById('meals'),mealTpl:document.getElementById('meal-template'),foodTpl:document.getElementById('food-template'),log:document.getElementById('log'),total:document.getElementById('total'),count:document.getElementById('count'),bar:document.getElementById('bar'),status:document.getElementById('status'),toast:document.getElementById('toast'),house:document.getElementById('house'),points:document.getElementById('points'),claim:document.getElementById('claim'),reset:document.getElementById('reset')};
+    const today = new Date().toISOString().slice(0,10);
+    function allergenBlocked(name){return /(walnut|shrimp|prawn|lobster|crab|shellfish)/i.test(name);}
 
-    // Starter library (low-FODMAP friendly, dairy-free, no onion/garlic)
-    const STARTER = {
-      Breakfast: [
-        {t:'Overnight oats w/ almond milk, chia, blueberries', k:380},
-        {t:'Scrambled eggs + spinach (garlic-free) on GF toast', k:420},
-        {t:'Smoothie: banana, strawberries, oat milk, PB', k:430},
-        {t:'Coconut yogurt (DF) + kiwi + low-FODMAP granola', k:360}
-      ],
-      Snack1: [
-        {t:'Rice cakes + peanut butter', k:240},
-        {t:'Banana + handful of walnuts', k:260},
-        {t:'Carrot sticks + hummus (garlic-free)*', k:220},
-        {t:'Lactose-free cheese alt + GF crackers', k:230}
-      ],
-      Lunch: [
-        {t:'Grilled chicken + quinoa + roasted carrots', k:620},
-        {t:'Turkey lettuce wraps (no onion/garlic) + rice', k:560},
-        {t:'Baked salmon + rice + zucchini', k:640},
-        {t:'Tofu stir-fry (garlic‑infused oil, no onion) + rice', k:580}
-      ],
-      Snack2: [
-        {t:'Orange + pumpkin seeds', k:220},
-        {t:'GF toast + jam + almond butter', k:300},
-        {t:'Protein shake (DF) with oat milk', k:280},
-        {t:'Grapes + dark chocolate square', k:240}
-      ],
-      Dinner: [
-        {t:'Roast chicken + potatoes + green beans', k:720},
-        {t:'Beef + polenta + roasted carrots', k:700},
-        {t:'Shrimp + rice noodles + bok choy (no garlic/onion)', k:680},
-        {t:'Turkey meatballs (no onion/garlic) + GF pasta + sauce', k:730}
-      ]
-    };
+function estimateCalories(name){if(/banana/i.test(name))return 105;if(/apple/i.test(name))return 95;if(/rice/i.test(name))return 200;if(/chicken/i.test(name))return 200;return 120;}
 
-    const MEAL_ORDER = [
-      { key:'Breakfast', color:'var(--red)' },
-      { key:'Snack1',    color:'var(--yellow)' },
-      { key:'Lunch',     color:'var(--blue)' },
-      { key:'Snack2',    color:'var(--green)' },
-      { key:'Dinner',    color:'var(--gold)' }
-    ];
+function toast(msg){els.toast.textContent=msg;els.toast.classList.add('show');setTimeout(()=>els.toast.classList.remove('show'),1500);}
 
-    const els = {
-      meals: document.getElementById('meals'),
-      mealTpl: document.getElementById('meal-template'),
-      foodTpl: document.getElementById('food-template'),
-      total: document.getElementById('total'),
-      count: document.getElementById('count'),
-      bar: document.getElementById('bar'),
-      status: document.getElementById('status'),
-      notes: document.getElementById('notes'),
-      save: document.getElementById('save'),
-      clear: document.getElementById('clear'),
-      today: document.getElementById('today'),
-      savedTotal: document.getElementById('savedTotal'),
-      bars: document.getElementById('bars'),
-      avg: document.getElementById('avg')
-    };
+function getHouse(){return localStorage.getItem(KEY+'_house');}
+function setHouse(h){localStorage.setItem(KEY+'_house',h);updateHeader();}
+function updateHeader(){const h=getHouse();if(h){document.querySelector('header').style.background=`linear-gradient(135deg,${HOUSE_COLORS[h]},#333)`;document.querySelector('header h1').innerHTML=`Wizarding Meal Planner ⚡ ${HOUSE_EMOJIS[h]}`;els.house.textContent=h;}}
 
-    // Local storage
-    const KEY = 'wizard_meal_planner_v2';
-    const HIST_KEY = KEY + '_history';
-    const DATA = JSON.parse(localStorage.getItem(KEY) || '{}');
+function getPoints(){return +localStorage.getItem(KEY+'_points') || 0;}
+function addPoints(p){setPoints(getPoints()+p);}
+function setPoints(p){localStorage.setItem(KEY+'_points',p);els.points.textContent=p;}
 
-    function saveState(){ localStorage.setItem(KEY, JSON.stringify(serialize())); }
+function getLastClaim(){return localStorage.getItem(KEY+'_last_claim');}
+function setLastClaim(d){localStorage.setItem(KEY+'_last_claim',d);}
+function canClaim(){return getLastClaim() !== today;}
 
-    function serialize(){
-      const selected = [...document.querySelectorAll('.food input[type=checkbox]')]
-        .filter(cb => cb.checked)
-        .map(cb => ({ t: cb.dataset.title, k: +cb.dataset.kcal, m: cb.dataset.meal }));
-      return { selected, notes: els.notes.value, custom: JSON.parse(localStorage.getItem(KEY + '_custom') || '{}'), theme: document.documentElement.dataset.theme || 'gryff' };
-    }
+function build(){els.meals.innerHTML='';if(!getHouse()){let h=prompt('Choose your Hogwarts House: Gryffindor, Hufflepuff, Ravenclaw, Slytherin').trim();while(!HOUSES.map(x=>x.toLowerCase()).includes(h.toLowerCase())){h=prompt('Invalid house! Choose again: Gryffindor, Hufflepuff, Ravenclaw, Slytherin').trim();}setHouse(HOUSES.find(x=>x.toLowerCase()===h.toLowerCase()));}updateHeader();setPoints(getPoints());MEALS.forEach(m=>{const node=els.mealTpl.content.cloneNode(true);node.querySelector('h3').textContent=m;const foods=node.querySelector('.foods');(STARTER[m]||[]).forEach(it=>foods.appendChild(makeFood(m,it.t,it.c)));node.querySelector('.add').onclick=()=>{const n=node.querySelector('.name').value.trim();const c=+node.querySelector('.cal').value;if(!n){toast('Enter item name, wizard!');return;}if(allergenBlocked(n)){toast('Blocked by allergen charm!');return;}const val=c||estimateCalories(n);foods.appendChild(makeFood(m,n,val,true));node.querySelector('.name').value='';node.querySelector('.cal').value='';};node.querySelector('.estimate').onclick=()=>{const n=node.querySelector('.name').value.trim();if(!n){toast('Enter item name, wizard!');return;}node.querySelector('.cal').value=estimateCalories(n);toast('Calories divined! 🪄');};node.querySelector('.apply').onclick=()=>{const cbs=[...foods.querySelectorAll('input:checked')];cbs.forEach(cb=>{addToLog({meal:m,title:cb.dataset.title,cal:+cb.dataset.cal});cb.checked=false;});};els.meals.appendChild(node);});renderLog();update();}
 
-    function restore(){ if(DATA.notes) els.notes.value = DATA.notes; if(DATA.theme) applyTheme(DATA.theme); }
+function makeFood(meal,title,cal){const n=els.foodTpl.content.cloneNode(true);const row=n.querySelector('.food');const cb=row.querySelector('input');cb.dataset.meal=meal;cb.dataset.title=title;cb.dataset.cal=cal;row.querySelector('.title').textContent=title;row.querySelector('.cal').textContent=cal+' cal';return n;}
 
-    function applyTheme(theme){
-      const map = { gryff:'var(--red)', slyth:'var(--green)', raven:'var(--blue)', huff:'var(--yellow)' };
-      const a = map[theme]||map.gryff; document.documentElement.dataset.theme = theme;
-      document.querySelectorAll('.meal').forEach(m=> m.style.borderColor = a);
-      document.querySelector('header').style.background = `linear-gradient(135deg, ${a}, var(--gold))`;
-    }
+function getLog(){return JSON.parse(localStorage.getItem(KEY+'_log')||'[]');}
+function setLog(log){localStorage.setItem(KEY+'_log',JSON.stringify(log));renderLog();update();}
+function addToLog(item){const log=getLog();log.push(item);setLog(log);addPoints(10);toast('Accio 10 points! 🏆');}
+function removeFromLog(i){const log=getLog();log.splice(i,1);setLog(log);addPoints(-10);toast('Evanesco 10 points... 😔');}
 
-    function build(){
-      els.meals.innerHTML = '';
-      MEAL_ORDER.forEach(({key,color})=>{
-        const node = els.mealTpl.content.cloneNode(true);
-        const box = node.querySelector('.meal');
-        box.style.borderColor = color;
-        box.querySelector('h3').textContent = key.replace('1',' (Snack)').replace('2',' (Snack)');
-        const foods = box.querySelector('.foods');
-        const library = getCustomLibrary();
-        const list = (library[key] && library[key].length ? library[key] : STARTER[key]);
-        list.forEach(item=> foods.appendChild(makeFood(key,item.t,item.k)));
-        const addBtn = node.querySelector('.add');
-        const name = node.querySelector('.name');
-        const kcal = node.querySelector('.kcal');
-        addBtn.addEventListener('click', ()=>{
-          const t = name.value.trim();
-          const k = Math.max(0, Math.round(+kcal.value || 0));
-          if(!t || !k){ alert('Please enter a name and calories.'); return; }
-          foods.appendChild(makeFood(key,t,k,true));
-          persistCustom(key,{t,k}); name.value=''; kcal.value=''; update(); saveState();
-        });
-        els.meals.appendChild(node);
-      });
-      if(DATA.selected){ DATA.selected.forEach(s=>{ const cb = document.querySelector(`.food input[data-meal="${s.m}"][data-title="${CSS.escape(s.t)}"]`); if(cb){ cb.checked = true; }}); }
-      update();
-    }
+function renderLog(){const log=getLog();els.log.innerHTML='';log.forEach((x,i)=>{const li=document.createElement('li');li.className='logitem';li.innerHTML=`${x.title} <b>${x.cal} cal</b>`;const b=document.createElement('button');b.textContent='✖';b.className='btn';b.onclick=()=>removeFromLog(i);li.appendChild(b);els.log.appendChild(li);});}
 
-    function makeFood(meal, title, kcal, custom=false){
-      const n = els.foodTpl.content.cloneNode(true);
-      const row = n.querySelector('.food');
-      row.querySelector('.title').textContent = title;
-      const cb = row.querySelector('input');
-      cb.dataset.meal = meal; cb.dataset.title = title; cb.dataset.kcal = kcal;
-      cb.addEventListener('change', ()=>{ update(); saveState(); });
-      n.querySelector('.cal').textContent = kcal + ' calories';
-      if(custom){
-        row.title = 'Right‑click to remove';
-        row.addEventListener('contextmenu', (e)=>{ e.preventDefault(); if(confirm('Remove this custom item?')){ row.remove(); removeCustom(meal, title); update(); saveState(); }});
-      }
-      return n;
-    }
+function update(){const log=getLog();const total=log.reduce((a,b)=>a+b.cal,0);els.total.textContent=total;els.count.textContent=log.length;els.bar.style.width=Math.min(100,total/3000*100)+'%';if(total<TARGET_MIN)els.status.innerHTML='⚠️ Too low - Needs more magic!';else if(total>TARGET_MAX)els.status.innerHTML='⚠️ Too high - Overpowered!';else els.status.innerHTML='✅ Brilliant feast!';els.status.className=(total>=TARGET_MIN&&total<=TARGET_MAX)?'good':'bad';els.claim.disabled=!(total>=TARGET_MIN&&total<=TARGET_MAX&&log.length>=5&&canClaim());}
 
-    function update(){
-      const cbs = [...document.querySelectorAll('.food input[type=checkbox]')];
-      let total = 0, count = 0; cbs.forEach(cb=>{ if(cb.checked){ total += +cb.dataset.kcal; count++; }});
-      els.total.textContent = total; els.count.textContent = count;
-      const pct = Math.min(100, Math.round((total/3000)*100)); els.bar.style.width = pct + '%';
-      let msg = '';
-      if(total < TARGET_MIN) msg = `⚠ A bit low. Add ${TARGET_MIN-total}–${Math.max(0, TARGET_MIN+200-total)} calories to hit the sweet spot.`;
-      else if(total > TARGET_MAX) msg = `⚠ Over target by ${total-TARGET_MAX} calories. Consider swapping or unchecking a snack.`;
-      else msg = '✅ Brilliant! You are within the 1,800–2,200 calories range.';
-      els.status.textContent = msg; els.status.className = 'small ' + (total>=TARGET_MIN && total<=TARGET_MAX ? 'good':'bad');
-    }
+els.claim.onclick=()=>{const log=getLog();const total=log.reduce((a,b)=>a+b.cal,0);if(total>=TARGET_MIN&&total<=TARGET_MAX&&log.length>=5&&canClaim()){addPoints(50);setLastClaim(today);toast('50 points to '+getHouse()+'! Expecto Patronum! ✨');update();}else{toast('Not ready yet, young wizard!');}};
 
-    function getCustomLibrary(){ return JSON.parse(localStorage.getItem(KEY + '_custom') || '{}'); }
-    function persistCustom(meal, item){ const lib = getCustomLibrary(); lib[meal] = lib[meal] || []; lib[meal].push(item); localStorage.setItem(KEY + '_custom', JSON.stringify(lib)); }
-    function removeCustom(meal, title){ const lib = getCustomLibrary(); if(!lib[meal]) return; lib[meal] = lib[meal].filter(x=>x.t!==title); localStorage.setItem(KEY + '_custom', JSON.stringify(lib)); }
+els.reset.onclick=()=>{if(confirm('Reset log for a new day?')){setLog([]);toast('New day at Hogwarts!');}};
 
-    // Theme switching
-    document.addEventListener('click', (e)=>{
-      const btn = e.target.closest('.house'); if(!btn) return; applyTheme(btn.dataset.theme); saveState();
-    });
+build();
 
-    // Save/Clear + History
-    document.getElementById('save').addEventListener('click', ()=>{
-      saveState(); const total = +els.total.textContent || 0; saveToHistory(todayKey(), total); renderHistory(); alert('Saved! Your day is safely tucked into the Pensieve.');
-    });
-    document.getElementById('clear').addEventListener('click', ()=>{
-      if(confirm('Clear all selections and notes?')){
-        localStorage.removeItem(KEY); const s = serialize(); s.selected = []; s.notes=''; localStorage.setItem(KEY, JSON.stringify(s));
-        document.querySelectorAll('.food input[type=checkbox]').forEach(cb=> cb.checked=false); els.notes.value=''; update();
-      }
-    });
-
-    // === History (daily/weekly) ===
-    function todayKey(){ const d = new Date(); const yyyy = d.getFullYear(); const mm = String(d.getMonth()+1).padStart(2,'0'); const dd = String(d.getDate()).padStart(2,'0'); return `${yyyy}-${mm}-${dd}`; }
-    function getHistory(){ return JSON.parse(localStorage.getItem(HIST_KEY) || '{}'); }
-    function saveToHistory(key, total){ const h = getHistory(); h[key] = total; localStorage.setItem(HIST_KEY, JSON.stringify(h)); els.savedTotal.textContent = total + ' calories'; }
-    function renderHistory(){
-      const bars = els.bars; if(!bars) return; const h = getHistory(); const dates = []; const now = new Date();
-      for(let i=6;i>=0;i--){ const d=new Date(now); d.setDate(now.getDate()-i); const k = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; dates.push(k); }
-      bars.innerHTML=''; let sum=0, n=0;
-      dates.forEach(k=>{ const v = h[k] ?? 0; if(v>0){ sum+=v; n++; }
-        const wrap = document.createElement('div'); const bi = document.createElement('div'); bi.className='bari';
-        const pct = Math.min(100, Math.round((v/3000)*100)); bi.style.height = (20 + pct) + 'px'; bi.dataset.val = v ? v+' cal' : '—';
-        bi.style.background = (v>=TARGET_MIN && v<=TARGET_MAX) ? 'linear-gradient(180deg,var(--green),var(--gold))' : 'linear-gradient(180deg,var(--red),var(--gold))';
-        const bd = document.createElement('div'); bd.className='bard'; bd.textContent = k.slice(5); wrap.appendChild(bi); wrap.appendChild(bd); bars.appendChild(wrap);
-      }); els.avg.textContent = n? Math.round(sum/n): '—';
-    }
-
-    // Init
-    function init(){ restore(); build(); els.today.textContent = todayKey(); const h=getHistory(); if(h[todayKey()]!=null){ els.savedTotal.textContent = h[todayKey()] + ' calories'; } renderHistory(); }
-    init();
-  </script></body>
+  </script>
+</body>
 </html>
