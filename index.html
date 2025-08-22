@@ -76,12 +76,12 @@
     .main-container {
       position: relative;
       z-index: 10;
-      max-width: 1600px;
+      max-width: 1800px;
       margin: 30px auto;
       padding: 0 20px 150px;
       display: grid;
       gap: 25px;
-      grid-template-columns: 1fr 1fr 350px 350px;
+      grid-template-columns: 1fr 1fr 1fr 350px 350px;
     }
     
     .magical-card {
@@ -421,6 +421,12 @@
       color: #ffd700;
     }
     
+    @media (max-width: 1600px) {
+      .main-container {
+        grid-template-columns: 1fr 1fr 1fr 350px;
+      }
+    }
+    
     @media (max-width: 1200px) {
       .main-container {
         grid-template-columns: 1fr 1fr 1fr;
@@ -482,12 +488,66 @@
       <button id="add-btn" class="magical-btn">✨ Add to Feast Log</button>
     </div>
 
+    <!-- Fitness Tracking Section -->
+    <div class="magical-card">
+      <h2 class="card-title">🏃‍♂️ Magical Training Grounds</h2>
+      <p>Track your magical fitness activities and earn extra house points for staying active!</p>
+      
+      <div class="input-group">
+        <select id="fitness-activity" class="magical-select">
+          <option value="Quidditch Practice">🏆 Quidditch Practice</option>
+          <option value="Magical Combat Training">⚔️ Defense Against Dark Arts</option>
+          <option value="Herbology Gardening">🌿 Herbology Greenhouse Work</option>
+          <option value="Castle Stairs Climbing">🏰 Castle Stairs Expedition</option>
+          <option value="Flying Lessons">🧙‍♂️ Broomstick Flying</option>
+          <option value="Care of Magical Creatures">🐉 Care of Magical Creatures</option>
+          <option value="Forbidden Forest Trek">🌲 Forbidden Forest Adventure</option>
+          <option value="Dueling Club">⚡ Dueling Club Practice</option>
+          <option value="Lake Swimming">🏊‍♂️ Black Lake Swimming</option>
+          <option value="Wizard Chess">♟️ Wizard Chess Tournament</option>
+          <option value="Other Training">🎯 Other Magical Training</option>
+        </select>
+      </div>
+      
+      <div class="input-group">
+        <input id="fitness-duration" class="magical-input" placeholder="Duration (minutes)" type="number" />
+      </div>
+      
+      <div class="input-group">
+        <select id="fitness-intensity" class="magical-select">
+          <option value="light">🌟 Light Training (Beginner)</option>
+          <option value="moderate">⚡ Moderate Training (Intermediate)</option>
+          <option value="vigorous">🔥 Vigorous Training (Advanced)</option>
+          <option value="extreme">💥 Extreme Training (Master Level)</option>
+        </select>
+      </div>
+      
+      <button id="add-fitness-btn" class="magical-btn">💪 Log Training Session</button>
+      
+      <div id="fitness-points-display" style="margin-top: 15px; padding: 10px; background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.3); border-radius: 8px; text-align: center; color: #ffd700; font-weight: bold; display: none;">
+        <div>Session Points: <span id="session-points">0</span></div>
+        <div>Daily Fitness: <span id="daily-fitness">0</span> minutes</div>
+      </div>
+    </div>
+
     <!-- Daily Log Section -->
     <div class="magical-card">
       <h2 class="card-title">📜 Today's Magical Chronicle</h2>
       <div id="feast-log" class="feast-log"></div>
       <div style="text-align: center; margin-top: 20px;">
         <button id="clear-log" class="magical-btn">🌟 New Day Incantation</button>
+      </div>
+    </div>
+
+    <!-- Fitness Log Section -->
+    <div class="magical-card">
+      <h2 class="card-title">🏋️‍♂️ Training Chronicles</h2>
+      <div id="fitness-log" class="feast-log"></div>
+      <div style="text-align: center; margin-top: 15px;">
+        <div style="color: #ffd700; font-weight: bold;">
+          <div>Today's Training: <span id="total-fitness-time">0</span> minutes</div>
+          <div>Fitness Points: <span id="total-fitness-points">0</span></div>
+        </div>
       </div>
     </div>
 
@@ -653,7 +713,11 @@
       "You're mastering the art of magical nutrition! Keep soaring! 🦅",
       "Like brewing a perfect Polyjuice Potion - precise and powerful! 💫",
       "Your dedication rivals that of the greatest Hogwarts students! 🌟",
-      "Accio success! You're on the path to wizarding greatness! ⚡🪄"
+      "Accio success! You're on the path to wizarding greatness! ⚡🪄",
+      "Your training would make even Madam Hooch proud! 🏆💪",
+      "Balancing nutrition and fitness like a true magical master! ⚖️✨",
+      "Professor Sprout would be amazed at your healthy growth! 🌱💚",
+      "You're building strength worthy of a Quidditch champion! 🏃‍♂️⚡"
     ];
 
     // Simple Match-3 Game Variables
@@ -670,10 +734,13 @@
       points: 0,
       level: 1,
       dailyLog: [],
+      fitnessLog: [],
       ownedArtifacts: [],
       lastBonusClaim: null,
       totalCalories: 0,
-      totalItems: 0
+      totalItems: 0,
+      totalFitnessTime: 0,
+      totalFitnessPoints: 0
     };
 
     // DOM Elements
@@ -701,7 +768,18 @@
       headerTitle: document.getElementById('header-title'),
       houseSelection: document.getElementById('house-selection'),
       houseDisplay: document.getElementById('house-display'),
-      changeHouse: document.getElementById('change-house')
+      changeHouse: document.getElementById('change-house'),
+      // Fitness elements
+      fitnessActivity: document.getElementById('fitness-activity'),
+      fitnessDuration: document.getElementById('fitness-duration'),
+      fitnessIntensity: document.getElementById('fitness-intensity'),
+      addFitnessBtn: document.getElementById('add-fitness-btn'),
+      fitnessLog: document.getElementById('fitness-log'),
+      fitnessPointsDisplay: document.getElementById('fitness-points-display'),
+      sessionPoints: document.getElementById('session-points'),
+      dailyFitness: document.getElementById('daily-fitness'),
+      totalFitnessTime: document.getElementById('total-fitness-time'),
+      totalFitnessPoints: document.getElementById('total-fitness-points')
     };
 
     // Initialize the app
@@ -776,6 +854,11 @@
         elements.houseSelection.style.display = 'block';
         elements.houseDisplay.style.display = 'none';
       });
+      
+      // Fitness event listeners
+      elements.addFitnessBtn.addEventListener('click', addFitnessActivity);
+      elements.fitnessDuration.addEventListener('input', calculateFitnessPoints);
+      elements.fitnessIntensity.addEventListener('change', calculateFitnessPoints);
       
       // House selection buttons
       document.querySelectorAll('.house-btn').forEach(btn => {
@@ -892,7 +975,140 @@
     function updateTotalStats() {
       gameState.totalCalories = gameState.dailyLog.reduce((sum, entry) => sum + entry.calories, 0);
       gameState.totalItems = gameState.dailyLog.length;
+      gameState.totalFitnessTime = gameState.fitnessLog.reduce((sum, entry) => sum + entry.duration, 0);
+      gameState.totalFitnessPoints = gameState.fitnessLog.reduce((sum, entry) => sum + entry.points, 0);
       gameState.level = Math.floor(gameState.points / 500) + 1;
+    }
+
+    // ===== FITNESS TRACKING FUNCTIONS =====
+    
+    // Calculate fitness points based on duration and intensity
+    function calculateFitnessPoints() {
+      const duration = parseInt(elements.fitnessDuration.value) || 0;
+      const intensity = elements.fitnessIntensity.value;
+      
+      if (duration <= 0) {
+        elements.fitnessPointsDisplay.style.display = 'none';
+        return;
+      }
+      
+      let multiplier = 1;
+      switch (intensity) {
+        case 'light': multiplier = 1; break;
+        case 'moderate': multiplier = 1.5; break;
+        case 'vigorous': multiplier = 2; break;
+        case 'extreme': multiplier = 3; break;
+      }
+      
+      const points = Math.floor(duration * multiplier);
+      
+      elements.sessionPoints.textContent = points;
+      elements.dailyFitness.textContent = gameState.totalFitnessTime + duration;
+      elements.fitnessPointsDisplay.style.display = 'block';
+    }
+    
+    // Add fitness activity to log
+    function addFitnessActivity() {
+      const activity = elements.fitnessActivity.value;
+      const duration = parseInt(elements.fitnessDuration.value);
+      const intensity = elements.fitnessIntensity.value;
+      
+      if (!duration || duration <= 0) {
+        showToast('⏱️ Enter your training duration in minutes!');
+        return;
+      }
+      
+      let multiplier = 1;
+      switch (intensity) {
+        case 'light': multiplier = 1; break;
+        case 'moderate': multiplier = 1.5; break;
+        case 'vigorous': multiplier = 2; break;
+        case 'extreme': multiplier = 3; break;
+      }
+      
+      const points = Math.floor(duration * multiplier);
+      const fitnessEntry = {
+        id: Date.now(),
+        activity,
+        duration,
+        intensity,
+        points,
+        timestamp: new Date().toLocaleTimeString()
+      };
+      
+      gameState.fitnessLog.push(fitnessEntry);
+      gameState.points += points;
+      updateTotalStats();
+      saveGameState();
+      updateDisplay();
+      renderFitnessLog();
+      clearFitnessInputs();
+      
+      const intensityText = {
+        light: 'light training',
+        moderate: 'moderate training', 
+        vigorous: 'vigorous training',
+        extreme: 'extreme training'
+      };
+      
+      showToast(`💪 ${activity} logged! ${duration} min of ${intensityText[intensity]} = +${points} house points!`);
+    }
+    
+    // Clear fitness input fields
+    function clearFitnessInputs() {
+      elements.fitnessDuration.value = '';
+      elements.fitnessPointsDisplay.style.display = 'none';
+    }
+    
+    // Remove fitness activity from log
+    function removeFitnessActivity(itemId) {
+      const index = gameState.fitnessLog.findIndex(entry => entry.id === itemId);
+      if (index !== -1) {
+        const removedActivity = gameState.fitnessLog[index];
+        gameState.fitnessLog.splice(index, 1);
+        gameState.points = Math.max(0, gameState.points - removedActivity.points);
+        updateTotalStats();
+        saveGameState();
+        updateDisplay();
+        renderFitnessLog();
+        showToast(`🗑️ Training session removed... -${removedActivity.points} points`);
+      }
+    }
+    
+    // Render fitness log
+    function renderFitnessLog() {
+      elements.fitnessLog.innerHTML = '';
+      
+      if (gameState.fitnessLog.length === 0) {
+        elements.fitnessLog.innerHTML = '<p style="text-align: center; color: #888;">No training sessions logged today. Time to get moving!</p>';
+        elements.totalFitnessTime.textContent = '0';
+        elements.totalFitnessPoints.textContent = '0';
+        return;
+      }
+      
+      gameState.fitnessLog.forEach(entry => {
+        const logDiv = document.createElement('div');
+        logDiv.className = 'feast-item';
+        
+        const intensityEmoji = {
+          light: '🌟',
+          moderate: '⚡',
+          vigorous: '🔥',
+          extreme: '💥'
+        };
+        
+        logDiv.innerHTML = `
+          <div>
+            <strong>${entry.activity}</strong> ${intensityEmoji[entry.intensity]}<br>
+            <small>${entry.timestamp} • ${entry.duration} min • +${entry.points} pts</small>
+          </div>
+          <button onclick="removeFitnessActivity(${entry.id})" class="magical-btn" style="background: #7f0909;">✖</button>
+        `;
+        elements.fitnessLog.appendChild(logDiv);
+      });
+      
+      elements.totalFitnessTime.textContent = gameState.totalFitnessTime;
+      elements.totalFitnessPoints.textContent = gameState.totalFitnessPoints;
     }
 
     // Clear input fields
@@ -917,8 +1133,9 @@
 
     // Clear daily log
     function clearDailyLog() {
-      if (confirm('🌅 Cast a new day incantation? This will clear your feast log but preserve your points and artifacts!')) {
+      if (confirm('🌅 Cast a new day incantation? This will clear your feast and training logs but preserve your points and artifacts!')) {
         gameState.dailyLog = [];
+        gameState.fitnessLog = [];
         gameState.lastBonusClaim = null;
         updateTotalStats();
         saveGameState();
@@ -933,20 +1150,24 @@
       const isInRange = gameState.totalCalories >= CONFIG.TARGET_MIN && 
                        gameState.totalCalories <= CONFIG.TARGET_MAX;
       const hasEnoughItems = gameState.totalItems >= 5;
+      const hasEnoughFitness = gameState.totalFitnessTime >= 30; // 30 minutes minimum
       const canClaim = gameState.lastBonusClaim !== today;
 
-      if (isInRange && hasEnoughItems && canClaim) {
-        gameState.points += 50;
+      if (isInRange && hasEnoughItems && hasEnoughFitness && canClaim) {
+        gameState.points += 100; // Increased bonus for both nutrition and fitness
         gameState.lastBonusClaim = today;
         saveGameState();
         updateDisplay();
-        showToast('🧪 Daily Elixir claimed! +50 points to your house! Well done!');
+        showToast('🧪 Daily Elixir claimed! Perfect balance of nutrition and training! +100 house points!');
       } else if (!canClaim) {
         showToast('⏰ You\'ve already claimed today\'s elixir! Return tomorrow!');
-      } else if (!isInRange) {
-        showToast('⚖️ Balance your magical energy within 1800-2200 calories first!');
       } else {
-        showToast('📝 Log at least 5 feast items to claim your daily elixir!');
+        let missing = [];
+        if (!isInRange) missing.push('balanced nutrition (1800-2200 calories)');
+        if (!hasEnoughItems) missing.push('at least 5 meal entries');
+        if (!hasEnoughFitness) missing.push('at least 30 minutes of training');
+        
+        showToast(`📋 Complete your daily quest: ${missing.join(', ')}`);
       }
     }
 
@@ -1017,6 +1238,7 @@
     function updateDisplay() {
       updateHouseDisplay();
       renderFeastLog();
+      renderFitnessLog();
       updateMagicMeter();
       updateStats();
       updateMotivation();
@@ -1074,21 +1296,39 @@
 
       // Update daily bonus button
       const today = new Date().toDateString();
-      const canClaim = gameState.lastBonusClaim !== today &&
-                      gameState.totalCalories >= CONFIG.TARGET_MIN &&
-                      gameState.totalCalories <= CONFIG.TARGET_MAX &&
-                      gameState.totalItems >= 5;
+      const isInRange = gameState.totalCalories >= CONFIG.TARGET_MIN &&
+                       gameState.totalCalories <= CONFIG.TARGET_MAX;
+      const hasEnoughItems = gameState.totalItems >= 5;
+      const hasEnoughFitness = gameState.totalFitnessTime >= 30;
+      const canClaim = gameState.lastBonusClaim !== today;
       
-      elements.dailyBonus.disabled = !canClaim;
-      elements.dailyBonus.textContent = canClaim ? '🧪 Claim Daily Elixir (50 pts)' : 
-        gameState.lastBonusClaim === today ? '✅ Elixir Claimed Today' : '🧪 Complete Daily Quest First';
+      const allRequirementsMet = isInRange && hasEnoughItems && hasEnoughFitness && canClaim;
+      
+      elements.dailyBonus.disabled = !allRequirementsMet;
+      
+      if (gameState.lastBonusClaim === today) {
+        elements.dailyBonus.textContent = '✅ Daily Elixir Claimed!';
+      } else if (allRequirementsMet) {
+        elements.dailyBonus.textContent = '🧪 Claim Daily Elixir (100 pts)';
+      } else {
+        elements.dailyBonus.textContent = '🧪 Complete Daily Quest First';
+      }
     }
 
     // Update motivation message
     function updateMotivation() {
-      if (gameState.totalCalories >= CONFIG.TARGET_MIN && gameState.totalCalories <= CONFIG.TARGET_MAX) {
+      const hasGoodNutrition = gameState.totalCalories >= CONFIG.TARGET_MIN && gameState.totalCalories <= CONFIG.TARGET_MAX;
+      const hasGoodFitness = gameState.totalFitnessTime >= 30;
+      
+      if (hasGoodNutrition && hasGoodFitness) {
         const randomMessage = MOTIVATIONAL_MESSAGES[Math.floor(Math.random() * MOTIVATIONAL_MESSAGES.length)];
         elements.motivation.textContent = randomMessage;
+        elements.motivation.style.display = 'block';
+      } else if (hasGoodNutrition) {
+        elements.motivation.textContent = "🍽️ Great nutrition! Now add some magical training to complete your quest! 💪";
+        elements.motivation.style.display = 'block';
+      } else if (hasGoodFitness) {
+        elements.motivation.textContent = "💪 Excellent training! Now balance your magical nutrition for the perfect day! 🍽️";
         elements.motivation.style.display = 'block';
       } else {
         elements.motivation.style.display = 'none';
@@ -1118,8 +1358,9 @@
       }
     }
 
-    // Make removeFromLog globally accessible
+    // Make functions globally accessible
     window.removeFromLog = removeFromLog;
+    window.removeFitnessActivity = removeFitnessActivity;
 
     // ===== SIMPLE WORKING GAME =====
     
