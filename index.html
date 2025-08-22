@@ -473,6 +473,73 @@
       color: #ffd700;
     }
     
+    /* Quest Tracker Styles */
+    .quest-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      padding: 10px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      border: 1px solid rgba(255,215,0,0.2);
+    }
+    
+    .quest-icon {
+      font-size: 1.5rem;
+      margin-right: 12px;
+      min-width: 30px;
+    }
+    
+    .quest-details {
+      flex: 1;
+    }
+    
+    .quest-title {
+      font-weight: bold;
+      color: #ffd700;
+      margin-bottom: 2px;
+    }
+    
+    .quest-desc {
+      font-size: 0.85rem;
+      color: #ccc;
+      margin-bottom: 3px;
+    }
+    
+    .quest-progress {
+      font-size: 0.8rem;
+      color: #999;
+    }
+    
+    .quest-status {
+      font-size: 1.2rem;
+      margin-left: 10px;
+    }
+    
+    .quest-btn {
+      width: 100%;
+      font-size: 1.1rem;
+      padding: 15px;
+      background: linear-gradient(45deg, #7f0909, #d4af37);
+      transition: all 0.3s ease;
+    }
+    
+    .quest-btn:disabled {
+      background: linear-gradient(45deg, #555, #777);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    
+    .quest-btn.ready {
+      background: linear-gradient(45deg, #0d6217, #ffd700);
+      animation: questPulse 2s infinite;
+    }
+    
+    @keyframes questPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255,215,0,0.3); }
+      50% { transform: scale(1.02); box-shadow: 0 0 30px rgba(255,215,0,0.6); }
+    }
+    
     @media (max-width: 1600px) {
       .main-container {
         grid-template-columns: 1fr 1fr 1fr 350px;
@@ -667,7 +734,43 @@
           <p><strong>Wizard Level:</strong> <span id="wizard-level" class="level-display">Apprentice (1)</span></p>
           <button id="change-house" class="magical-btn" style="font-size: 0.8rem; padding: 5px 10px;">Change House</button>
         </div>
-        <button id="daily-bonus" class="magical-btn">🧪 Claim Daily Elixir (100 pts)</button>
+        
+        <!-- Daily Quest Tracker -->
+        <div style="margin: 20px 0; padding: 15px; background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.3); border-radius: 10px;">
+          <h3 style="margin: 0 0 15px 0; color: #ffd700; text-align: center; font-family: 'Cinzel', serif;">🌟 Daily Quest Progress</h3>
+          
+          <div id="quest-nutrition" class="quest-item">
+            <span class="quest-icon">🍽️</span>
+            <div class="quest-details">
+              <div class="quest-title">Balanced Nutrition</div>
+              <div class="quest-desc">1800-2200 calories & 5+ meals</div>
+              <div class="quest-progress" id="nutrition-progress">0/1800 calories, 0/5 meals</div>
+            </div>
+            <div class="quest-status" id="nutrition-status">❌</div>
+          </div>
+          
+          <div id="quest-fitness" class="quest-item">
+            <span class="quest-icon">💪</span>
+            <div class="quest-details">
+              <div class="quest-title">Physical Training</div>
+              <div class="quest-desc">30+ minutes of exercise</div>
+              <div class="quest-progress" id="fitness-progress">0/30 minutes</div>
+            </div>
+            <div class="quest-status" id="fitness-status">❌</div>
+          </div>
+          
+          <div id="quest-bonus" class="quest-item">
+            <span class="quest-icon">🧪</span>
+            <div class="quest-details">
+              <div class="quest-title">Daily Elixir</div>
+              <div class="quest-desc">Complete both above tasks</div>
+              <div class="quest-progress" id="bonus-progress">Awaiting completion</div>
+            </div>
+            <div class="quest-status" id="bonus-status">❌</div>
+          </div>
+        </div>
+        
+        <button id="daily-bonus" class="magical-btn quest-btn">🧪 Complete Daily Quest (100 pts)</button>
       </div>
 
       <!-- Trophy Shop -->
@@ -924,7 +1027,12 @@
       elements.estimateBtn.addEventListener('click', estimateCalories);
       elements.addBtn.addEventListener('click', addToLog);
       elements.clearLog.addEventListener('click', clearDailyLog);
-      elements.dailyBonus.addEventListener('click', claimDailyBonus);
+      
+      // Daily bonus with feedback even when disabled
+      elements.dailyBonus.addEventListener('click', (e) => {
+        claimDailyBonus();
+      });
+      
       elements.changeHouse.addEventListener('click', () => {
         elements.houseSelection.style.display = 'block';
         elements.houseDisplay.style.display = 'none';
@@ -1532,7 +1640,7 @@
         updateTotalStats();
         saveGameState();
         updateDisplay();
-        showToast('🌟 A new magical day dawns at Hogwarts!');
+        showToast('🌟 A new magical day dawns at Hogwarts! Your daily quests have been reset!');
       }
     }
 
@@ -1545,21 +1653,45 @@
       const hasEnoughFitness = gameState.totalFitnessTime >= 30; // 30 minutes minimum
       const canClaim = gameState.lastBonusClaim !== today;
 
+      // Always provide feedback, even if button is disabled
+      if (!canClaim) {
+        showToast('⏰ You\'ve already claimed today\'s elixir! Return tomorrow for a new quest!');
+        return;
+      }
+
+      if (!isInRange) {
+        if (gameState.totalCalories < CONFIG.TARGET_MIN) {
+          showToast(`🍽️ You need ${CONFIG.TARGET_MIN - gameState.totalCalories} more calories for balanced nutrition!`);
+        } else {
+          showToast(`🍽️ You have ${gameState.totalCalories - CONFIG.TARGET_MAX} calories too many! Try to stay within 1800-2200.`);
+        }
+        return;
+      }
+
+      if (!hasEnoughItems) {
+        showToast(`📝 You need ${5 - gameState.totalItems} more meal entries to complete the nutrition quest!`);
+        return;
+      }
+
+      if (!hasEnoughFitness) {
+        showToast(`💪 You need ${30 - gameState.totalFitnessTime} more minutes of training to complete the fitness quest!`);
+        return;
+      }
+
+      // All requirements met - grant the bonus!
       if (isInRange && hasEnoughItems && hasEnoughFitness && canClaim) {
-        gameState.points += 100; // Increased bonus for both nutrition and fitness
+        gameState.points += 100;
         gameState.lastBonusClaim = today;
         saveGameState();
         updateDisplay();
-        showToast('🧪 Daily Elixir claimed! Perfect balance of nutrition and training! +100 house points!');
-      } else if (!canClaim) {
-        showToast('⏰ You\'ve already claimed today\'s elixir! Return tomorrow!');
-      } else {
-        let missing = [];
-        if (!isInRange) missing.push('balanced nutrition (1800-2200 calories)');
-        if (!hasEnoughItems) missing.push('at least 5 meal entries');
-        if (!hasEnoughFitness) missing.push('at least 30 minutes of training');
         
-        showToast(`📋 Complete your daily quest: ${missing.join(', ')}`);
+        // Special celebration for completing daily quest
+        showToast('🎉🧪 DAILY QUEST COMPLETED! Perfect balance of nutrition and training! +100 house points! 🏆');
+        
+        // Update button immediately
+        elements.dailyBonus.textContent = '✅ Quest Completed Today!';
+        elements.dailyBonus.disabled = true;
+        elements.dailyBonus.classList.remove('ready');
       }
     }
 
@@ -1722,7 +1854,12 @@
         elements.statusMessage.className = 'status-good';
       }
 
-      // Update daily bonus button
+      // Update quest tracker
+      updateQuestTracker();
+    }
+
+    // Update quest tracker display
+    function updateQuestTracker() {
       const today = new Date().toDateString();
       const isInRange = gameState.totalCalories >= CONFIG.TARGET_MIN &&
                        gameState.totalCalories <= CONFIG.TARGET_MAX;
@@ -1730,16 +1867,47 @@
       const hasEnoughFitness = gameState.totalFitnessTime >= 30;
       const canClaim = gameState.lastBonusClaim !== today;
       
-      const allRequirementsMet = isInRange && hasEnoughItems && hasEnoughFitness && canClaim;
+      // Update nutrition quest
+      const nutritionComplete = isInRange && hasEnoughItems;
+      document.getElementById('nutrition-progress').textContent = 
+        `${gameState.totalCalories}/${CONFIG.TARGET_MIN}-${CONFIG.TARGET_MAX} calories, ${gameState.totalItems}/5 meals`;
+      document.getElementById('nutrition-status').textContent = nutritionComplete ? '✅' : '❌';
       
-      elements.dailyBonus.disabled = !allRequirementsMet;
+      // Update fitness quest
+      const fitnessComplete = hasEnoughFitness;
+      document.getElementById('fitness-progress').textContent = 
+        `${gameState.totalFitnessTime}/30 minutes`;
+      document.getElementById('fitness-status').textContent = fitnessComplete ? '✅' : '❌';
       
-      if (gameState.lastBonusClaim === today) {
-        elements.dailyBonus.textContent = '✅ Daily Elixir Claimed!';
-      } else if (allRequirementsMet) {
-        elements.dailyBonus.textContent = '🧪 Claim Daily Elixir (100 pts)';
+      // Update bonus quest
+      const allComplete = nutritionComplete && fitnessComplete;
+      const alreadyClaimed = !canClaim;
+      
+      if (alreadyClaimed) {
+        document.getElementById('bonus-progress').textContent = 'Completed today! ✨';
+        document.getElementById('bonus-status').textContent = '🏆';
+      } else if (allComplete) {
+        document.getElementById('bonus-progress').textContent = 'Ready to claim! 🎉';
+        document.getElementById('bonus-status').textContent = '🧪';
       } else {
-        elements.dailyBonus.textContent = '🧪 Complete Daily Quest First';
+        document.getElementById('bonus-progress').textContent = 'Complete both quests above';
+        document.getElementById('bonus-status').textContent = '❌';
+      }
+      
+      // Update daily bonus button
+      const buttonReady = allComplete && canClaim;
+      
+      elements.dailyBonus.disabled = !buttonReady;
+      
+      if (alreadyClaimed) {
+        elements.dailyBonus.textContent = '✅ Quest Completed Today!';
+        elements.dailyBonus.classList.remove('ready');
+      } else if (buttonReady) {
+        elements.dailyBonus.textContent = '🎉 Claim Daily Quest Reward! (100 pts)';
+        elements.dailyBonus.classList.add('ready');
+      } else {
+        elements.dailyBonus.textContent = '🧪 Complete Daily Quests First';
+        elements.dailyBonus.classList.remove('ready');
       }
     }
 
