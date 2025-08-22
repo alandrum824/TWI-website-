@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -76,12 +77,12 @@
     .main-container {
       position: relative;
       z-index: 10;
-      max-width: 1400px;
+      max-width: 1600px;
       margin: 30px auto;
       padding: 0 20px 150px;
       display: grid;
       gap: 25px;
-      grid-template-columns: 1fr 1fr 350px;
+      grid-template-columns: 1fr 1fr 350px 350px;
     }
     
     .magical-card {
@@ -319,6 +320,52 @@
       animation: glow 3s infinite;
     }
     
+    /* Match-3 Game Styles */
+    .game-piece {
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      background: linear-gradient(145deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+      border: 1px solid rgba(255,215,0,0.3);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+    
+    .game-piece:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px rgba(255,215,0,0.5);
+    }
+    
+    .game-piece.selected {
+      background: linear-gradient(45deg, #ffd700, #ffed4e);
+      transform: scale(1.15);
+      box-shadow: 0 0 20px rgba(255,215,0,0.8);
+    }
+    
+    .game-piece.matched {
+      animation: matchPulse 0.6s ease-in-out;
+    }
+    
+    @keyframes matchPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); background: #ffd700; }
+      100% { transform: scale(0); opacity: 0; }
+    }
+    
+    .game-piece.falling {
+      animation: fall 0.5s ease-in;
+    }
+    
+    @keyframes fall {
+      from { transform: translateY(-100px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
     .motivation-quote {
       text-align: center;
       font-style: italic;
@@ -444,6 +491,22 @@
       <div style="text-align: center; margin-top: 20px;">
         <button id="clear-log" class="magical-btn">🌟 New Day Incantation</button>
       </div>
+    </div>
+
+    <!-- Match-3 Magical Game -->
+    <div class="magical-card">
+      <h2 class="card-title">🎮 Magical Potions Match</h2>
+      <p>Match 3+ magical items to brew powerful potions and earn bonus points!</p>
+      <div style="text-align: center; margin-bottom: 15px;">
+        <div>Score: <span id="game-score" class="points-display">0</span></div>
+        <div>Moves: <span id="moves-left">20</span></div>
+      </div>
+      <div id="game-board" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; max-width: 300px; margin: 0 auto; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px;"></div>
+      <div style="text-align: center; margin-top: 15px;">
+        <button id="new-game" class="magical-btn">🆕 New Game</button>
+        <button id="hint-btn" class="magical-btn">💡 Hint (5 pts)</button>
+      </div>
+      <div id="game-hint" style="text-align: center; color: #ffd700; margin-top: 10px; font-style: italic; display: none;"></div>
     </div>
 
     <!-- Stats and Progress Sidebar -->
@@ -590,6 +653,18 @@
       "Accio success! You're on the path to wizarding greatness! ⚡🪄"
     ];
 
+    // Magical Game Pieces for Match-3
+    const MAGICAL_PIECES = [
+      '🧪', // Potion
+      '⚡', // Lightning
+      '🔮', // Crystal Ball
+      '🕯️', // Candle
+      '⭐', // Star
+      '💎', // Gem
+      '🌙', // Moon
+      '🦉'  // Owl
+    ];
+
     // Game State
     let gameState = {
       house: null,
@@ -601,6 +676,13 @@
       totalCalories: 0,
       totalItems: 0
     };
+
+    // Match-3 Game State
+    let gameBoard = [];
+    let selectedPiece = null;
+    let gameScore = 0;
+    let movesLeft = 20;
+    let isProcessing = false;
 
     // DOM Elements
     const elements = {
