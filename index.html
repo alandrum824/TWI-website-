@@ -319,21 +319,56 @@
       animation: glow 3s infinite;
     }
     
-    /* Simple Game Styles */
-    .game-cell {
+    /* Working Match-3 Game Styles */
+    .game-board-container {
       display: inline-block;
-      width: 40px;
-      height: 40px;
+      background: linear-gradient(145deg, rgba(0,0,0,0.6), rgba(0,0,0,0.3));
+      padding: 20px;
+      border-radius: 15px;
+      border: 3px solid #ffd700;
+      margin-bottom: 25px;
+      position: relative;
+      z-index: 2;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    }
+    
+    .game-row {
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .game-cell {
+      width: 35px;
+      height: 35px;
       margin: 2px;
-      text-align: center;
-      line-height: 40px;
-      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
       background: linear-gradient(145deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
       border: 2px solid rgba(255,215,0,0.3);
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.3s ease;
       user-select: none;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .game-cell::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,215,0,0.4), transparent);
+      transition: left 0.6s ease;
+    }
+    
+    .game-cell:hover::before {
+      left: 100%;
     }
     
     .game-cell:hover {
@@ -346,16 +381,33 @@
       background: linear-gradient(45deg, #ffd700, #ffed4e);
       border-color: #ffd700;
       box-shadow: 0 0 20px rgba(255,215,0,0.8);
+      transform: scale(1.15);
+      animation: pulse 1s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(255,215,0,0.8); }
+      50% { box-shadow: 0 0 30px rgba(255,215,0,1); }
     }
     
     .game-cell.matched {
-      animation: gameMatch 0.8s ease-in-out forwards;
+      animation: magicalMatch 0.8s ease-in-out forwards;
     }
     
-    @keyframes gameMatch {
+    .game-cell.falling {
+      animation: magicalFall 0.6s ease-in forwards;
+    }
+    
+    @keyframes magicalMatch {
       0% { transform: scale(1); }
-      50% { transform: scale(1.3); background: #ff6b6b; }
+      30% { transform: scale(1.4); background: linear-gradient(45deg, #ffd700, #ff6b6b); }
+      70% { transform: scale(1.6); background: linear-gradient(45deg, #ff6b6b, #ffd93d); opacity: 0.8; }
       100% { transform: scale(0); opacity: 0; }
+    }
+    
+    @keyframes magicalFall {
+      from { transform: translateY(-150px) rotate(180deg); opacity: 0; }
+      to { transform: translateY(0) rotate(0deg); opacity: 1; }
     }
     
     .motivation-quote {
@@ -444,6 +496,7 @@
         grid-template-columns: 1fr;
       }
       h1 { font-size: 2rem; }
+      .game-cell { width: 30px; height: 30px; font-size: 1.4rem; }
     }
   </style>
 </head>
@@ -452,7 +505,7 @@
   
   <header>
     <h1 id="header-title">Hogwarts Feast Tracker ⚡</h1>
-    <div class="subtitle">Master the Art of Magical Nutrition</div>
+    <div class="subtitle">Master the Art of Magical Nutrition & Fitness</div>
     <p>Chronicle your daily feasts, balance your magical energy (1800-2200 calories), earn house points, and unlock legendary artifacts!</p>
   </header>
 
@@ -530,46 +583,32 @@
       </div>
     </div>
 
-    <!-- Daily Log Section -->
+    <!-- Working Match-3 Magical Game -->
     <div class="magical-card">
-      <h2 class="card-title">📜 Today's Magical Chronicle</h2>
-      <div id="feast-log" class="feast-log"></div>
-      <div style="text-align: center; margin-top: 20px;">
-        <button id="clear-log" class="magical-btn">🌟 New Day Incantation</button>
-      </div>
-    </div>
-
-    <!-- Fitness Log Section -->
-    <div class="magical-card">
-      <h2 class="card-title">🏋️‍♂️ Training Chronicles</h2>
-      <div id="fitness-log" class="feast-log"></div>
-      <div style="text-align: center; margin-top: 15px;">
-        <div style="color: #ffd700; font-weight: bold;">
-          <div>Today's Training: <span id="total-fitness-time">0</span> minutes</div>
-          <div>Fitness Points: <span id="total-fitness-points">0</span></div>
+      <h2 class="card-title">🎮 Hogwarts Magic Match</h2>
+      <p>Match 3+ magical symbols to brew powerful spells and earn house points!</p>
+      
+      <div style="display: flex; justify-content: space-around; margin-bottom: 20px; padding: 15px; background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.3); border-radius: 10px;">
+        <div style="text-align: center;">
+          <div style="color: #ffd700; margin-bottom: 5px;">Spell Power</div>
+          <div id="game-score" class="points-display">0</div>
         </div>
-      </div>
-    </div>
-
-    <!-- Match-3 Magical Game -->
-    <div class="magical-card">
-      <h2 class="card-title">🎮 Magical Potions Match</h2>
-      <p>Match 3+ magical items to earn house points!</p>
-      <div style="text-align: center; margin-bottom: 15px;">
-        <div><strong>Score:</strong> <span id="game-score">0</span> | <strong>Moves:</strong> <span id="moves-left">15</span></div>
+        <div style="text-align: center;">
+          <div style="color: #ffd700; margin-bottom: 5px;">Magic Left</div>
+          <div id="moves-left" class="points-display">15</div>
+        </div>
       </div>
       
-      <div style="text-align: center;">
-        <div id="game-board" style="display: inline-block; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border: 2px solid #ffd700;">
-          <!-- Game will load here -->
-        </div>
-        
-        <div style="margin-top: 15px;">
-          <button id="new-game" class="magical-btn" onclick="initGame()">🆕 New Game</button>
-          <button class="magical-btn" onclick="getGameHint()">💡 Hint (5 pts)</button>
-        </div>
-        <div id="game-status" style="color: #ffd700; margin-top: 10px; font-weight: bold;">Click New Game to start!</div>
+      <div id="game-board" class="game-board-container">
+        <!-- Game board will be generated here -->
       </div>
+      
+      <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 15px;">
+        <button id="new-game" class="magical-btn">🪄 New Spell</button>
+        <button id="game-hint" class="magical-btn">🔮 Divination</button>
+      </div>
+      
+      <div id="game-status" style="color: #ffd700; font-weight: bold; font-size: 1rem; margin-top: 10px; text-align: center; min-height: 25px;">Cast your first spell to begin!</div>
     </div>
 
     <!-- Stats and Progress Sidebar -->
@@ -586,6 +625,30 @@
         <div id="motivation" class="motivation-quote"></div>
       </div>
 
+      <!-- Daily Log Section -->
+      <div class="magical-card">
+        <h2 class="card-title">📜 Today's Magical Chronicle</h2>
+        <div id="feast-log" class="feast-log"></div>
+        <div style="text-align: center; margin-top: 20px;">
+          <button id="clear-log" class="magical-btn">🌟 New Day Incantation</button>
+        </div>
+      </div>
+
+      <!-- Fitness Log Section -->
+      <div class="magical-card">
+        <h2 class="card-title">🏋️‍♂️ Training Chronicles</h2>
+        <div id="fitness-log" class="feast-log"></div>
+        <div style="text-align: center; margin-top: 15px;">
+          <div style="color: #ffd700; font-weight: bold;">
+            <div>Today's Training: <span id="total-fitness-time">0</span> minutes</div>
+            <div>Fitness Points: <span id="total-fitness-points">0</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- House & Trophy Sidebar -->
+    <div>
       <!-- House Points & Level -->
       <div class="magical-card">
         <h2 class="card-title">🏆 House Championship</h2>
@@ -604,7 +667,7 @@
           <p><strong>Wizard Level:</strong> <span id="wizard-level" class="level-display">Apprentice (1)</span></p>
           <button id="change-house" class="magical-btn" style="font-size: 0.8rem; padding: 5px 10px;">Change House</button>
         </div>
-        <button id="daily-bonus" class="magical-btn">🧪 Claim Daily Elixir (50 pts)</button>
+        <button id="daily-bonus" class="magical-btn">🧪 Claim Daily Elixir (100 pts)</button>
       </div>
 
       <!-- Trophy Shop -->
@@ -720,14 +783,6 @@
       "You're building strength worthy of a Quidditch champion! 🏃‍♂️⚡"
     ];
 
-    // Simple Match-3 Game Variables
-    let gameGrid = [];
-    let gameSelected = null;
-    let gamePoints = 0;
-    let gameMoves = 15;
-    const gamePieces = ['🧪', '⚡', '🔮', '🕯️', '⭐', '💎'];
-    const gridSize = 6;
-
     // Game State
     let gameState = {
       house: null,
@@ -742,6 +797,19 @@
       totalFitnessTime: 0,
       totalFitnessPoints: 0
     };
+
+    // Working Match-3 Game Variables
+    let magicGameState = {
+      board: [],
+      score: 0,
+      movesLeft: 15,
+      selectedCell: null,
+      gameActive: false,
+      boardSize: 8
+    };
+
+    // Magical Harry Potter symbols for the game
+    const magicalSymbols = ['⚡', '🪄', '🔮', '🧪', '🦉', '⭐'];
 
     // DOM Elements
     const elements = {
@@ -779,7 +847,14 @@
       sessionPoints: document.getElementById('session-points'),
       dailyFitness: document.getElementById('daily-fitness'),
       totalFitnessTime: document.getElementById('total-fitness-time'),
-      totalFitnessPoints: document.getElementById('total-fitness-points')
+      totalFitnessPoints: document.getElementById('total-fitness-points'),
+      // Game elements
+      gameBoard: document.getElementById('game-board'),
+      gameScore: document.getElementById('game-score'),
+      movesLeft: document.getElementById('moves-left'),
+      newGame: document.getElementById('new-game'),
+      gameHint: document.getElementById('game-hint'),
+      gameStatus: document.getElementById('game-status')
     };
 
     // Initialize the app
@@ -791,7 +866,7 @@
       renderTrophyShop();
       renderTrophyCase();
       showHouseSelection();
-      // Game will initialize when user clicks "New Game"
+      initGame(); // Initialize the working match-3 game
     }
 
     // Create twinkling stars background
@@ -860,6 +935,10 @@
       elements.fitnessDuration.addEventListener('input', calculateFitnessPoints);
       elements.fitnessIntensity.addEventListener('change', calculateFitnessPoints);
       
+      // Game event listeners
+      elements.newGame.addEventListener('click', initGame);
+      elements.gameHint.addEventListener('click', getGameHint);
+      
       // House selection buttons
       document.querySelectorAll('.house-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -875,6 +954,355 @@
         }
       });
     }
+
+    // ===== WORKING MATCH-3 GAME FUNCTIONS =====
+    
+    // Initialize new game
+    function initGame() {
+      magicGameState = {
+        board: [],
+        score: 0,
+        movesLeft: 15,
+        selectedCell: null,
+        gameActive: true,
+        boardSize: 8
+      };
+      
+      // Create initial board without matches
+      do {
+        magicGameState.board = [];
+        for (let i = 0; i < magicGameState.boardSize * magicGameState.boardSize; i++) {
+          magicGameState.board.push(magicalSymbols[Math.floor(Math.random() * magicalSymbols.length)]);
+        }
+      } while (findMatches().length > 0);
+      
+      renderGame();
+      updateGameDisplay();
+      elements.gameStatus.textContent = 'Your magical journey begins! Cast your first spell!';
+    }
+
+    // Render the game board
+    function renderGame() {
+      const board = elements.gameBoard;
+      board.innerHTML = '';
+      
+      for (let row = 0; row < magicGameState.boardSize; row++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'game-row';
+        
+        for (let col = 0; col < magicGameState.boardSize; col++) {
+          const index = row * magicGameState.boardSize + col;
+          const cell = document.createElement('div');
+          cell.className = 'game-cell';
+          cell.textContent = magicGameState.board[index];
+          cell.dataset.index = index;
+          cell.addEventListener('click', () => selectCell(index));
+          rowDiv.appendChild(cell);
+        }
+        
+        board.appendChild(rowDiv);
+      }
+    }
+
+    // Handle cell selection and swapping
+    function selectCell(index) {
+      if (!magicGameState.gameActive) return;
+      
+      const cells = document.querySelectorAll('.game-cell');
+      
+      if (magicGameState.selectedCell === null) {
+        magicGameState.selectedCell = index;
+        cells[index].classList.add('selected');
+        elements.gameStatus.textContent = 'Symbol selected! Choose an adjacent symbol to swap.';
+      } else if (magicGameState.selectedCell === index) {
+        cells[index].classList.remove('selected');
+        magicGameState.selectedCell = null;
+        elements.gameStatus.textContent = 'Selection cleared. Choose a symbol to begin casting.';
+      } else {
+        // Check if cells are adjacent
+        if (isAdjacent(magicGameState.selectedCell, index)) {
+          // Remove selection highlight
+          cells[magicGameState.selectedCell].classList.remove('selected');
+          
+          // Swap cells
+          const temp = magicGameState.board[magicGameState.selectedCell];
+          magicGameState.board[magicGameState.selectedCell] = magicGameState.board[index];
+          magicGameState.board[index] = temp;
+          
+          // Check if swap creates matches
+          const matches = findMatches();
+          if (matches.length > 0) {
+            magicGameState.movesLeft--;
+            renderGame();
+            setTimeout(() => {
+              processMatches();
+            }, 300);
+          } else {
+            // Swap back if no matches
+            magicGameState.board[index] = magicGameState.board[magicGameState.selectedCell];
+            magicGameState.board[magicGameState.selectedCell] = temp;
+            elements.gameStatus.textContent = 'No magical combinations found! Try a different spell.';
+          }
+          
+          magicGameState.selectedCell = null;
+          updateGameDisplay();
+          
+          if (magicGameState.movesLeft <= 0) {
+            setTimeout(endGame, 1000);
+          }
+        } else {
+          cells[magicGameState.selectedCell].classList.remove('selected');
+          magicGameState.selectedCell = index;
+          cells[index].classList.add('selected');
+          elements.gameStatus.textContent = 'New symbol selected! Choose an adjacent symbol to swap.';
+        }
+      }
+    }
+
+    // Check if two cells are adjacent
+    function isAdjacent(index1, index2) {
+      const row1 = Math.floor(index1 / magicGameState.boardSize);
+      const col1 = index1 % magicGameState.boardSize;
+      const row2 = Math.floor(index2 / magicGameState.boardSize);
+      const col2 = index2 % magicGameState.boardSize;
+      
+      return (Math.abs(row1 - row2) === 1 && col1 === col2) ||
+             (Math.abs(col1 - col2) === 1 && row1 === row2);
+    }
+
+    // Find all matches on the board
+    function findMatches() {
+      const matches = new Set();
+      
+      // Check horizontal matches
+      for (let row = 0; row < magicGameState.boardSize; row++) {
+        let count = 1;
+        let current = magicGameState.board[row * magicGameState.boardSize];
+        
+        for (let col = 1; col < magicGameState.boardSize; col++) {
+          const index = row * magicGameState.boardSize + col;
+          if (magicGameState.board[index] === current) {
+            count++;
+          } else {
+            if (count >= 3) {
+              for (let i = col - count; i < col; i++) {
+                matches.add(row * magicGameState.boardSize + i);
+              }
+            }
+            current = magicGameState.board[index];
+            count = 1;
+          }
+        }
+        
+        if (count >= 3) {
+          for (let i = magicGameState.boardSize - count; i < magicGameState.boardSize; i++) {
+            matches.add(row * magicGameState.boardSize + i);
+          }
+        }
+      }
+      
+      // Check vertical matches
+      for (let col = 0; col < magicGameState.boardSize; col++) {
+        let count = 1;
+        let current = magicGameState.board[col];
+        
+        for (let row = 1; row < magicGameState.boardSize; row++) {
+          const index = row * magicGameState.boardSize + col;
+          if (magicGameState.board[index] === current) {
+            count++;
+          } else {
+            if (count >= 3) {
+              for (let i = row - count; i < row; i++) {
+                matches.add(i * magicGameState.boardSize + col);
+              }
+            }
+            current = magicGameState.board[index];
+            count = 1;
+          }
+        }
+        
+        if (count >= 3) {
+          for (let i = magicGameState.boardSize - count; i < magicGameState.boardSize; i++) {
+            matches.add(i * magicGameState.boardSize + col);
+          }
+        }
+      }
+      
+      return Array.from(matches);
+    }
+
+    // Process matches and handle cascading
+    function processMatches() {
+      const matches = findMatches();
+      if (matches.length === 0) return;
+      
+      const basePoints = matches.length * 10;
+      magicGameState.score += basePoints;
+      gameState.points += Math.floor(basePoints / 2); // Add to house points
+      
+      // Bonus messages based on match size
+      let spellMessage = '';
+      if (matches.length >= 8) {
+        spellMessage = `🌟 LEGENDARY SPELL! ${matches.length} symbols vanquished!`;
+      } else if (matches.length >= 6) {
+        spellMessage = `⚡ POWERFUL MAGIC! ${matches.length} symbols destroyed!`;
+      } else if (matches.length >= 4) {
+        spellMessage = `🔥 EXCELLENT SPELL! ${matches.length} symbols matched!`;
+      } else {
+        spellMessage = `✨ Magical! ${matches.length} symbols matched!`;
+      }
+      
+      elements.gameStatus.textContent = spellMessage;
+      
+      // Animate matched cells
+      const cells = document.querySelectorAll('.game-cell');
+      matches.forEach(index => {
+        cells[index].classList.add('matched');
+      });
+      
+      setTimeout(() => {
+        // Remove matched symbols and apply gravity
+        applyGravity(matches);
+        renderGame();
+        
+        // Add falling animation to new pieces
+        const newCells = document.querySelectorAll('.game-cell');
+        matches.forEach(index => {
+          newCells[index].classList.add('falling');
+        });
+        
+        // Check for chain reactions
+        setTimeout(() => {
+          const newMatches = findMatches();
+          if (newMatches.length > 0) {
+            elements.gameStatus.textContent = '🎆 Chain reaction! More spells brewing!';
+            setTimeout(() => {
+              processMatches();
+            }, 300);
+          }
+        }, 700);
+      }, 800);
+      
+      // Update displays
+      updateGameDisplay();
+      saveGameState();
+      updateDisplay();
+      showToast(`⚡ ${matches.length} spell match! +${Math.floor(basePoints/2)} house points!`);
+    }
+
+    // Apply gravity to make symbols fall
+    function applyGravity(matchedIndices) {
+      const newBoard = [...magicGameState.board];
+      
+      for (let col = 0; col < magicGameState.boardSize; col++) {
+        // Collect non-matched symbols in this column
+        const columnSymbols = [];
+        for (let row = magicGameState.boardSize - 1; row >= 0; row--) {
+          const index = row * magicGameState.boardSize + col;
+          if (!matchedIndices.includes(index)) {
+            columnSymbols.push(magicGameState.board[index]);
+          }
+        }
+        
+        // Fill column from bottom up
+        for (let row = magicGameState.boardSize - 1; row >= 0; row--) {
+          const index = row * magicGameState.boardSize + col;
+          if (columnSymbols.length > 0) {
+            newBoard[index] = columnSymbols.shift();
+          } else {
+            // Add new random symbol at top
+            newBoard[index] = magicalSymbols[Math.floor(Math.random() * magicalSymbols.length)];
+          }
+        }
+      }
+      
+      magicGameState.board = newBoard;
+    }
+
+    // Update game display
+    function updateGameDisplay() {
+      elements.gameScore.textContent = magicGameState.score;
+      elements.movesLeft.textContent = magicGameState.movesLeft;
+    }
+
+    // End the game
+    function endGame() {
+      magicGameState.gameActive = false;
+      let endMessage = '';
+      let bonus = 0;
+      
+      if (magicGameState.score >= 500) {
+        endMessage = `🏆 MASTER WIZARD! Final Spell Power: ${magicGameState.score}`;
+        bonus = 50;
+      } else if (magicGameState.score >= 300) {
+        endMessage = `⭐ SKILLED SORCERER! Final Spell Power: ${magicGameState.score}`;
+        bonus = 25;
+      } else if (magicGameState.score >= 150) {
+        endMessage = `🪄 APPRENTICE MAGE! Final Spell Power: ${magicGameState.score}`;
+        bonus = 10;
+      } else {
+        endMessage = `🧙‍♂️ Practice makes perfect! Final Spell Power: ${magicGameState.score}`;
+      }
+      
+      if (bonus > 0) {
+        gameState.points += bonus;
+        endMessage += ` +${bonus} bonus house points!`;
+        saveGameState();
+        updateDisplay();
+      }
+      
+      elements.gameStatus.textContent = endMessage;
+    }
+
+    // Provide a magical hint to the player
+    function getGameHint() {
+      if (!magicGameState.gameActive) {
+        elements.gameStatus.textContent = 'Begin a new magical quest first!';
+        return;
+      }
+      
+      // Look for possible moves
+      let hintGiven = false;
+      for (let i = 0; i < magicGameState.board.length && !hintGiven; i++) {
+        for (let j = i + 1; j < magicGameState.board.length && !hintGiven; j++) {
+          if (isAdjacent(i, j)) {
+            // Temporarily swap
+            const temp = magicGameState.board[i];
+            magicGameState.board[i] = magicGameState.board[j];
+            magicGameState.board[j] = temp;
+            
+            const matches = findMatches();
+            
+            // Swap back
+            magicGameState.board[j] = magicGameState.board[i];
+            magicGameState.board[i] = temp;
+            
+            if (matches.length > 0) {
+              const row1 = Math.floor(i / magicGameState.boardSize);
+              const col1 = i % magicGameState.boardSize;
+              elements.gameStatus.textContent = 
+                `🔮 The crystal ball reveals: Try enchanting row ${row1 + 1}, column ${col1 + 1}!`;
+              hintGiven = true;
+            }
+          }
+        }
+      }
+      
+      if (!hintGiven) {
+        const mysticalAdvice = [
+          '🔮 Seek symbols that yearn to unite in groups of three or more!',
+          '⚡ The ancient magic flows where similar symbols align!',
+          '🌟 Look closely - magical patterns await your discovery!',
+          '🦉 Wisdom suggests examining the corners and edges first!',
+          '🪄 Sometimes the most powerful spells require patience!'
+        ];
+        
+        const randomAdvice = mysticalAdvice[Math.floor(Math.random() * mysticalAdvice.length)];
+        elements.gameStatus.textContent = randomAdvice;
+      }
+    }
+
+    // ===== MEAL TRACKING FUNCTIONS =====
 
     // Enhanced calorie estimation
     function estimateCalories() {
@@ -971,15 +1399,6 @@
       showToast(`🎉 ${foodName} added to your feast log! +10 house points!`);
     }
 
-    // Update total statistics
-    function updateTotalStats() {
-      gameState.totalCalories = gameState.dailyLog.reduce((sum, entry) => sum + entry.calories, 0);
-      gameState.totalItems = gameState.dailyLog.length;
-      gameState.totalFitnessTime = gameState.fitnessLog.reduce((sum, entry) => sum + entry.duration, 0);
-      gameState.totalFitnessPoints = gameState.fitnessLog.reduce((sum, entry) => sum + entry.points, 0);
-      gameState.level = Math.floor(gameState.points / 500) + 1;
-    }
-
     // ===== FITNESS TRACKING FUNCTIONS =====
     
     // Calculate fitness points based on duration and intensity
@@ -1053,62 +1472,14 @@
       
       showToast(`💪 ${activity} logged! ${duration} min of ${intensityText[intensity]} = +${points} house points!`);
     }
-    
-    // Clear fitness input fields
-    function clearFitnessInputs() {
-      elements.fitnessDuration.value = '';
-      elements.fitnessPointsDisplay.style.display = 'none';
-    }
-    
-    // Remove fitness activity from log
-    function removeFitnessActivity(itemId) {
-      const index = gameState.fitnessLog.findIndex(entry => entry.id === itemId);
-      if (index !== -1) {
-        const removedActivity = gameState.fitnessLog[index];
-        gameState.fitnessLog.splice(index, 1);
-        gameState.points = Math.max(0, gameState.points - removedActivity.points);
-        updateTotalStats();
-        saveGameState();
-        updateDisplay();
-        renderFitnessLog();
-        showToast(`🗑️ Training session removed... -${removedActivity.points} points`);
-      }
-    }
-    
-    // Render fitness log
-    function renderFitnessLog() {
-      elements.fitnessLog.innerHTML = '';
-      
-      if (gameState.fitnessLog.length === 0) {
-        elements.fitnessLog.innerHTML = '<p style="text-align: center; color: #888;">No training sessions logged today. Time to get moving!</p>';
-        elements.totalFitnessTime.textContent = '0';
-        elements.totalFitnessPoints.textContent = '0';
-        return;
-      }
-      
-      gameState.fitnessLog.forEach(entry => {
-        const logDiv = document.createElement('div');
-        logDiv.className = 'feast-item';
-        
-        const intensityEmoji = {
-          light: '🌟',
-          moderate: '⚡',
-          vigorous: '🔥',
-          extreme: '💥'
-        };
-        
-        logDiv.innerHTML = `
-          <div>
-            <strong>${entry.activity}</strong> ${intensityEmoji[entry.intensity]}<br>
-            <small>${entry.timestamp} • ${entry.duration} min • +${entry.points} pts</small>
-          </div>
-          <button onclick="removeFitnessActivity(${entry.id})" class="magical-btn" style="background: #7f0909;">✖</button>
-        `;
-        elements.fitnessLog.appendChild(logDiv);
-      });
-      
-      elements.totalFitnessTime.textContent = gameState.totalFitnessTime;
-      elements.totalFitnessPoints.textContent = gameState.totalFitnessPoints;
+
+    // Update total statistics
+    function updateTotalStats() {
+      gameState.totalCalories = gameState.dailyLog.reduce((sum, entry) => sum + entry.calories, 0);
+      gameState.totalItems = gameState.dailyLog.length;
+      gameState.totalFitnessTime = gameState.fitnessLog.reduce((sum, entry) => sum + entry.duration, 0);
+      gameState.totalFitnessPoints = gameState.fitnessLog.reduce((sum, entry) => sum + entry.points, 0);
+      gameState.level = Math.floor(gameState.points / 500) + 1;
     }
 
     // Clear input fields
@@ -1116,6 +1487,12 @@
       elements.foodName.value = '';
       elements.foodCalories.value = '';
       elements.calorieEst.style.display = 'none';
+    }
+
+    // Clear fitness input fields
+    function clearFitnessInputs() {
+      elements.fitnessDuration.value = '';
+      elements.fitnessPointsDisplay.style.display = 'none';
     }
 
     // Remove item from log
@@ -1128,6 +1505,21 @@
         saveGameState();
         updateDisplay();
         showToast('🗑️ Item banished from your log... -10 points');
+      }
+    }
+
+    // Remove fitness activity from log
+    function removeFitnessActivity(itemId) {
+      const index = gameState.fitnessLog.findIndex(entry => entry.id === itemId);
+      if (index !== -1) {
+        const removedActivity = gameState.fitnessLog[index];
+        gameState.fitnessLog.splice(index, 1);
+        gameState.points = Math.max(0, gameState.points - removedActivity.points);
+        updateTotalStats();
+        saveGameState();
+        updateDisplay();
+        renderFitnessLog();
+        showToast(`🗑️ Training session removed... -${removedActivity.points} points`);
       }
     }
 
@@ -1269,6 +1661,42 @@
       });
     }
 
+    // Render fitness log
+    function renderFitnessLog() {
+      elements.fitnessLog.innerHTML = '';
+      
+      if (gameState.fitnessLog.length === 0) {
+        elements.fitnessLog.innerHTML = '<p style="text-align: center; color: #888;">No training sessions logged today. Time to get moving!</p>';
+        elements.totalFitnessTime.textContent = '0';
+        elements.totalFitnessPoints.textContent = '0';
+        return;
+      }
+      
+      gameState.fitnessLog.forEach(entry => {
+        const logDiv = document.createElement('div');
+        logDiv.className = 'feast-item';
+        
+        const intensityEmoji = {
+          light: '🌟',
+          moderate: '⚡',
+          vigorous: '🔥',
+          extreme: '💥'
+        };
+        
+        logDiv.innerHTML = `
+          <div>
+            <strong>${entry.activity}</strong> ${intensityEmoji[entry.intensity]}<br>
+            <small>${entry.timestamp} • ${entry.duration} min • +${entry.points} pts</small>
+          </div>
+          <button onclick="removeFitnessActivity(${entry.id})" class="magical-btn" style="background: #7f0909;">✖</button>
+        `;
+        elements.fitnessLog.appendChild(logDiv);
+      });
+      
+      elements.totalFitnessTime.textContent = gameState.totalFitnessTime;
+      elements.totalFitnessPoints.textContent = gameState.totalFitnessPoints;
+    }
+
     // Update magic meter
     function updateMagicMeter() {
       const percentage = Math.min(100, (gameState.totalCalories / 3000) * 100);
@@ -1361,270 +1789,6 @@
     // Make functions globally accessible
     window.removeFromLog = removeFromLog;
     window.removeFitnessActivity = removeFitnessActivity;
-
-    // ===== SIMPLE WORKING GAME =====
-    
-    // Initialize game
-    function initGame() {
-      gamePoints = 0;
-      gameMoves = 15;
-      gameSelected = null;
-      gameGrid = [];
-      
-      // Create grid
-      for (let i = 0; i < gridSize; i++) {
-        gameGrid[i] = [];
-        for (let j = 0; j < gridSize; j++) {
-          gameGrid[i][j] = gamePieces[Math.floor(Math.random() * gamePieces.length)];
-        }
-      }
-      
-      drawGame();
-      updateGameStats();
-      document.getElementById('game-status').textContent = 'Match 3+ pieces in a row or column!';
-    }
-    
-    // Draw the game board
-    function drawGame() {
-      const board = document.getElementById('game-board');
-      let html = '';
-      
-      for (let i = 0; i < gridSize; i++) {
-        for (let j = 0; j < gridSize; j++) {
-          html += `<div class="game-cell" id="cell_${i}_${j}" onclick="clickCell(${i}, ${j})">${gameGrid[i][j]}</div>`;
-        }
-        html += '<br>';
-      }
-      
-      board.innerHTML = html;
-    }
-    
-    // Handle cell clicks
-    function clickCell(row, col) {
-      if (gameMoves <= 0) return;
-      
-      const cellId = `cell_${row}_${col}`;
-      const cell = document.getElementById(cellId);
-      
-      if (!gameSelected) {
-        // Select first cell
-        gameSelected = {row, col};
-        cell.classList.add('selected');
-      } else if (gameSelected.row === row && gameSelected.col === col) {
-        // Deselect same cell
-        cell.classList.remove('selected');
-        gameSelected = null;
-      } else if (Math.abs(gameSelected.row - row) + Math.abs(gameSelected.col - col) === 1) {
-        // Swap adjacent cells
-        const prevCell = document.getElementById(`cell_${gameSelected.row}_${gameSelected.col}`);
-        prevCell.classList.remove('selected');
-        
-        // Do the swap
-        const temp = gameGrid[gameSelected.row][gameSelected.col];
-        gameGrid[gameSelected.row][gameSelected.col] = gameGrid[row][col];
-        gameGrid[row][col] = temp;
-        
-        // Check for matches
-        const matches = checkMatches();
-        if (matches.length > 0) {  // Changed from >= 3 to > 0
-          gameMoves--;
-          handleMatches(matches);
-        } else {
-          // Swap back
-          gameGrid[row][col] = gameGrid[gameSelected.row][gameSelected.col];
-          gameGrid[gameSelected.row][gameSelected.col] = temp;
-          document.getElementById('game-status').textContent = 'No matches! Try different pieces.';
-          setTimeout(() => {
-            document.getElementById('game-status').textContent = 'Match 3+ pieces in a row or column!';
-          }, 2000);
-        }
-        
-        gameSelected = null;
-        drawGame();
-        updateGameStats();
-      } else {
-        // Select new cell
-        document.querySelectorAll('.game-cell').forEach(c => c.classList.remove('selected'));
-        gameSelected = {row, col};
-        cell.classList.add('selected');
-      }
-    }
-    
-    // Check for matches - FIXED VERSION
-    function checkMatches() {
-      const matches = new Set(); // Use Set to avoid duplicates
-      
-      // Check horizontal matches
-      for (let row = 0; row < gridSize; row++) {
-        let consecutiveCount = 1;
-        let currentPiece = gameGrid[row][0];
-        
-        for (let col = 1; col < gridSize; col++) {
-          if (gameGrid[row][col] === currentPiece) {
-            consecutiveCount++;
-          } else {
-            // Check if we have a match
-            if (consecutiveCount >= 3) {
-              for (let k = col - consecutiveCount; k < col; k++) {
-                matches.add(`${row}-${k}`);
-              }
-            }
-            currentPiece = gameGrid[row][col];
-            consecutiveCount = 1;
-          }
-        }
-        
-        // Check the last sequence
-        if (consecutiveCount >= 3) {
-          for (let k = gridSize - consecutiveCount; k < gridSize; k++) {
-            matches.add(`${row}-${k}`);
-          }
-        }
-      }
-      
-      // Check vertical matches
-      for (let col = 0; col < gridSize; col++) {
-        let consecutiveCount = 1;
-        let currentPiece = gameGrid[0][col];
-        
-        for (let row = 1; row < gridSize; row++) {
-          if (gameGrid[row][col] === currentPiece) {
-            consecutiveCount++;
-          } else {
-            // Check if we have a match
-            if (consecutiveCount >= 3) {
-              for (let k = row - consecutiveCount; k < row; k++) {
-                matches.add(`${k}-${col}`);
-              }
-            }
-            currentPiece = gameGrid[row][col];
-            consecutiveCount = 1;
-          }
-        }
-        
-        // Check the last sequence
-        if (consecutiveCount >= 3) {
-          for (let k = gridSize - consecutiveCount; k < gridSize; k++) {
-            matches.add(`${k}-${col}`);
-          }
-        }
-      }
-      
-      // Convert Set back to array of objects
-      const matchArray = [];
-      matches.forEach(match => {
-        const [row, col] = match.split('-').map(Number);
-        matchArray.push({row, col});
-      });
-      
-      return matchArray;
-    }
-    
-    // Handle matches
-    function handleMatches(matches) {
-      if (matches.length === 0) return; // Safety check
-      
-      // Calculate points
-      const points = matches.length * 10;
-      gamePoints += points;
-      gameState.points += Math.floor(points / 2);
-      
-      // Animate matches
-      matches.forEach(match => {
-        const cell = document.getElementById(`cell_${match.row}_${match.col}`);
-        if (cell) cell.classList.add('matched');
-      });
-      
-      setTimeout(() => {
-        // Remove matched pieces
-        matches.forEach(match => {
-          gameGrid[match.row][match.col] = null;
-        });
-        
-        // Drop pieces
-        for (let j = 0; j < gridSize; j++) {
-          let writePos = gridSize - 1;
-          for (let i = gridSize - 1; i >= 0; i--) {
-            if (gameGrid[i][j] !== null) {
-              if (writePos !== i) {
-                gameGrid[writePos][j] = gameGrid[i][j];
-                gameGrid[i][j] = null;
-              }
-              writePos--;
-            }
-          }
-        }
-        
-        // Fill empty spaces
-        for (let i = 0; i < gridSize; i++) {
-          for (let j = 0; j < gridSize; j++) {
-            if (gameGrid[i][j] === null) {
-              gameGrid[i][j] = gamePieces[Math.floor(Math.random() * gamePieces.length)];
-            }
-          }
-        }
-        
-        drawGame();
-        
-        // Check for new matches (chain reactions)
-        const newMatches = checkMatches();
-        if (newMatches.length > 0) {  // Changed from >= 3 to > 0
-          setTimeout(() => handleMatches(newMatches), 500);
-        }
-        
-        updateGameStats();
-        saveGameState();
-        updateDisplay();
-      }, 800);
-      
-      document.getElementById('game-status').textContent = `🎉 ${matches.length} pieces matched! +${Math.floor(points/2)} house points!`;
-      showToast(`⚡ ${matches.length} piece match! +${Math.floor(points/2)} house points!`);
-    }
-    
-    // Get hint
-    function getGameHint() {
-      if (gameState.points < 5) {
-        showToast('💰 Need 5 house points for a hint!');
-        return;
-      }
-      
-      gameState.points -= 5;
-      document.getElementById('game-status').textContent = '💡 Look for pieces that can form a line when swapped!';
-      setTimeout(() => {
-        document.getElementById('game-status').textContent = 'Match 3+ pieces in a row or column!';
-      }, 3000);
-      saveGameState();
-      updateDisplay();
-    }
-    
-    // Update game stats
-    function updateGameStats() {
-      document.getElementById('game-score').textContent = gamePoints;
-      document.getElementById('moves-left').textContent = gameMoves;
-      
-      if (gameMoves <= 0) {
-        let bonus = 0;
-        if (gamePoints >= 150) bonus = 15;
-        else if (gamePoints >= 100) bonus = 10;
-        else if (gamePoints >= 50) bonus = 5;
-        
-        if (bonus > 0) {
-          gameState.points += bonus;
-          document.getElementById('game-status').textContent = `🏆 Game over! Bonus: +${bonus} house points!`;
-          showToast(`🎉 Game complete! +${bonus} bonus house points!`);
-        } else {
-          document.getElementById('game-status').textContent = '🎮 Game over! Try again for better magical combinations!';
-        }
-        
-        saveGameState();
-        updateDisplay();
-      }
-    }
-    
-    // Make functions globally accessible
-    window.initGame = initGame;
-    window.clickCell = clickCell;
-    window.getGameHint = getGameHint;
 
     // Initialize the app when page loads
     document.addEventListener('DOMContentLoaded', init);
