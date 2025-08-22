@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,16 +9,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body{margin:0;background:#f8f4e6;color:#1a1a1a;font-family:'Crimson Text',serif;}
-    header{padding:20px;text-align:center;background:linear-gradient(135deg,#7f0909,#d4af37);color:#fff;}
-    h1{font-family:'Cinzel',serif;margin:0;font-weight:900}
+    body{margin:0;background:#f8f4e6;color:#1a1a1a;font-family:'Crimson Text',serif; animation: fadeIn 1s;}
+    @keyframes fadeIn {from {opacity:0;} to {opacity:1;}}
+    header{padding:20px;text-align:center;background:linear-gradient(135deg,#7f0909,#d4af37);color:#fff; box-shadow:0 0 20px rgba(0,0,0,0.2);}
+    h1{font-family:'Cinzel',serif;margin:0;font-weight:900; text-shadow:2px 2px 4px rgba(0,0,0,0.3);}
     main{max-width:1100px;margin:20px auto;padding:0 16px 140px;display:grid;gap:16px;grid-template-columns:1fr .8fr}
-    .card{background:#fff;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.15);padding:16px;margin-bottom:16px}
+    .card{background:#fff;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.15);padding:16px;margin-bottom:16px; transition:transform 0.3s;}
+    .card:hover{transform:scale(1.02);}
     .food{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border-radius:8px;margin-bottom:4px}
     .food:hover{background:#fdf5d4}
     .loglist{list-style:none;padding:0;margin:0}
-    .logitem{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border:1px dashed #ccc;border-radius:8px;margin-bottom:6px;background:#fffef9}
-    .btn{padding:6px 10px;border:none;border-radius:8px;cursor:pointer;background:#0d6217;color:#fff;font-weight:700;margin-left:4px}
+    .logitem{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border:1px dashed #ccc;border-radius:8px;margin-bottom:6px;background:#fffef9; transition:background 0.3s;}
+    .logitem:hover{background:#f0f0f0;}
+    .btn{padding:6px 10px;border:none;border-radius:8px;cursor:pointer;background:#0d6217;color:#fff;font-weight:700;margin-left:4px; transition:background 0.3s;}
+    .btn:hover{background:#0a4e13;}
     .meter{height:16px;background:#eee;border-radius:999px;overflow:hidden;margin:6px 0}
     .meter>div{height:100%;width:0;background:linear-gradient(90deg,#0d6217,#eee117,#7f0909);transition:width .25s}
     .good{color:#0d6217;font-weight:700}
@@ -29,20 +34,21 @@
     .prize-img{width:30px;height:30px;margin-right:8px;}
     .owned-list{list-style:none;padding:0;}
     .owned-item{margin-bottom:8px;display:flex;align-items:center;}
-    .motivation{text-align:center;font-style:italic;color:#0d6217;margin-top:16px;}
+    .motivation{text-align:center;font-style:italic;color:#0d6217;margin-top:16px; animation:pulse 2s infinite;}
+    @keyframes pulse {0% {transform:scale(1);} 50% {transform:scale(1.05);} 100% {transform:scale(1);}}
   </style>
 </head>
 <body>
   <header>
     <h1>Wizarding Meal Planner ⚡</h1>
     <div>IBS‑Friendly • Dairy‑Free • No Onion/Garlic • No Walnuts or Shellfish</div>
-    <p>Embark on your Hogwarts Feast Quest! Log enchanted meals, balance your magic (1800-2200 calories), earn house points, and collect magical artifacts!</p>
+    <p>Embark on your Hogwarts Feast Quest! Log enchanted meals, balance your magic (1800-2200 calories), earn house points, and collect magical artifacts! Calories divined from ancient tomes for accuracy.</p>
   </header>
   <main>
     <section>
       <div class="card">
         <h2>Quick Conjure Feast Item 🪄</h2>
-        <p>Whisper what you feasted on (e.g., "grilled chicken" or "banana"), choose your meal time, and we'll divine the calories!</p>
+        <p>Whisper what you feasted on (e.g., "grilled chicken" or "banana"), choose your meal time, and we'll divine the calories from our expanded grimoire!</p>
         <select id="quick-meal" style="width:100%; margin-bottom:8px;">
           <option value="Custom">Any Time</option>
           <option value="Breakfast">Breakfast at the Great Hall</option>
@@ -73,6 +79,7 @@
         <h2>Hogwarts House Cup</h2>
         <p>Your House: <b id="house"></b></p>
         <p>House Points: <b id="points">0</b></p>
+        <p>Quest Level: <b id="level">1</b></p>
         <button id="claim" class="btn">Claim Daily Elixir Bonus</button>
         <button id="reset" class="btn">New Day Incantation</button>
       </div>
@@ -87,12 +94,12 @@
       </div>
       <div class="card">
         <h2>Wizard's Grimoire</h2>
-        <p>Conjure items with the Quick Conjure, log them to earn points. Balance your calories like a perfect potion. Claim bonuses and redeem prizes. Forbidden ingredients are blocked by charms!</p>
+        <p>Conjure items with the Quick Conjure, log them to earn points. Balance your calories like a perfect potion. Claim bonuses, level up, and redeem prizes. Forbidden ingredients blocked by charms! New: Expanded calorie grimoire for precise divinations!</p>
       </div>
     </aside>
   </main>
   <footer style="text-align:center;padding:10px;background:#fff8e6;border-top:3px solid #2e2a23;position:fixed;bottom:0;width:100%">
-    Hogwarts Feast Quest: Log meals to earn points, balance your magic, and collect artifacts for your house!
+    Hogwarts Feast Quest: Log meals to earn points, balance your magic, level up, and collect artifacts for your house!
   </footer>
   <div id="toast" class="toast"></div>
   <script>
@@ -106,35 +113,53 @@
       {name: 'Quidditch Broom', points: 200, emoji: '🧹', desc: 'Fly high with this speedy broom!'},
       {name: 'Invisibility Cloak', points: 500, emoji: '🧥', desc: 'Sneak around unseen!'},
       {name: 'House Cup Trophy', points: 1000, emoji: '🏆', desc: 'Victory for your house!'},
-      {name: 'Golden Snitch', points: 2000, emoji: '🏐', desc: 'Catch the elusive snitch!'}
+      {name: 'Golden Snitch', points: 2000, emoji: '🏐', desc: 'Catch the elusive snitch!'},
+      {name: 'Phoenix Feather Wand', points: 3000, emoji: '🪄', desc: 'Cast powerful spells!'},
+      {name: 'Time Turner', points: 5000, emoji: '⏳', desc: 'Turn back time!'}
     ];
     const MOTIVATIONS = [
       'Well done, wizard! Your feast is worthy of the Great Hall! ⚡',
       'Keep going, apprentice! Dumbledore would be proud! 🧙‍♂️',
       'Brilliant balancing! Like brewing a perfect Polyjuice Potion! 🧪',
       'Accio success! You\'re on the path to wizarding greatness! ✨',
-      'Fantastic feasting! Even Hermione would approve your planning! 📚'
+      'Fantastic feasting! Even Hermione would approve your planning! 📚',
+      'Magical mastery! Ron would envy your appetite control! 🍽️'
     ];
     const CAL_DB = {
-      'banana': 105, 'blueberries': 84, 'strawberries': 50, 'orange': 62, 'kiwi': 42, 'pineapple': 82,
-      'carrot': 50, 'cucumber': 45, 'green beans': 31, 'lettuce': 5, 'potato': 160, 'spinach': 7,
-      'tomato': 25, 'zucchini': 20, 'chicken': 165, 'beef': 250, 'pork': 220, 'fish': 150,
-      'tofu': 70, 'tempeh': 200, 'egg': 70, 'rice': 200, 'quinoa': 222, 'oats': 150,
-      'almond milk': 30, 'rice milk': 120, 'peanut butter': 90, 'peanuts': 160, 'almonds': 160,
-      'macadamia': 200, 'pecans': 200, 'pine nuts': 190, 'bok choy': 13, 'eggplant': 25,
-      'ginger': 80, 'olives': 115, 'parsnips': 75, 'turnip': 28, 'cantaloupe': 34, 'grapefruit': 42,
-      'honeydew': 36, 'lemon': 29, 'lime': 30, 'broccoli': 55, 'salmon': 206, 'tuna': 132,
-      'turkey': 189, 'lamb': 294, 'avocado': 160, 'kale': 33, 'cabbage': 22, 'celery': 16,
-      'radish': 16, 'sweet potato': 86, 'yam': 118, 'squash': 45, 'pumpkin': 30, 'corn': 96,
-      'breadfruit': 103, 'cranberry': 46, 'coconut': 354, 'dates': 277, 'papaya': 43,
-      'rhubarb': 21, 'arugula': 25, 'endive': 17, 'chicory': 23, 'bean sprouts': 30,
-      'chili pepper': 40, 'courgette': 17, 'fennel': 31, 'okra': 33, 'swede': 38,
-      'water chestnuts': 97, 'ackee': 151, 'bilberries': 57, 'carambola': 31, 'durian': 147,
-      'prickly pear': 41, 'tangelo': 47, 'yellow papaya': 43, 'alfalfa sprouts': 23
+      'alfalfa': 23, 'bamboo shoots': 27, 'bean sprouts': 30, 'beetroot': 43, 'black beans': 100, 'bok choy': 13, 'broccoli': 55,
+      'brussels sprouts': 43, 'butternut squash': 45, 'cabbage': 25, 'carrots': 41, 'celeriac': 42, 'celery': 16, 'chicory': 23,
+      'chick peas': 100, 'chilli': 40, 'chives': 30, 'cho cho': 20, 'choy sum': 15, 'collard greens': 32, 'corn': 96, 'courgette': 17,
+      'cucumber': 16, 'eggplant': 25, 'fennel': 31, 'green beans': 31, 'green pepper': 20, 'ginger': 80, 'kale': 33, 'karela': 17,
+      'kumara': 86, 'leek leaves': 61, 'lentils': 116, 'lettuce': 15, 'marrow': 17, 'okra': 33, 'olives': 115, 'parsnip': 75,
+      'peas': 81, 'pickled gherkins': 11, 'pickled onions': 22, 'potato': 77, 'pumpkin': 26, 'radish': 16, 'red peppers': 31,
+      'scallions': 32, 'seaweed': 45, 'silverbeet': 19, 'spaghetti squash': 31, 'spinach': 23, 'squash': 16, 'sun-dried tomatoes': 258,
+      'swede': 38, 'swiss chard': 19, 'sweet potato': 86, 'tomato': 18, 'tomatillo': 32, 'turnip': 28, 'water chestnuts': 97,
+      'water spinach': 19, 'yam': 118, 'zucchini': 17, 'ackee': 151, 'applesauce': 50, 'bananas': 89, 'bilberries': 57,
+      'blueberries': 57, 'breadfruit': 103, 'carambola': 31, 'cantaloupe': 34, 'cranberry': 46, 'clementine': 47, 'coconut': 354,
+      'dates': 277, 'dragon fruit': 60, 'lingonberries': 50, 'grapefruit': 42, 'grapes': 67, 'guava': 68, 'honeydew': 36,
+      'jackfruit': 95, 'kiwifruit': 61, 'lemon': 29, 'lime': 30, 'mandarin': 53, 'orange': 47, 'passion fruit': 97, 'paw paw': 43,
+      'papaya': 43, 'pineapple': 50, 'plantain': 122, 'prickly pear': 41, 'raspberry': 52, 'rhubarb': 21, 'strawberry': 32,
+      'tamarind': 239, 'tangelo': 47, 'beef': 250, 'chicken': 165, 'chorizo': 455, 'foie gras': 462, 'kangaroo': 98, 'lamb': 294,
+      'pork': 242, 'prosciutto': 195, 'quorn': 100, 'turkey': 189, 'tuna': 132, 'salmon': 206, 'fish': 150, 'tofu': 70,
+      'tempeh': 193, 'egg': 78, 'rice': 130, 'quinoa': 120, 'oats': 389, 'almond milk': 30, 'rice milk': 47, 'peanut butter': 588,
+      'peanuts': 567, 'almonds': 579, 'macadamia': 718, 'pecans': 691, 'pine nuts': 673, 'bok choy': 13, 'eggplant': 25,
+      'ginger': 80, 'olives': 115, 'parsnips': 75, 'turnip': 28, 'cantaloupe': 34, 'grapefruit': 42, 'honeydew': 36, 'lemon': 29,
+      'lime': 30, 'corn flour': 361, 'broccoli': 55, 'beef': 250, 'salmon': 206, 'tuna': 132, 'turkey': 189, 'lamb': 294,
+      'avocado': 160, 'kale': 33, 'cabbage': 22, 'celery': 16, 'radish': 16, 'sweet potato': 86, 'yam': 118, 'squash': 45,
+      'pumpkin': 30, 'corn': 96, 'breadfruit': 103, 'cranberry': 46, 'coconut': 354, 'dates': 277, 'papaya': 43, 'rhubarb': 21,
+      'arugula': 25, 'endive': 17, 'chicory': 23, 'bean sprouts': 30, 'chili pepper': 40, 'courgette': 17, 'fennel': 31, 'okra': 33,
+      'swede': 38, 'water chestnuts': 97, 'ackee': 151, 'bilberries': 57, 'carambola': 31, 'durian': 147, 'prickly pear': 41,
+      'tangelo': 47, 'yellow papaya': 43, 'alfalfa sprouts': 23, 'cheese': 55, 'cottage cheese': 55, 'cream cheese': 55,
+      'parmesan': 55, 'ricotta': 55, 'egg whites': 17, 'shellfish': 35, 'meat': 55, 'poultry': 55, 'spirulina': 26, 'green peas': 100,
+      'chickpeas': 100, 'hummus': 166, 'mung beans': 100, 'milk': 120, 'yogurt': 120, 'coconut milk': 57, 'brazil nuts': 659,
+      'chia seeds': 486, 'chestnuts': 213, 'flax seeds': 534, 'hazelnuts': 628, 'nut butters': 614, 'nut flour': 579, 'pumpkin seeds': 446,
+      'sesame seeds': 573, 'sunflower seeds': 584, 'walnut halves': 654, 'butter': 717, 'ghee': 900, 'mayonnaise': 680,
+      'oils': 884, 'pesto': 526, 'artichoke hearts': 53, 'asparagus': 20, 'beets': 43, 'broccoli': 34, 'cabbage': 25, 'carrots': 41,
+      'celery': 16, 'chard': 19
     };
-    const els={log:document.getElementById('log'),total:document.getElementById('total'),count:document.getElementById('count'),bar:document.getElementById('bar'),status:document.getElementById('status'),toast:document.getElementById('toast'),house:document.getElementById('house'),points:document.getElementById('points'),claim:document.getElementById('claim'),reset:document.getElementById('reset'),prizes:document.getElementById('prizes'),owned:document.getElementById('owned'),quickMeal:document.getElementById('quick-meal'),quickName:document.getElementById('quick-name'),quickCal:document.getElementById('quick-cal'),quickEstimate:document.getElementById('quick-estimate'),quickAdd:document.getElementById('quick-add'),motivation:document.getElementById('motivation')};
+    const els={log:document.getElementById('log'),total:document.getElementById('total'),count:document.getElementById('count'),bar:document.getElementById('bar'),status:document.getElementById('status'),toast:document.getElementById('toast'),house:document.getElementById('house'),points:document.getElementById('points'),claim:document.getElementById('claim'),reset:document.getElementById('reset'),prizes:document.getElementById('prizes'),owned:document.getElementById('owned'),quickMeal:document.getElementById('quick-meal'),quickName:document.getElementById('quick-name'),quickCal:document.getElementById('quick-cal'),quickEstimate:document.getElementById('quick-estimate'),quickAdd:document.getElementById('quick-add'),motivation:document.getElementById('motivation'),level:document.getElementById('level')};
     const today = new Date().toISOString().slice(0,10);
-    function allergenBlocked(name){return /(walnut|shrimp|prawn|lobster|crab|shellfish|onion|garlic)/i.test(name);}
+    function allergenBlocked(name){return /(walnut|shrimp|prawn|lobster|crab|shellfish|onion|garlic|dairy|milk|cheese|yogurt|cream|butter)/i.test(name) && !/lactose-free|dairy-free|almond milk|coconut milk/i.test(name);}
 
 function estimateCalories(name){name = name.toLowerCase();let maxMatch = 0; let bestCal = 120;for(let key in CAL_DB){const matchLen = name.includes(key) ? key.length : 0;if(matchLen > maxMatch){maxMatch = matchLen; bestCal = CAL_DB[key];}}return bestCal;}
 
@@ -145,8 +170,10 @@ function setHouse(h){localStorage.setItem(KEY+'_house',h);updateHeader();}
 function updateHeader(){const h=getHouse();if(h){document.querySelector('header').style.background=`linear-gradient(135deg,${HOUSE_COLORS[h]},#333)`;document.querySelector('header h1').innerHTML=`Wizarding Meal Planner ⚡ ${HOUSE_EMOJIS[h]}`;els.house.textContent=h;}}
 
 function getPoints(){return +localStorage.getItem(KEY+'_points') || 0;}
-function addPoints(p){setPoints(getPoints()+p);}
+function addPoints(p){const newP = getPoints()+p;setPoints(newP);updateLevel(newP);}
 function setPoints(p){localStorage.setItem(KEY+'_points',p);els.points.textContent=p;renderPrizes();}
+function getLevel(){const p = getPoints();return Math.floor(p / 500) + 1;}
+function updateLevel(p){els.level.textContent = getLevel();if(p % 500 === 0){toast('Level up! New spells unlocked! 🎉');}}
 
 function getLastClaim(){return localStorage.getItem(KEY+'_last_claim');}
 function setLastClaim(d){localStorage.setItem(KEY+'_last_claim',d);}
@@ -155,7 +182,7 @@ function canClaim(){return getLastClaim() !== today;}
 function getOwned(){return JSON.parse(localStorage.getItem(KEY+'_owned')||'[]');}
 function addOwned(i){const owned=getOwned();owned.push(i);localStorage.setItem(KEY+'_owned',JSON.stringify(owned));renderOwned();}
 
-function build(){if(!getHouse()){let h=prompt('Choose your Hogwarts House, young wizard: Gryffindor, Hufflepuff, Ravenclaw, Slytherin').trim();while(!HOUSES.map(x=>x.toLowerCase()).includes(h.toLowerCase())){h=prompt('Invalid house! Choose again: Gryffindor, Hufflepuff, Ravenclaw, Slytherin').trim();}setHouse(HOUSES.find(x=>x.toLowerCase()===h.toLowerCase()));}updateHeader();setPoints(getPoints());renderLog();update();renderPrizes();renderOwned();els.quickEstimate.onclick=()=>{const n=els.quickName.value.trim();if(!n){toast('Enter what you feasted on, wizard!');return;}const est=estimateCalories(n);els.quickCal.value=est;toast(`Calories divined: ${est} 🧙‍♂️`);};els.quickAdd.onclick=()=>{const m=els.quickMeal.value;const n=els.quickName.value.trim();const c=+els.quickCal.value;if(!n){toast('Enter what you feasted on, wizard!');return;}if(allergenBlocked(n)){toast('Blocked by protective charm! Forbidden ingredient detected.');return;}const val=c||estimateCalories(n);addToLog({meal:m,title:n,cal:val});els.quickName.value='';els.quickCal.value='';toast('Feast item accio\'d to log! +10 points 🏆');};}
+function build(){if(!getHouse()){let h=prompt('Choose your Hogwarts House, young wizard: Gryffindor, Hufflepuff, Ravenclaw, Slytherin').trim();while(!HOUSES.map(x=>x.toLowerCase()).includes(h.toLowerCase())){h=prompt('Invalid house! Choose again: Gryffindor, Hufflepuff, Ravenclaw, Slytherin').trim();}setHouse(HOUSES.find(x=>x.toLowerCase()===h.toLowerCase()));}updateHeader();setPoints(getPoints());els.level.textContent = getLevel();renderLog();update();renderPrizes();renderOwned();els.quickEstimate.onclick=()=>{const n=els.quickName.value.trim();if(!n){toast('Enter what you feasted on, wizard!');return;}const est=estimateCalories(n);els.quickCal.value=est;toast(`Calories divined: ${est} 🧙‍♂️`);};els.quickAdd.onclick=()=>{const m=els.quickMeal.value;const n=els.quickName.value.trim();const c=+els.quickCal.value;if(!n){toast('Enter what you feasted on, wizard!');return;}if(allergenBlocked(n)){toast('Blocked by protective charm! Forbidden ingredient detected.');return;}const val=c||estimateCalories(n);addToLog({meal:m,title:n,cal:val});els.quickName.value='';els.quickCal.value='';toast('Feast item accio\'d to log! +10 points 🏆');};}
 
 function getLog(){return JSON.parse(localStorage.getItem(KEY+'_log')||'[]');}
 function setLog(log){localStorage.setItem(KEY+'_log',JSON.stringify(log));renderLog();update();}
@@ -179,3 +206,4 @@ build();
   </script>
 </body>
 </html>
+```
