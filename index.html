@@ -1,209 +1,1035 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wizarding Meal Planner — Hogwarts Feast Quest</title>
+  <title>Hogwarts Feast Tracker ⚡</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body{margin:0;background:#f8f4e6;color:#1a1a1a;font-family:'Crimson Text',serif; animation: fadeIn 1s;}
-    @keyframes fadeIn {from {opacity:0;} to {opacity:1;}}
-    header{padding:20px;text-align:center;background:linear-gradient(135deg,#7f0909,#d4af37);color:#fff; box-shadow:0 0 20px rgba(0,0,0,0.2);}
-    h1{font-family:'Cinzel',serif;margin:0;font-weight:900; text-shadow:2px 2px 4px rgba(0,0,0,0.3);}
-    main{max-width:1100px;margin:20px auto;padding:0 16px 140px;display:grid;gap:16px;grid-template-columns:1fr .8fr}
-    .card{background:#fff;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.15);padding:16px;margin-bottom:16px; transition:transform 0.3s;}
-    .card:hover{transform:scale(1.02);}
-    .food{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border-radius:8px;margin-bottom:4px}
-    .food:hover{background:#fdf5d4}
-    .loglist{list-style:none;padding:0;margin:0}
-    .logitem{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border:1px dashed #ccc;border-radius:8px;margin-bottom:6px;background:#fffef9; transition:background 0.3s;}
-    .logitem:hover{background:#f0f0f0;}
-    .btn{padding:6px 10px;border:none;border-radius:8px;cursor:pointer;background:#0d6217;color:#fff;font-weight:700;margin-left:4px; transition:background 0.3s;}
-    .btn:hover{background:#0a4e13;}
-    .meter{height:16px;background:#eee;border-radius:999px;overflow:hidden;margin:6px 0}
-    .meter>div{height:100%;width:0;background:linear-gradient(90deg,#0d6217,#eee117,#7f0909);transition:width .25s}
-    .good{color:#0d6217;font-weight:700}
-    .bad{color:#7f0909;font-weight:700}
-    .toast{position:fixed;right:12px;bottom:80px;background:#111;color:#fff;padding:8px 12px;border-radius:8px;opacity:0;transition:.3s}
-    .toast.show{opacity:1}
-    .prize-list{list-style:none;padding:0;}
-    .prize-item{margin-bottom:8px;display:flex;align-items:center;}
-    .prize-img{width:30px;height:30px;margin-right:8px;}
-    .owned-list{list-style:none;padding:0;}
-    .owned-item{margin-bottom:8px;display:flex;align-items:center;}
-    .motivation{text-align:center;font-style:italic;color:#0d6217;margin-top:16px; animation:pulse 2s infinite;}
-    @keyframes pulse {0% {transform:scale(1);} 50% {transform:scale(1.05);} 100% {transform:scale(1);}}
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #0c1445 0%, #1a1a2e 50%, #16213e 100%);
+      color: #fff;
+      font-family: 'Crimson Text', serif;
+      min-height: 100vh;
+      animation: fadeIn 1s ease-in;
+    }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes sparkle { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.1) rotate(5deg); } }
+    @keyframes glow { 0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); } 50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); } }
+    @keyframes floatUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(-10px); } }
+    
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle 2s infinite;
+    }
+    
+    @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    
+    header {
+      position: relative;
+      z-index: 10;
+      padding: 30px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #7f0909, #d4af37, #0a1172);
+      border-bottom: 3px solid #ffd700;
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    }
+    
+    h1 {
+      font-family: 'Cinzel', serif;
+      margin: 0;
+      font-weight: 900;
+      font-size: 3rem;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+      background: linear-gradient(45deg, #ffd700, #fff, #ffd700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      margin-top: 10px;
+      font-style: italic;
+      color: #ffd700;
+    }
+    
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1400px;
+      margin: 30px auto;
+      padding: 0 20px 150px;
+      display: grid;
+      gap: 25px;
+      grid-template-columns: 1fr 1fr 350px;
+    }
+    
+    .magical-card {
+      background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+      border: 2px solid rgba(255, 215, 0, 0.3);
+      border-radius: 20px;
+      padding: 25px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .magical-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,215,0,0.1), transparent);
+      transform: rotate(-45deg);
+      transition: all 0.6s ease;
+      opacity: 0;
+    }
+    
+    .magical-card:hover::before {
+      opacity: 1;
+      transform: rotate(-45deg) translate(50%, 50%);
+    }
+    
+    .magical-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255, 215, 0, 0.6);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+    
+    .card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      color: #ffd700;
+      margin: 0 0 20px 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .input-group {
+      margin-bottom: 15px;
+    }
+    
+    .magical-input, .magical-select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid rgba(255, 215, 0, 0.3);
+      border-radius: 10px;
+      background: rgba(0,0,0,0.3);
+      color: #fff;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .magical-input:focus, .magical-select:focus {
+      outline: none;
+      border-color: #ffd700;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    }
+    
+    .magical-btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(45deg, #7f0909, #d4af37);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 5px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .magical-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      transform: translate(-50%, -50%);
+    }
+    
+    .magical-btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .magical-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    
+    .feast-log {
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+    
+    .feast-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      margin-bottom: 10px;
+      background: rgba(255,215,0,0.1);
+      border: 1px solid rgba(255,215,0,0.3);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      animation: floatUp 0.5s ease;
+    }
+    
+    .feast-item:hover {
+      background: rgba(255,215,0,0.2);
+      transform: translateX(5px);
+    }
+    
+    .magic-meter {
+      height: 25px;
+      background: linear-gradient(90deg, #000, #333);
+      border-radius: 15px;
+      overflow: hidden;
+      margin: 15px 0;
+      border: 2px solid #ffd700;
+      position: relative;
+    }
+    
+    .magic-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #7f0909, #d4af37, #0a1172);
+      transition: width 0.8s ease;
+      border-radius: 15px;
+      position: relative;
+    }
+    
+    .magic-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    .status-good { color: #4CAF50; font-weight: bold; }
+    .status-warning { color: #FF9800; font-weight: bold; }
+    .status-danger { color: #F44336; font-weight: bold; }
+    
+    .trophy-case {
+      background: linear-gradient(145deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
+      border: 3px solid #ffd700;
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+    
+    .trophy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .trophy-item {
+      text-align: center;
+      padding: 15px;
+      background: rgba(255,215,0,0.1);
+      border: 2px solid rgba(255,215,0,0.3);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .trophy-item:hover {
+      transform: scale(1.05);
+      background: rgba(255,215,0,0.2);
+      animation: glow 1s infinite;
+    }
+    
+    .trophy-emoji {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: 8px;
+      filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
+    }
+    
+    .trophy-owned .trophy-emoji {
+      animation: sparkle 2s infinite;
+    }
+    
+    .trophy-cost {
+      font-size: 0.9rem;
+      color: #ffd700;
+      font-weight: bold;
+    }
+    
+    .trophy-owned .trophy-cost {
+      color: #4CAF50;
+    }
+    
+    .owned-display {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .owned-trophy {
+      text-align: center;
+      padding: 10px;
+      background: linear-gradient(45deg, #ffd700, #ffed4e);
+      border-radius: 10px;
+      color: #000;
+      font-weight: bold;
+      box-shadow: 0 5px 15px rgba(255,215,0,0.3);
+      animation: glow 3s infinite;
+    }
+    
+    .motivation-quote {
+      text-align: center;
+      font-style: italic;
+      color: #ffd700;
+      font-size: 1.1rem;
+      margin-top: 15px;
+      padding: 15px;
+      background: rgba(255,215,0,0.1);
+      border-radius: 10px;
+      border: 1px solid rgba(255,215,0,0.3);
+    }
+    
+    .magical-toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(45deg, #7f0909, #d4af37);
+      color: #fff;
+      padding: 15px 20px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      transform: translateX(400px);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      max-width: 300px;
+    }
+    
+    .magical-toast.show {
+      transform: translateX(0);
+    }
+    
+    .house-badge {
+      display: inline-block;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin: 5px;
+    }
+    
+    .level-display {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #ffd700;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .points-display {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #ffd700;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .calorie-estimate {
+      background: rgba(255,215,0,0.2);
+      border: 1px solid #ffd700;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #ffd700;
+    }
+    
+    @media (max-width: 1200px) {
+      .main-container {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .main-container {
+        grid-template-columns: 1fr;
+      }
+      h1 { font-size: 2rem; }
+    }
   </style>
 </head>
 <body>
+  <div class="stars" id="stars"></div>
+  
   <header>
-    <h1>Wizarding Meal Planner ⚡</h1>
-    <div>IBS‑Friendly • Dairy‑Free • No Onion/Garlic • No Walnuts or Shellfish</div>
-    <p>Embark on your Hogwarts Feast Quest! Log enchanted meals, balance your magic (1800-2200 calories), earn house points, and collect magical artifacts! Calories divined from ancient tomes for accuracy.</p>
+    <h1 id="header-title">Hogwarts Feast Tracker ⚡</h1>
+    <div class="subtitle">Master the Art of Magical Nutrition</div>
+    <p>Chronicle your daily feasts, balance your magical energy (1800-2200 calories), earn house points, and unlock legendary artifacts!</p>
   </header>
-  <main>
-    <section>
-      <div class="card">
-        <h2>Quick Conjure Feast Item 🪄</h2>
-        <p>Whisper what you feasted on (e.g., "grilled chicken" or "banana"), choose your meal time, and we'll divine the calories from our expanded grimoire!</p>
-        <select id="quick-meal" style="width:100%; margin-bottom:8px;">
-          <option value="Custom">Any Time</option>
-          <option value="Breakfast">Breakfast at the Great Hall</option>
-          <option value="Snack1">Mid-Morning Snack</option>
-          <option value="Lunch">Lunch with House Mates</option>
-          <option value="Snack2">Afternoon Treat</option>
-          <option value="Dinner">Dinner Feast</option>
+
+  <div class="main-container">
+    <!-- Food Input Section -->
+    <div class="magical-card">
+      <h2 class="card-title">🪄 Conjure Your Feast</h2>
+      <p>Simply whisper what delicious morsel you've enjoyed, and our ancient grimoire will divine its magical essence!</p>
+      
+      <div class="input-group">
+        <select id="meal-time" class="magical-select">
+          <option value="Custom">Any Magical Moment</option>
+          <option value="Breakfast">Breakfast in the Great Hall</option>
+          <option value="Morning Snack">Morning Potion Break</option>
+          <option value="Lunch">Midday Feast with Friends</option>
+          <option value="Afternoon Snack">Afternoon Enchantment</option>
+          <option value="Dinner">Evening Grand Banquet</option>
+          <option value="Late Snack">Midnight Kitchen Raid</option>
         </select>
-        <input id="quick-name" placeholder="What did you enchant? e.g. banana, grilled chicken" style="width:100%; margin-bottom:8px;" />
-        <input id="quick-cal" placeholder="Calories (optional, leave for divination)" type="number" style="width:100%; margin-bottom:8px;" />
-        <button id="quick-estimate" class="btn">Divine Calories 🧙‍♂️</button>
-        <button id="quick-add" class="btn">Accio to Log! ✨</button>
       </div>
-      <div class="card">
-        <h2>Today's Enchanted Log</h2>
-        <ul id="log" class="loglist"></ul>
+      
+      <div class="input-group">
+        <input id="food-name" class="magical-input" placeholder="What magical feast did you enjoy? (e.g., roasted chicken, chocolate cake, apple)" />
       </div>
-    </section>
-    <aside>
-      <div class="card">
-        <h2>Daily Magic Meter</h2>
-        <div class="meter"><div id="bar"></div></div>
-        <p>Total: <b id="total">0</b> Calories • <span id="count">0</span> items</p>
-        <p id="status"></p>
-        <p id="motivation" class="motivation"></p>
+      
+      <div class="input-group">
+        <input id="food-calories" class="magical-input" placeholder="Calories (leave empty for auto-divination)" type="number" />
       </div>
-      <div class="card">
-        <h2>Hogwarts House Cup</h2>
-        <p>Your House: <b id="house"></b></p>
-        <p>House Points: <b id="points">0</b></p>
-        <p>Quest Level: <b id="level">1</b></p>
-        <button id="claim" class="btn">Claim Daily Elixir Bonus</button>
-        <button id="reset" class="btn">New Day Incantation</button>
+      
+      <div id="calorie-suggestion" class="calorie-estimate" style="display: none;"></div>
+      
+      <button id="estimate-btn" class="magical-btn">🔮 Divine Calories</button>
+      <button id="add-btn" class="magical-btn">✨ Add to Feast Log</button>
+    </div>
+
+    <!-- Daily Log Section -->
+    <div class="magical-card">
+      <h2 class="card-title">📜 Today's Magical Chronicle</h2>
+      <div id="feast-log" class="feast-log"></div>
+      <div style="text-align: center; margin-top: 20px;">
+        <button id="clear-log" class="magical-btn">🌟 New Day Incantation</button>
       </div>
-      <div class="card">
-        <h2>Prize Cauldron 🏆</h2>
-        <p>Brew your points into magical artifacts!</p>
-        <ul id="prizes" class="prize-list"></ul>
+    </div>
+
+    <!-- Stats and Progress Sidebar -->
+    <div>
+      <!-- Magic Meter -->
+      <div class="magical-card">
+        <h2 class="card-title">⚡ Daily Magic Meter</h2>
+        <div class="magic-meter">
+          <div id="magic-fill" class="magic-fill"></div>
+        </div>
+        <p><strong>Total Energy:</strong> <span id="total-calories" class="points-display">0</span> calories</p>
+        <p><strong>Feast Items:</strong> <span id="total-items">0</span></p>
+        <p id="status-message" class="status-good">Ready for magical adventures!</p>
+        <div id="motivation" class="motivation-quote"></div>
       </div>
-      <div class="card">
-        <h2>Your Magical Collection</h2>
-        <ul id="owned" class="owned-list"></ul>
+
+      <!-- House Points & Level -->
+      <div class="magical-card">
+        <h2 class="card-title">🏆 House Championship</h2>
+        <div id="house-display">
+          <p><strong>Your House:</strong> <span id="house-name" class="house-badge">Choose your house!</span></p>
+          <p><strong>House Points:</strong> <span id="house-points" class="points-display">0</span></p>
+          <p><strong>Wizard Level:</strong> <span id="wizard-level" class="level-display">Apprentice (1)</span></p>
+        </div>
+        <button id="daily-bonus" class="magical-btn">🧪 Claim Daily Elixir (50 pts)</button>
       </div>
-      <div class="card">
-        <h2>Wizard's Grimoire</h2>
-        <p>Conjure items with the Quick Conjure, log them to earn points. Balance your calories like a perfect potion. Claim bonuses, level up, and redeem prizes. Forbidden ingredients blocked by charms! New: Expanded calorie grimoire for precise divinations!</p>
+
+      <!-- Trophy Shop -->
+      <div class="magical-card">
+        <h2 class="card-title">🏪 Magical Artifacts Shop</h2>
+        <p>Transmute your hard-earned points into legendary treasures!</p>
+        <div id="trophy-shop" class="trophy-grid"></div>
       </div>
-    </aside>
-  </main>
-  <footer style="text-align:center;padding:10px;background:#fff8e6;border-top:3px solid #2e2a23;position:fixed;bottom:0;width:100%">
-    Hogwarts Feast Quest: Log meals to earn points, balance your magic, level up, and collect artifacts for your house!
-  </footer>
-  <div id="toast" class="toast"></div>
+
+      <!-- Trophy Case -->
+      <div class="magical-card">
+        <h2 class="card-title">🎖️ Your Trophy Case</h2>
+        <p>Behold your collection of magical artifacts!</p>
+        <div id="trophy-case" class="owned-display"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="magical-toast"></div>
+
   <script>
-    const TARGET_MIN=1800,TARGET_MAX=2200;
-    const KEY='hp_meal_planner_game';
-    const HOUSES=['Gryffindor','Hufflepuff','Ravenclaw','Slytherin'];
-    const HOUSE_COLORS={Gryffindor:'#7f0909',Hufflepuff:'#d4af37',Ravenclaw:'#0a1172',Slytherin:'#0d6217'};
-    const HOUSE_EMOJIS={Gryffindor:'🦁',Hufflepuff:'🦡',Ravenclaw:'🦅',Slytherin:'🐍'};
-    const PRIZES = [
-      {name: 'Butterbeer Mug', points: 100, emoji: '🍺', desc: 'A frothy mug for your potions!'},
-      {name: 'Quidditch Broom', points: 200, emoji: '🧹', desc: 'Fly high with this speedy broom!'},
-      {name: 'Invisibility Cloak', points: 500, emoji: '🧥', desc: 'Sneak around unseen!'},
-      {name: 'House Cup Trophy', points: 1000, emoji: '🏆', desc: 'Victory for your house!'},
-      {name: 'Golden Snitch', points: 2000, emoji: '🏐', desc: 'Catch the elusive snitch!'},
-      {name: 'Phoenix Feather Wand', points: 3000, emoji: '🪄', desc: 'Cast powerful spells!'},
-      {name: 'Time Turner', points: 5000, emoji: '⏳', desc: 'Turn back time!'}
-    ];
-    const MOTIVATIONS = [
-      'Well done, wizard! Your feast is worthy of the Great Hall! ⚡',
-      'Keep going, apprentice! Dumbledore would be proud! 🧙‍♂️',
-      'Brilliant balancing! Like brewing a perfect Polyjuice Potion! 🧪',
-      'Accio success! You\'re on the path to wizarding greatness! ✨',
-      'Fantastic feasting! Even Hermione would approve your planning! 📚',
-      'Magical mastery! Ron would envy your appetite control! 🍽️'
-    ];
-    const CAL_DB = {
-      'alfalfa': 23, 'bamboo shoots': 27, 'bean sprouts': 30, 'beetroot': 43, 'black beans': 100, 'bok choy': 13, 'broccoli': 55,
-      'brussels sprouts': 43, 'butternut squash': 45, 'cabbage': 25, 'carrots': 41, 'celeriac': 42, 'celery': 16, 'chicory': 23,
-      'chick peas': 100, 'chilli': 40, 'chives': 30, 'cho cho': 20, 'choy sum': 15, 'collard greens': 32, 'corn': 96, 'courgette': 17,
-      'cucumber': 16, 'eggplant': 25, 'fennel': 31, 'green beans': 31, 'green pepper': 20, 'ginger': 80, 'kale': 33, 'karela': 17,
-      'kumara': 86, 'leek leaves': 61, 'lentils': 116, 'lettuce': 15, 'marrow': 17, 'okra': 33, 'olives': 115, 'parsnip': 75,
-      'peas': 81, 'pickled gherkins': 11, 'pickled onions': 22, 'potato': 77, 'pumpkin': 26, 'radish': 16, 'red peppers': 31,
-      'scallions': 32, 'seaweed': 45, 'silverbeet': 19, 'spaghetti squash': 31, 'spinach': 23, 'squash': 16, 'sun-dried tomatoes': 258,
-      'swede': 38, 'swiss chard': 19, 'sweet potato': 86, 'tomato': 18, 'tomatillo': 32, 'turnip': 28, 'water chestnuts': 97,
-      'water spinach': 19, 'yam': 118, 'zucchini': 17, 'ackee': 151, 'applesauce': 50, 'bananas': 89, 'bilberries': 57,
-      'blueberries': 57, 'breadfruit': 103, 'carambola': 31, 'cantaloupe': 34, 'cranberry': 46, 'clementine': 47, 'coconut': 354,
-      'dates': 277, 'dragon fruit': 60, 'lingonberries': 50, 'grapefruit': 42, 'grapes': 67, 'guava': 68, 'honeydew': 36,
-      'jackfruit': 95, 'kiwifruit': 61, 'lemon': 29, 'lime': 30, 'mandarin': 53, 'orange': 47, 'passion fruit': 97, 'paw paw': 43,
-      'papaya': 43, 'pineapple': 50, 'plantain': 122, 'prickly pear': 41, 'raspberry': 52, 'rhubarb': 21, 'strawberry': 32,
-      'tamarind': 239, 'tangelo': 47, 'beef': 250, 'chicken': 165, 'chorizo': 455, 'foie gras': 462, 'kangaroo': 98, 'lamb': 294,
-      'pork': 242, 'prosciutto': 195, 'quorn': 100, 'turkey': 189, 'tuna': 132, 'salmon': 206, 'fish': 150, 'tofu': 70,
-      'tempeh': 193, 'egg': 78, 'rice': 130, 'quinoa': 120, 'oats': 389, 'almond milk': 30, 'rice milk': 47, 'peanut butter': 588,
-      'peanuts': 567, 'almonds': 579, 'macadamia': 718, 'pecans': 691, 'pine nuts': 673, 'bok choy': 13, 'eggplant': 25,
-      'ginger': 80, 'olives': 115, 'parsnips': 75, 'turnip': 28, 'cantaloupe': 34, 'grapefruit': 42, 'honeydew': 36, 'lemon': 29,
-      'lime': 30, 'corn flour': 361, 'broccoli': 55, 'beef': 250, 'salmon': 206, 'tuna': 132, 'turkey': 189, 'lamb': 294,
-      'avocado': 160, 'kale': 33, 'cabbage': 22, 'celery': 16, 'radish': 16, 'sweet potato': 86, 'yam': 118, 'squash': 45,
-      'pumpkin': 30, 'corn': 96, 'breadfruit': 103, 'cranberry': 46, 'coconut': 354, 'dates': 277, 'papaya': 43, 'rhubarb': 21,
-      'arugula': 25, 'endive': 17, 'chicory': 23, 'bean sprouts': 30, 'chili pepper': 40, 'courgette': 17, 'fennel': 31, 'okra': 33,
-      'swede': 38, 'water chestnuts': 97, 'ackee': 151, 'bilberries': 57, 'carambola': 31, 'durian': 147, 'prickly pear': 41,
-      'tangelo': 47, 'yellow papaya': 43, 'alfalfa sprouts': 23, 'cheese': 55, 'cottage cheese': 55, 'cream cheese': 55,
-      'parmesan': 55, 'ricotta': 55, 'egg whites': 17, 'shellfish': 35, 'meat': 55, 'poultry': 55, 'spirulina': 26, 'green peas': 100,
-      'chickpeas': 100, 'hummus': 166, 'mung beans': 100, 'milk': 120, 'yogurt': 120, 'coconut milk': 57, 'brazil nuts': 659,
-      'chia seeds': 486, 'chestnuts': 213, 'flax seeds': 534, 'hazelnuts': 628, 'nut butters': 614, 'nut flour': 579, 'pumpkin seeds': 446,
-      'sesame seeds': 573, 'sunflower seeds': 584, 'walnut halves': 654, 'butter': 717, 'ghee': 900, 'mayonnaise': 680,
-      'oils': 884, 'pesto': 526, 'artichoke hearts': 53, 'asparagus': 20, 'beets': 43, 'broccoli': 34, 'cabbage': 25, 'carrots': 41,
-      'celery': 16, 'chard': 19
+    // Configuration and Constants
+    const CONFIG = {
+      TARGET_MIN: 1800,
+      TARGET_MAX: 2200,
+      STORAGE_KEY: 'hogwarts_feast_tracker',
+      HOUSES: ['Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin'],
+      HOUSE_COLORS: {
+        'Gryffindor': '#7f0909',
+        'Hufflepuff': '#d4af37', 
+        'Ravenclaw': '#0a1172',
+        'Slytherin': '#0d6217'
+      },
+      HOUSE_EMOJIS: {
+        'Gryffindor': '🦁',
+        'Hufflepuff': '🦡',
+        'Ravenclaw': '🦅',
+        'Slytherin': '🐍'
+      }
     };
-    const els={log:document.getElementById('log'),total:document.getElementById('total'),count:document.getElementById('count'),bar:document.getElementById('bar'),status:document.getElementById('status'),toast:document.getElementById('toast'),house:document.getElementById('house'),points:document.getElementById('points'),claim:document.getElementById('claim'),reset:document.getElementById('reset'),prizes:document.getElementById('prizes'),owned:document.getElementById('owned'),quickMeal:document.getElementById('quick-meal'),quickName:document.getElementById('quick-name'),quickCal:document.getElementById('quick-cal'),quickEstimate:document.getElementById('quick-estimate'),quickAdd:document.getElementById('quick-add'),motivation:document.getElementById('motivation'),level:document.getElementById('level')};
-    const today = new Date().toISOString().slice(0,10);
-    function allergenBlocked(name){return /(walnut|shrimp|prawn|lobster|crab|shellfish|onion|garlic|dairy|milk|cheese|yogurt|cream|butter)/i.test(name) && !/lactose-free|dairy-free|almond milk|coconut milk/i.test(name);}
 
-function estimateCalories(name){name = name.toLowerCase();let maxMatch = 0; let bestCal = 120;for(let key in CAL_DB){const matchLen = name.includes(key) ? key.length : 0;if(matchLen > maxMatch){maxMatch = matchLen; bestCal = CAL_DB[key];}}return bestCal;}
+    // Expanded Calorie Database
+    const CALORIE_DB = {
+      // Proteins
+      'chicken breast': 165, 'chicken thigh': 209, 'turkey': 189, 'beef': 250, 'pork': 242,
+      'salmon': 206, 'tuna': 132, 'cod': 82, 'shrimp': 99, 'crab': 97, 'eggs': 155,
+      'egg whites': 52, 'tofu': 70, 'tempeh': 193, 'chicken': 165, 'beef steak': 271,
+      'ground beef': 254, 'lamb': 294, 'bacon': 541, 'ham': 145, 'sausage': 346,
+      
+      // Carbohydrates  
+      'rice': 130, 'quinoa': 120, 'pasta': 131, 'bread': 265, 'oats': 389, 'cereal': 379,
+      'potato': 77, 'sweet potato': 86, 'corn': 96, 'barley': 123, 'bulgur': 83,
+      'couscous': 112, 'noodles': 138, 'bagel': 245, 'muffin': 377, 'pancakes': 227,
+      
+      // Fruits
+      'apple': 52, 'banana': 89, 'orange': 47, 'grapes': 67, 'strawberries': 32,
+      'blueberries': 57, 'raspberries': 52, 'blackberries': 43, 'pineapple': 50,
+      'mango': 60, 'peach': 39, 'pear': 57, 'plum': 46, 'watermelon': 30,
+      'cantaloupe': 34, 'honeydew': 36, 'kiwi': 61, 'papaya': 43, 'avocado': 160,
+      
+      // Vegetables
+      'broccoli': 34, 'spinach': 23, 'kale': 33, 'carrots': 41, 'bell peppers': 31,
+      'tomatoes': 18, 'cucumber': 16, 'lettuce': 15, 'onion': 40, 'garlic': 149,
+      'mushrooms': 22, 'asparagus': 20, 'green beans': 31, 'peas': 81, 'brussels sprouts': 43,
+      'cauliflower': 25, 'cabbage': 25, 'zucchini': 17, 'eggplant': 25, 'beets': 43,
+      
+      // Dairy & Alternatives
+      'milk': 42, 'yogurt': 59, 'cheese': 113, 'cottage cheese': 98, 'cream cheese': 342,
+      'butter': 717, 'almond milk': 17, 'soy milk': 33, 'coconut milk': 230, 'ice cream': 207,
+      
+      // Nuts & Seeds
+      'almonds': 579, 'walnuts': 654, 'peanuts': 567, 'cashews': 553, 'pistachios': 560,
+      'peanut butter': 588, 'almond butter': 614, 'sunflower seeds': 584, 'chia seeds': 486,
+      'flax seeds': 534, 'pumpkin seeds': 446, 'sesame seeds': 573,
+      
+      // Common Foods
+      'pizza': 266, 'burger': 354, 'sandwich': 215, 'salad': 33, 'soup': 36,
+      'french fries': 365, 'chips': 536, 'crackers': 488, 'cookies': 502, 'cake': 257,
+      'chocolate': 546, 'candy': 400, 'granola bar': 471, 'protein bar': 384,
+      'smoothie': 63, 'juice': 45, 'soda': 41, 'beer': 43, 'wine': 83, 'coffee': 2, 'tea': 1
+    };
 
-function toast(msg){els.toast.textContent=msg;els.toast.classList.add('show');setTimeout(()=>els.toast.classList.remove('show'),2500);}
+    // Magical Artifacts (Trophies)
+    const MAGICAL_ARTIFACTS = [
+      { name: 'Chocolate Frog', emoji: '🐸', cost: 25, description: 'Your first magical treat!' },
+      { name: 'Butterbeer Mug', emoji: '🍺', cost: 100, description: 'For celebrating feast victories!' },
+      { name: 'Quidditch Snitch', emoji: '🏐', cost: 250, description: 'Catch this elusive golden ball!' },
+      { name: 'Hogwarts Scarf', emoji: '🧣', cost: 400, description: 'Show your house pride!' },
+      { name: 'Magic Wand', emoji: '🪄', cost: 750, description: 'Channel your inner wizard!' },
+      { name: 'Sorting Hat', emoji: '🎩', cost: 1000, description: 'Wisdom of the ages!' },
+      { name: 'Invisibility Cloak', emoji: '👻', cost: 1500, description: 'Become one with the shadows!' },
+      { name: 'Marauder\'s Map', emoji: '🗺️', cost: 2000, description: 'I solemnly swear I am up to no good!' },
+      { name: 'Time Turner', emoji: '⏰', cost: 3000, description: 'Turn back time itself!' },
+      { name: 'Elder Wand', emoji: '⚡', cost: 5000, description: 'The most powerful wand ever created!' },
+      { name: 'Philosopher\'s Stone', emoji: '💎', cost: 10000, description: 'The ultimate magical achievement!' }
+    ];
 
-function getHouse(){return localStorage.getItem(KEY+'_house');}
-function setHouse(h){localStorage.setItem(KEY+'_house',h);updateHeader();}
-function updateHeader(){const h=getHouse();if(h){document.querySelector('header').style.background=`linear-gradient(135deg,${HOUSE_COLORS[h]},#333)`;document.querySelector('header h1').innerHTML=`Wizarding Meal Planner ⚡ ${HOUSE_EMOJIS[h]}`;els.house.textContent=h;}}
+    // Motivational Messages
+    const MOTIVATIONAL_MESSAGES = [
+      "Brilliant feast planning! Even Hermione would be impressed! 📚✨",
+      "You're showing the dedication of a true Gryffindor! 🦁⚡",
+      "Magical balance achieved! Your potion-making skills are legendary! 🧪",
+      "Outstanding! Professor McGonagall awards you full marks! 🏆",
+      "Your feast log is more organized than the Hogwarts library! 📖",
+      "Dumbledore himself would applaud your commitment! 🧙‍♂️✨",
+      "You're mastering the art of magical nutrition! Keep soaring! 🦅",
+      "Like brewing a perfect Polyjuice Potion - precise and powerful! 💫",
+      "Your dedication rivals that of the greatest Hogwarts students! 🌟",
+      "Accio success! You're on the path to wizarding greatness! ⚡🪄"
+    ];
 
-function getPoints(){return +localStorage.getItem(KEY+'_points') || 0;}
-function addPoints(p){const newP = getPoints()+p;setPoints(newP);updateLevel(newP);}
-function setPoints(p){localStorage.setItem(KEY+'_points',p);els.points.textContent=p;renderPrizes();}
-function getLevel(){const p = getPoints();return Math.floor(p / 500) + 1;}
-function updateLevel(p){els.level.textContent = getLevel();if(p % 500 === 0){toast('Level up! New spells unlocked! 🎉');}}
+    // Game State
+    let gameState = {
+      house: null,
+      points: 0,
+      level: 1,
+      dailyLog: [],
+      ownedArtifacts: [],
+      lastBonusClaim: null,
+      totalCalories: 0,
+      totalItems: 0
+    };
 
-function getLastClaim(){return localStorage.getItem(KEY+'_last_claim');}
-function setLastClaim(d){localStorage.setItem(KEY+'_last_claim',d);}
-function canClaim(){return getLastClaim() !== today;}
+    // DOM Elements
+    const elements = {
+      mealTime: document.getElementById('meal-time'),
+      foodName: document.getElementById('food-name'),
+      foodCalories: document.getElementById('food-calories'),
+      calorieEst: document.getElementById('calorie-suggestion'),
+      estimateBtn: document.getElementById('estimate-btn'),
+      addBtn: document.getElementById('add-btn'),
+      feastLog: document.getElementById('feast-log'),
+      clearLog: document.getElementById('clear-log'),
+      magicFill: document.getElementById('magic-fill'),
+      totalCalories: document.getElementById('total-calories'),
+      totalItems: document.getElementById('total-items'),
+      statusMessage: document.getElementById('status-message'),
+      motivation: document.getElementById('motivation'),
+      houseName: document.getElementById('house-name'),
+      housePoints: document.getElementById('house-points'),
+      wizardLevel: document.getElementById('wizard-level'),
+      dailyBonus: document.getElementById('daily-bonus'),
+      trophyShop: document.getElementById('trophy-shop'),
+      trophyCase: document.getElementById('trophy-case'),
+      toast: document.getElementById('toast'),
+      headerTitle: document.getElementById('header-title')
+    };
 
-function getOwned(){return JSON.parse(localStorage.getItem(KEY+'_owned')||'[]');}
-function addOwned(i){const owned=getOwned();owned.push(i);localStorage.setItem(KEY+'_owned',JSON.stringify(owned));renderOwned();}
+    // Initialize the app
+    function init() {
+      createStars();
+      loadGameState();
+      setupEventListeners();
+      if (!gameState.house) {
+        chooseHouse();
+      }
+      updateDisplay();
+      renderTrophyShop();
+      renderTrophyCase();
+    }
 
-function build(){if(!getHouse()){let h=prompt('Choose your Hogwarts House, young wizard: Gryffindor, Hufflepuff, Ravenclaw, Slytherin').trim();while(!HOUSES.map(x=>x.toLowerCase()).includes(h.toLowerCase())){h=prompt('Invalid house! Choose again: Gryffindor, Hufflepuff, Ravenclaw, Slytherin').trim();}setHouse(HOUSES.find(x=>x.toLowerCase()===h.toLowerCase()));}updateHeader();setPoints(getPoints());els.level.textContent = getLevel();renderLog();update();renderPrizes();renderOwned();els.quickEstimate.onclick=()=>{const n=els.quickName.value.trim();if(!n){toast('Enter what you feasted on, wizard!');return;}const est=estimateCalories(n);els.quickCal.value=est;toast(`Calories divined: ${est} 🧙‍♂️`);};els.quickAdd.onclick=()=>{const m=els.quickMeal.value;const n=els.quickName.value.trim();const c=+els.quickCal.value;if(!n){toast('Enter what you feasted on, wizard!');return;}if(allergenBlocked(n)){toast('Blocked by protective charm! Forbidden ingredient detected.');return;}const val=c||estimateCalories(n);addToLog({meal:m,title:n,cal:val});els.quickName.value='';els.quickCal.value='';toast('Feast item accio\'d to log! +10 points 🏆');};}
+    // Create twinkling stars background
+    function createStars() {
+      const starsContainer = document.getElementById('stars');
+      for (let i = 0; i < 100; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 2 + 's';
+        starsContainer.appendChild(star);
+      }
+    }
 
-function getLog(){return JSON.parse(localStorage.getItem(KEY+'_log')||'[]');}
-function setLog(log){localStorage.setItem(KEY+'_log',JSON.stringify(log));renderLog();update();}
-function addToLog(item){const log=getLog();log.push(item);setLog(log);addPoints(10);}
-function removeFromLog(i){const log=getLog();log.splice(i,1);setLog(log);addPoints(-10);toast('Item evanesco\'d... -10 points 😔');}
+    // House selection
+    function chooseHouse() {
+      let houseChoice = null;
+      while (!houseChoice || !CONFIG.HOUSES.includes(houseChoice)) {
+        houseChoice = prompt(`🏰 Welcome to Hogwarts, young wizard! 
+        
+Which house calls to your magical soul?
+        
+🦁 Gryffindor - Brave and daring
+🦡 Hufflepuff - Loyal and kind  
+🦅 Ravenclaw - Wise and clever
+🐍 Slytherin - Ambitious and cunning
 
-function renderLog(){const log=getLog();els.log.innerHTML='';log.forEach((x,i)=>{const li=document.createElement('li');li.className='logitem';li.innerHTML=`${x.meal}: ${x.title} <b>${x.cal} cal</b>`;const b=document.createElement('button');b.textContent='✖';b.className='btn';b.onclick=()=>removeFromLog(i);li.appendChild(b);els.log.appendChild(li);});}
+Type your house name:`);
+        
+        if (houseChoice) {
+          houseChoice = houseChoice.charAt(0).toUpperCase() + houseChoice.slice(1).toLowerCase();
+        }
+      }
+      
+      gameState.house = houseChoice;
+      saveGameState();
+      updateHouseDisplay();
+      showToast(`🎉 Welcome to ${houseChoice}! Your magical journey begins now!`);
+    }
 
-function update(){const log=getLog();const total=log.reduce((a,b)=>a+b.cal,0);els.total.textContent=total;els.count.textContent=log.length;els.bar.style.width=Math.min(100,total/3000*100)+'%';if(total<TARGET_MIN)els.status.innerHTML='⚠️ Too low - Summon more magic to your feast!';else if(total>TARGET_MAX)els.status.innerHTML='⚠️ Too high - Overpowered incantation!';else els.status.innerHTML='✅ Perfect potion of health!';els.status.className=(total>=TARGET_MIN&&total<=TARGET_MAX)?'good':'bad';els.claim.disabled=!(total>=TARGET_MIN&&total<=TARGET_MAX&&log.length>=5&&canClaim());if(total>=TARGET_MIN&&total<=TARGET_MAX){els.motivation.textContent=MOTIVATIONS[Math.floor(Math.random()*MOTIVATIONS.length)];}else{els.motivation.textContent='';}}
+    // Update house display
+    function updateHouseDisplay() {
+      if (gameState.house) {
+        const emoji = CONFIG.HOUSE_EMOJIS[gameState.house];
+        const color = CONFIG.HOUSE_COLORS[gameState.house];
+        
+        elements.houseName.textContent = `${emoji} ${gameState.house}`;
+        elements.houseName.style.backgroundColor = color;
+        elements.headerTitle.textContent = `Hogwarts Feast Tracker ${emoji}`;
+        
+        // Update header background
+        document.querySelector('header').style.background = 
+          `linear-gradient(135deg, ${color}, #d4af37, #0a1172)`;
+      }
+    }
 
-function renderPrizes(){const pts = getPoints();els.prizes.innerHTML='';PRIZES.forEach((p, i) => {const li = document.createElement('li');li.className='prize-item';li.innerHTML = `<span class="prize-img">${p.emoji}</span>${p.name} - ${p.points} points`;if(pts >= p.points){const btn = document.createElement('button');btn.textContent='Redeem!';btn.className='btn';btn.onclick=()=>{if(pts >= p.points){addPoints(-p.points);addOwned(i);toast(`Redeemed ${p.name}! ${p.desc} ✨`);}else{toast('Not enough points, forage more feasts!');}};li.appendChild(btn);}els.prizes.appendChild(li);});}
+    // Setup event listeners
+    function setupEventListeners() {
+      elements.estimateBtn.addEventListener('click', estimateCalories);
+      elements.addBtn.addEventListener('click', addToLog);
+      elements.clearLog.addEventListener('click', clearDailyLog);
+      elements.dailyBonus.addEventListener('click', claimDailyBonus);
+      
+      // Auto-estimate on input
+      elements.foodName.addEventListener('input', () => {
+        if (elements.foodName.value.trim()) {
+          setTimeout(estimateCalories, 500);
+        }
+      });
+    }
 
-function renderOwned(){const owned=getOwned();els.owned.innerHTML='';owned.forEach(i => {const p=PRIZES[i];const li = document.createElement('li');li.className='owned-item';li.innerHTML = `<span class="prize-img">${p.emoji}</span>${p.name} - ${p.desc}`;els.owned.appendChild(li);});}
+    // Enhanced calorie estimation
+    function estimateCalories() {
+      const foodName = elements.foodName.value.trim().toLowerCase();
+      if (!foodName) {
+        showToast('🔮 Tell me what magical feast you enjoyed first!');
+        return;
+      }
 
-els.claim.onclick=()=>{const log=getLog();const total=log.reduce((a,b)=>a+b.cal,0);if(total>=TARGET_MIN&&total<=TARGET_MAX&&log.length>=5&&canClaim()){addPoints(50);setLastClaim(today);toast('50 points to '+getHouse()+'! Wingardium Leviosa your success! ✨');update();}else{toast('Not ready yet, young padawan! Complete a full day\'s log in range with at least 5 items.');}};
+      let estimatedCalories = 0;
+      let matchedFood = '';
+      let maxMatch = 0;
 
-els.reset.onclick=()=>{if(confirm('Invoke new day incantation? Points and artifacts preserved!')){setLog([]);toast('A new dawn rises over Hogwarts!');}};
+      // Find best match in database
+      for (const [food, calories] of Object.entries(CALORIE_DB)) {
+        if (foodName.includes(food) && food.length > maxMatch) {
+          maxMatch = food.length;
+          estimatedCalories = calories;
+          matchedFood = food;
+        }
+      }
 
-build();
+      // Fallback estimation based on food type keywords
+      if (!estimatedCalories) {
+        if (foodName.includes('chocolate') || foodName.includes('cake') || foodName.includes('cookie')) {
+          estimatedCalories = 400;
+          matchedFood = 'sweet treat';
+        } else if (foodName.includes('salad') || foodName.includes('vegetables')) {
+          estimatedCalories = 50;
+          matchedFood = 'fresh vegetables';
+        } else if (foodName.includes('meat') || foodName.includes('chicken') || foodName.includes('beef')) {
+          estimatedCalories = 200;
+          matchedFood = 'protein source';
+        } else if (foodName.includes('fruit')) {
+          estimatedCalories = 60;
+          matchedFood = 'fresh fruit';
+        } else {
+          estimatedCalories = 150;
+          matchedFood = 'general food item';
+        }
+      }
 
+      elements.foodCalories.value = estimatedCalories;
+      elements.calorieEst.style.display = 'block';
+      elements.calorieEst.innerHTML = `🔮 Ancient grimoire suggests: <strong>${estimatedCalories} calories</strong><br>
+        <small>Based on: ${matchedFood}</small>`;
+      
+      showToast(`✨ Calories divined: ${estimatedCalories} for "${matchedFood}"!`);
+    }
+
+    // Add food to log
+    function addToLog() {
+      const mealTime = elements.mealTime.value;
+      const foodName = elements.foodName.value.trim();
+      const calories = parseInt(elements.foodCalories.value) || 0;
+
+      if (!foodName) {
+        showToast('🪄 Cast your food name into the magical field first!');
+        return;
+      }
+
+      if (calories <= 0) {
+        showToast('🔮 Let me divine the calories first!');
+        estimateCalories();
+        return;
+      }
+
+      // Check for forbidden ingredients (allergens)
+      const forbiddenIngredients = ['walnut', 'shellfish', 'onion', 'garlic', 'dairy'];
+      const containsForbidden = forbiddenIngredients.some(ingredient => 
+        foodName.toLowerCase().includes(ingredient)
+      );
+
+      if (containsForbidden) {
+        showToast('🛡️ Protective charm activated! This contains forbidden ingredients for your quest.');
+        return;
+      }
+
+      const logEntry = {
+        id: Date.now(),
+        mealTime,
+        foodName,
+        calories,
+        timestamp: new Date().toLocaleTimeString()
+      };
+
+      gameState.dailyLog.push(logEntry);
+      gameState.points += 10;
+      updateTotalStats();
+      saveGameState();
+      updateDisplay();
+      clearInputs();
+      
+      showToast(`🎉 ${foodName} added to your feast log! +10 house points!`);
+    }
+
+    // Update total statistics
+    function updateTotalStats() {
+      gameState.totalCalories = gameState.dailyLog.reduce((sum, entry) => sum + entry.calories, 0);
+      gameState.totalItems = gameState.dailyLog.length;
+      gameState.level = Math.floor(gameState.points / 500) + 1;
+    }
+
+    // Clear input fields
+    function clearInputs() {
+      elements.foodName.value = '';
+      elements.foodCalories.value = '';
+      elements.calorieEst.style.display = 'none';
+    }
+
+    // Remove item from log
+    function removeFromLog(itemId) {
+      const index = gameState.dailyLog.findIndex(entry => entry.id === itemId);
+      if (index !== -1) {
+        gameState.dailyLog.splice(index, 1);
+        gameState.points = Math.max(0, gameState.points - 10);
+        updateTotalStats();
+        saveGameState();
+        updateDisplay();
+        showToast('🗑️ Item banished from your log... -10 points');
+      }
+    }
+
+    // Clear daily log
+    function clearDailyLog() {
+      if (confirm('🌅 Cast a new day incantation? This will clear your feast log but preserve your points and artifacts!')) {
+        gameState.dailyLog = [];
+        gameState.lastBonusClaim = null;
+        updateTotalStats();
+        saveGameState();
+        updateDisplay();
+        showToast('🌟 A new magical day dawns at Hogwarts!');
+      }
+    }
+
+    // Claim daily bonus
+    function claimDailyBonus() {
+      const today = new Date().toDateString();
+      const isInRange = gameState.totalCalories >= CONFIG.TARGET_MIN && 
+                       gameState.totalCalories <= CONFIG.TARGET_MAX;
+      const hasEnoughItems = gameState.totalItems >= 5;
+      const canClaim = gameState.lastBonusClaim !== today;
+
+      if (isInRange && hasEnoughItems && canClaim) {
+        gameState.points += 50;
+        gameState.lastBonusClaim = today;
+        saveGameState();
+        updateDisplay();
+        showToast('🧪 Daily Elixir claimed! +50 points to your house! Well done!');
+      } else if (!canClaim) {
+        showToast('⏰ You\'ve already claimed today\'s elixir! Return tomorrow!');
+      } else if (!isInRange) {
+        showToast('⚖️ Balance your magical energy within 1800-2200 calories first!');
+      } else {
+        showToast('📝 Log at least 5 feast items to claim your daily elixir!');
+      }
+    }
+
+    // Purchase artifact
+    function purchaseArtifact(artifactIndex) {
+      const artifact = MAGICAL_ARTIFACTS[artifactIndex];
+      if (gameState.points >= artifact.cost && !gameState.ownedArtifacts.includes(artifactIndex)) {
+        gameState.points -= artifact.cost;
+        gameState.ownedArtifacts.push(artifactIndex);
+        saveGameState();
+        updateDisplay();
+        renderTrophyShop();
+        renderTrophyCase();
+        showToast(`🎉 ${artifact.emoji} ${artifact.name} acquired! ${artifact.description}`);
+      } else if (gameState.ownedArtifacts.includes(artifactIndex)) {
+        showToast('✨ You already possess this magical artifact!');
+      } else {
+        showToast(`💰 You need ${artifact.cost - gameState.points} more points for this artifact!`);
+      }
+    }
+
+    // Render trophy shop
+    function renderTrophyShop() {
+      elements.trophyShop.innerHTML = '';
+      MAGICAL_ARTIFACTS.forEach((artifact, index) => {
+        const isOwned = gameState.ownedArtifacts.includes(index);
+        const canAfford = gameState.points >= artifact.cost;
+        
+        const trophyDiv = document.createElement('div');
+        trophyDiv.className = `trophy-item ${isOwned ? 'trophy-owned' : ''}`;
+        trophyDiv.innerHTML = `
+          <span class="trophy-emoji">${artifact.emoji}</span>
+          <div style="font-size: 0.8rem; margin-bottom: 5px;">${artifact.name}</div>
+          <div class="trophy-cost">${isOwned ? '✅ Owned' : `${artifact.cost} pts`}</div>
+        `;
+        
+        if (!isOwned) {
+          trophyDiv.style.opacity = canAfford ? '1' : '0.5';
+          trophyDiv.addEventListener('click', () => purchaseArtifact(index));
+        }
+        
+        elements.trophyShop.appendChild(trophyDiv);
+      });
+    }
+
+    // Render trophy case
+    function renderTrophyCase() {
+      elements.trophyCase.innerHTML = '';
+      if (gameState.ownedArtifacts.length === 0) {
+        elements.trophyCase.innerHTML = '<p style="text-align: center; color: #888;">Your magical collection awaits your first artifact!</p>';
+        return;
+      }
+
+      gameState.ownedArtifacts.forEach(artifactIndex => {
+        const artifact = MAGICAL_ARTIFACTS[artifactIndex];
+        const trophyDiv = document.createElement('div');
+        trophyDiv.className = 'owned-trophy';
+        trophyDiv.innerHTML = `
+          <div style="font-size: 2rem;">${artifact.emoji}</div>
+          <div style="font-size: 0.8rem;">${artifact.name}</div>
+        `;
+        trophyDiv.title = artifact.description;
+        elements.trophyCase.appendChild(trophyDiv);
+      });
+    }
+
+    // Update all displays
+    function updateDisplay() {
+      updateHouseDisplay();
+      renderFeastLog();
+      updateMagicMeter();
+      updateStats();
+      updateMotivation();
+      renderTrophyShop();
+      renderTrophyCase();
+    }
+
+    // Render feast log
+    function renderFeastLog() {
+      elements.feastLog.innerHTML = '';
+      
+      if (gameState.dailyLog.length === 0) {
+        elements.feastLog.innerHTML = '<p style="text-align: center; color: #888;">Your magical feast log awaits your first entry!</p>';
+        return;
+      }
+
+      gameState.dailyLog.forEach(entry => {
+        const logDiv = document.createElement('div');
+        logDiv.className = 'feast-item';
+        logDiv.innerHTML = `
+          <div>
+            <strong>${entry.mealTime}:</strong> ${entry.foodName}<br>
+            <small>${entry.timestamp} • ${entry.calories} calories</small>
+          </div>
+          <button onclick="removeFromLog(${entry.id})" class="magical-btn" style="background: #7f0909;">✖</button>
+        `;
+        elements.feastLog.appendChild(logDiv);
+      });
+    }
+
+    // Update magic meter
+    function updateMagicMeter() {
+      const percentage = Math.min(100, (gameState.totalCalories / 3000) * 100);
+      elements.magicFill.style.width = percentage + '%';
+    }
+
+    // Update stats display
+    function updateStats() {
+      elements.totalCalories.textContent = gameState.totalCalories;
+      elements.totalItems.textContent = gameState.totalItems;
+      elements.housePoints.textContent = gameState.points;
+      elements.wizardLevel.textContent = `Level ${gameState.level}`;
+
+      // Update status message
+      if (gameState.totalCalories < CONFIG.TARGET_MIN) {
+        elements.statusMessage.textContent = '⚡ Summon more magical energy to your feast!';
+        elements.statusMessage.className = 'status-warning';
+      } else if (gameState.totalCalories > CONFIG.TARGET_MAX) {
+        elements.statusMessage.textContent = '🔥 Powerful magic! Consider balancing your feast.';
+        elements.statusMessage.className = 'status-warning';
+      } else {
+        elements.statusMessage.textContent = '✨ Perfect magical balance achieved!';
+        elements.statusMessage.className = 'status-good';
+      }
+
+      // Update daily bonus button
+      const today = new Date().toDateString();
+      const canClaim = gameState.lastBonusClaim !== today &&
+                      gameState.totalCalories >= CONFIG.TARGET_MIN &&
+                      gameState.totalCalories <= CONFIG.TARGET_MAX &&
+                      gameState.totalItems >= 5;
+      
+      elements.dailyBonus.disabled = !canClaim;
+      elements.dailyBonus.textContent = canClaim ? '🧪 Claim Daily Elixir (50 pts)' : 
+        gameState.lastBonusClaim === today ? '✅ Elixir Claimed Today' : '🧪 Complete Daily Quest First';
+    }
+
+    // Update motivation message
+    function updateMotivation() {
+      if (gameState.totalCalories >= CONFIG.TARGET_MIN && gameState.totalCalories <= CONFIG.TARGET_MAX) {
+        const randomMessage = MOTIVATIONAL_MESSAGES[Math.floor(Math.random() * MOTIVATIONAL_MESSAGES.length)];
+        elements.motivation.textContent = randomMessage;
+        elements.motivation.style.display = 'block';
+      } else {
+        elements.motivation.style.display = 'none';
+      }
+    }
+
+    // Show toast notification
+    function showToast(message) {
+      elements.toast.textContent = message;
+      elements.toast.classList.add('show');
+      setTimeout(() => {
+        elements.toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Save game state to localStorage
+    function saveGameState() {
+      localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(gameState));
+    }
+
+    // Load game state from localStorage
+    function loadGameState() {
+      const saved = localStorage.getItem(CONFIG.STORAGE_KEY);
+      if (saved) {
+        gameState = { ...gameState, ...JSON.parse(saved) };
+        updateTotalStats();
+      }
+    }
+
+    // Make removeFromLog globally accessible
+    window.removeFromLog = removeFromLog;
+
+    // Initialize the app when page loads
+    document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
-```
