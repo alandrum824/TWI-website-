@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -320,11 +319,14 @@
       animation: glow 3s infinite;
     }
     
-    /* Match-3 Game Styles */
-    #game-board td {
+    /* Simple Game Styles */
+    .game-cell {
+      display: inline-block;
       width: 40px;
       height: 40px;
+      margin: 2px;
       text-align: center;
+      line-height: 40px;
       font-size: 1.8rem;
       background: linear-gradient(145deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
       border: 2px solid rgba(255,215,0,0.3);
@@ -334,26 +336,25 @@
       user-select: none;
     }
     
-    #game-board td:hover {
+    .game-cell:hover {
       transform: scale(1.1);
       border-color: rgba(255,215,0,0.8);
       box-shadow: 0 0 15px rgba(255,215,0,0.5);
     }
     
-    #game-board td.selected {
+    .game-cell.selected {
       background: linear-gradient(45deg, #ffd700, #ffed4e);
-      transform: scale(1.15);
       border-color: #ffd700;
       box-shadow: 0 0 20px rgba(255,215,0,0.8);
     }
     
-    #game-board td.matched {
-      animation: matchGlow 0.8s ease-in-out forwards;
+    .game-cell.matched {
+      animation: gameMatch 0.8s ease-in-out forwards;
     }
     
-    @keyframes matchGlow {
+    @keyframes gameMatch {
       0% { transform: scale(1); }
-      50% { transform: scale(1.3); background: linear-gradient(45deg, #ff6b6b, #ffd700); }
+      50% { transform: scale(1.3); background: #ff6b6b; }
       100% { transform: scale(0); opacity: 0; }
     }
     
@@ -495,19 +496,19 @@
       <h2 class="card-title">🎮 Magical Potions Match</h2>
       <p>Match 3+ magical items to earn house points!</p>
       <div style="text-align: center; margin-bottom: 15px;">
-        <div><strong>Score:</strong> <span id="game-score" class="points-display">0</span></div>
-        <div><strong>Moves:</strong> <span id="moves-left" class="points-display">15</span></div>
+        <div><strong>Score:</strong> <span id="game-score">0</span> | <strong>Moves:</strong> <span id="moves-left">15</span></div>
       </div>
       
       <div style="text-align: center;">
-        <table id="game-board" style="margin: 0 auto; border-collapse: separate; border-spacing: 3px; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 10px;">
-        </table>
+        <div id="game-board" style="display: inline-block; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border: 2px solid #ffd700;">
+          <!-- Game will load here -->
+        </div>
         
         <div style="margin-top: 15px;">
-          <button id="new-game" class="magical-btn">🆕 New Game</button>
-          <button id="hint-btn" class="magical-btn">💡 Hint (5 pts)</button>
+          <button id="new-game" class="magical-btn" onclick="initGame()">🆕 New Game</button>
+          <button class="magical-btn" onclick="getGameHint()">💡 Hint (5 pts)</button>
         </div>
-        <div id="game-message" style="color: #ffd700; margin-top: 10px; font-weight: bold;">Click pieces to match 3+ in a row!</div>
+        <div id="game-status" style="color: #ffd700; margin-top: 10px; font-weight: bold;">Click New Game to start!</div>
       </div>
     </div>
 
@@ -655,13 +656,13 @@
       "Accio success! You're on the path to wizarding greatness! ⚡🪄"
     ];
 
-    // Simple Match-3 Game
-    const pieces = ['🧪', '⚡', '🔮', '🕯️', '⭐', '💎'];
-    let grid = [];
-    let selected = null;
-    let score = 0;
-    let moves = 15;
-    const size = 6;
+    // Simple Match-3 Game Variables
+    let gameGrid = [];
+    let gameSelected = null;
+    let gamePoints = 0;
+    let gameMoves = 15;
+    const gamePieces = ['🧪', '⚡', '🔮', '🕯️', '⭐', '💎'];
+    const gridSize = 6;
 
     // Game State
     let gameState = {
@@ -700,13 +701,7 @@
       headerTitle: document.getElementById('header-title'),
       houseSelection: document.getElementById('house-selection'),
       houseDisplay: document.getElementById('house-display'),
-      changeHouse: document.getElementById('change-house'),
-      gameBoard: document.getElementById('game-board'),
-      gameScore: document.getElementById('game-score'),
-      movesLeft: document.getElementById('moves-left'),
-      newGame: document.getElementById('new-game'),
-      hintBtn: document.getElementById('hint-btn'),
-      gameMessage: document.getElementById('game-message')
+      changeHouse: document.getElementById('change-house')
     };
 
     // Initialize the app
@@ -718,7 +713,7 @@
       renderTrophyShop();
       renderTrophyCase();
       showHouseSelection();
-      createGame();
+      // Game will initialize when user clicks "New Game"
     }
 
     // Create twinkling stars background
@@ -781,10 +776,6 @@
         elements.houseSelection.style.display = 'block';
         elements.houseDisplay.style.display = 'none';
       });
-      
-      // Game event listeners
-      elements.newGame.addEventListener('click', createGame);
-      elements.hintBtn.addEventListener('click', getHint);
       
       // House selection buttons
       document.querySelectorAll('.house-btn').forEach(btn => {
@@ -1130,288 +1121,248 @@
     // Make removeFromLog globally accessible
     window.removeFromLog = removeFromLog;
 
-    // ===== SIMPLE MATCH-3 GAME =====
+    // ===== SIMPLE WORKING GAME =====
     
-    // Start new game
-    function startNewGame() {
-      gameScore = 0;
-      movesLeft = 15;
-      selectedCell = null;
-      board = [];
+    // Initialize game
+    function initGame() {
+      gamePoints = 0;
+      gameMoves = 15;
+      gameSelected = null;
+      gameGrid = [];
       
-      // Create board
-      for (let i = 0; i < BOARD_SIZE; i++) {
-        board[i] = [];
-        for (let j = 0; j < BOARD_SIZE; j++) {
-          board[i][j] = GAME_PIECES[Math.floor(Math.random() * GAME_PIECES.length)];
+      // Create grid
+      for (let i = 0; i < gridSize; i++) {
+        gameGrid[i] = [];
+        for (let j = 0; j < gridSize; j++) {
+          gameGrid[i][j] = gamePieces[Math.floor(Math.random() * gamePieces.length)];
         }
       }
       
-      renderBoard();
-      updateGameUI();
-      elements.gameMessage.textContent = "Match 3+ magical items in a row!";
+      drawGame();
+      updateGameStats();
+      document.getElementById('game-status').textContent = 'Match 3+ pieces in a row or column!';
     }
     
-    // Render the game board
-    function renderBoard() {
-      elements.gameBoard.innerHTML = '';
+    // Draw the game board
+    function drawGame() {
+      const board = document.getElementById('game-board');
+      let html = '';
       
-      for (let i = 0; i < BOARD_SIZE; i++) {
-        for (let j = 0; j < BOARD_SIZE; j++) {
-          const cell = document.createElement('div');
-          cell.className = 'game-piece';
-          cell.textContent = board[i][j];
-          cell.dataset.row = i;
-          cell.dataset.col = j;
-          cell.addEventListener('click', () => handleCellClick(i, j));
-          elements.gameBoard.appendChild(cell);
+      for (let i = 0; i < gridSize; i++) {
+        for (let j = 0; j < gridSize; j++) {
+          html += `<div class="game-cell" id="cell_${i}_${j}" onclick="clickCell(${i}, ${j})">${gameGrid[i][j]}</div>`;
         }
+        html += '<br>';
       }
+      
+      board.innerHTML = html;
     }
     
-    // Handle cell click
-    function handleCellClick(row, col) {
-      if (movesLeft <= 0) return;
+    // Handle cell clicks
+    function clickCell(row, col) {
+      if (gameMoves <= 0) return;
       
-      const clickedCell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+      const cellId = `cell_${row}_${col}`;
+      const cell = document.getElementById(cellId);
       
-      if (!selectedCell) {
+      if (!gameSelected) {
         // Select first cell
-        selectedCell = { row, col };
-        clickedCell.classList.add('selected');
-      } else if (selectedCell.row === row && selectedCell.col === col) {
+        gameSelected = {row, col};
+        cell.classList.add('selected');
+      } else if (gameSelected.row === row && gameSelected.col === col) {
         // Deselect same cell
-        clickedCell.classList.remove('selected');
-        selectedCell = null;
-      } else if (areAdjacent(selectedCell.row, selectedCell.col, row, col)) {
+        cell.classList.remove('selected');
+        gameSelected = null;
+      } else if (Math.abs(gameSelected.row - row) + Math.abs(gameSelected.col - col) === 1) {
         // Swap adjacent cells
-        const prevSelected = document.querySelector(`[data-row="${selectedCell.row}"][data-col="${selectedCell.col}"]`);
-        prevSelected.classList.remove('selected');
+        const prevCell = document.getElementById(`cell_${gameSelected.row}_${gameSelected.col}`);
+        prevCell.classList.remove('selected');
         
-        swapCells(selectedCell.row, selectedCell.col, row, col);
-        selectedCell = null;
+        // Do the swap
+        const temp = gameGrid[gameSelected.row][gameSelected.col];
+        gameGrid[gameSelected.row][gameSelected.col] = gameGrid[row][col];
+        gameGrid[row][col] = temp;
+        
+        // Check for matches
+        const matches = checkMatches();
+        if (matches.length >= 3) {
+          gameMoves--;
+          handleMatches(matches);
+        } else {
+          // Swap back
+          gameGrid[row][col] = gameGrid[gameSelected.row][gameSelected.col];
+          gameGrid[gameSelected.row][gameSelected.col] = temp;
+          document.getElementById('game-status').textContent = 'No matches! Try different pieces.';
+          setTimeout(() => {
+            document.getElementById('game-status').textContent = 'Match 3+ pieces in a row or column!';
+          }, 2000);
+        }
+        
+        gameSelected = null;
+        drawGame();
+        updateGameStats();
       } else {
         // Select new cell
-        document.querySelectorAll('.game-piece').forEach(cell => cell.classList.remove('selected'));
-        selectedCell = { row, col };
-        clickedCell.classList.add('selected');
+        document.querySelectorAll('.game-cell').forEach(c => c.classList.remove('selected'));
+        gameSelected = {row, col};
+        cell.classList.add('selected');
       }
     }
     
-    // Check if cells are adjacent
-    function areAdjacent(row1, col1, row2, col2) {
-      const rowDiff = Math.abs(row1 - row2);
-      const colDiff = Math.abs(col1 - col2);
-      return (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1);
-    }
-    
-    // Swap two cells
-    function swapCells(row1, col1, row2, col2) {
-      const temp = board[row1][col1];
-      board[row1][col1] = board[row2][col2];
-      board[row2][col2] = temp;
-      
-      const matches = findMatches();
-      if (matches.length > 0) {
-        movesLeft--;
-        processMatches(matches);
-      } else {
-        // Swap back if no matches
-        board[row1][col1] = board[row2][col2];
-        board[row2][col2] = temp;
-        elements.gameMessage.textContent = "No matches found! Try a different spell.";
-        setTimeout(() => {
-          elements.gameMessage.textContent = "Match 3+ magical items in a row!";
-        }, 2000);
-      }
-      
-      renderBoard();
-      updateGameUI();
-    }
-    
-    // Find all matches on board
-    function findMatches() {
+    // Check for matches
+    function checkMatches() {
       const matches = [];
       
-      // Check horizontal matches
-      for (let i = 0; i < BOARD_SIZE; i++) {
-        for (let j = 0; j < BOARD_SIZE - 2; j++) {
-          if (board[i][j] === board[i][j+1] && board[i][j] === board[i][j+2]) {
-            matches.push({row: i, col: j});
-            matches.push({row: i, col: j+1});
-            matches.push({row: i, col: j+2});
-            
-            // Check for longer matches
-            let k = j + 3;
-            while (k < BOARD_SIZE && board[i][k] === board[i][j]) {
-              matches.push({row: i, col: k});
-              k++;
+      // Check horizontal
+      for (let i = 0; i < gridSize; i++) {
+        let count = 1;
+        for (let j = 1; j < gridSize; j++) {
+          if (gameGrid[i][j] === gameGrid[i][j-1]) {
+            count++;
+          } else {
+            if (count >= 3) {
+              for (let k = j - count; k < j; k++) {
+                matches.push({row: i, col: k});
+              }
             }
+            count = 1;
+          }
+        }
+        if (count >= 3) {
+          for (let k = gridSize - count; k < gridSize; k++) {
+            matches.push({row: i, col: k});
           }
         }
       }
       
-      // Check vertical matches
-      for (let i = 0; i < BOARD_SIZE - 2; i++) {
-        for (let j = 0; j < BOARD_SIZE; j++) {
-          if (board[i][j] === board[i+1][j] && board[i][j] === board[i+2][j]) {
-            matches.push({row: i, col: j});
-            matches.push({row: i+1, col: j});
-            matches.push({row: i+2, col: j});
-            
-            // Check for longer matches
-            let k = i + 3;
-            while (k < BOARD_SIZE && board[k][j] === board[i][j]) {
-              matches.push({row: k, col: j});
-              k++;
+      // Check vertical
+      for (let j = 0; j < gridSize; j++) {
+        let count = 1;
+        for (let i = 1; i < gridSize; i++) {
+          if (gameGrid[i][j] === gameGrid[i-1][j]) {
+            count++;
+          } else {
+            if (count >= 3) {
+              for (let k = i - count; k < i; k++) {
+                matches.push({row: k, col: j});
+              }
             }
+            count = 1;
+          }
+        }
+        if (count >= 3) {
+          for (let k = gridSize - count; k < gridSize; k++) {
+            matches.push({row: k, col: j});
           }
         }
       }
       
-      // Remove duplicates
-      const uniqueMatches = [];
-      matches.forEach(match => {
-        if (!uniqueMatches.some(m => m.row === match.row && m.col === match.col)) {
-          uniqueMatches.push(match);
-        }
-      });
-      
-      return uniqueMatches;
+      return matches;
     }
     
-    // Process matches
-    function processMatches(matches) {
-      // Calculate score
+    // Handle matches
+    function handleMatches(matches) {
+      // Calculate points
       const points = matches.length * 10;
-      gameScore += points;
+      gamePoints += points;
       gameState.points += Math.floor(points / 2);
       
       // Animate matches
       matches.forEach(match => {
-        const cell = document.querySelector(`[data-row="${match.row}"][data-col="${match.col}"]`);
-        if (cell) {
-          cell.classList.add('matching');
-        }
+        const cell = document.getElementById(`cell_${match.row}_${match.col}`);
+        if (cell) cell.classList.add('matched');
       });
       
       setTimeout(() => {
         // Remove matched pieces
         matches.forEach(match => {
-          board[match.row][match.col] = null;
+          gameGrid[match.row][match.col] = null;
         });
         
-        // Drop pieces down
-        dropPieces();
+        // Drop pieces
+        for (let j = 0; j < gridSize; j++) {
+          let writePos = gridSize - 1;
+          for (let i = gridSize - 1; i >= 0; i--) {
+            if (gameGrid[i][j] !== null) {
+              if (writePos !== i) {
+                gameGrid[writePos][j] = gameGrid[i][j];
+                gameGrid[i][j] = null;
+              }
+              writePos--;
+            }
+          }
+        }
         
         // Fill empty spaces
-        fillEmpty();
+        for (let i = 0; i < gridSize; i++) {
+          for (let j = 0; j < gridSize; j++) {
+            if (gameGrid[i][j] === null) {
+              gameGrid[i][j] = gamePieces[Math.floor(Math.random() * gamePieces.length)];
+            }
+          }
+        }
         
-        renderBoard();
+        drawGame();
         
         // Check for new matches
-        const newMatches = findMatches();
-        if (newMatches.length > 0) {
-          setTimeout(() => processMatches(newMatches), 500);
+        const newMatches = checkMatches();
+        if (newMatches.length >= 3) {
+          setTimeout(() => handleMatches(newMatches), 500);
         }
         
-        updateGameUI();
+        updateGameStats();
         saveGameState();
+        updateDisplay();
       }, 800);
       
-      elements.gameMessage.textContent = `Magical! +${points} game points, +${Math.floor(points/2)} house points!`;
-      showToast(`🎉 ${matches.length} piece match! +${Math.floor(points/2)} house points!`);
+      document.getElementById('game-status').textContent = `🎉 ${matches.length} pieces matched! +${Math.floor(points/2)} house points!`;
+      showToast(`⚡ ${matches.length} piece match! +${Math.floor(points/2)} house points!`);
     }
     
-    // Drop pieces down
-    function dropPieces() {
-      for (let j = 0; j < BOARD_SIZE; j++) {
-        let writePos = BOARD_SIZE - 1;
-        for (let i = BOARD_SIZE - 1; i >= 0; i--) {
-          if (board[i][j] !== null) {
-            board[writePos][j] = board[i][j];
-            if (writePos !== i) {
-              board[i][j] = null;
-            }
-            writePos--;
-          }
-        }
-      }
-    }
-    
-    // Fill empty spaces
-    function fillEmpty() {
-      for (let i = 0; i < BOARD_SIZE; i++) {
-        for (let j = 0; j < BOARD_SIZE; j++) {
-          if (board[i][j] === null) {
-            board[i][j] = GAME_PIECES[Math.floor(Math.random() * GAME_PIECES.length)];
-          }
-        }
-      }
-    }
-    
-    // Use hint
-    function useHint() {
+    // Get hint
+    function getGameHint() {
       if (gameState.points < 5) {
-        showToast('💰 You need at least 5 house points for a hint!');
+        showToast('💰 Need 5 house points for a hint!');
         return;
       }
       
       gameState.points -= 5;
-      
-      // Find possible match
-      for (let i = 0; i < BOARD_SIZE; i++) {
-        for (let j = 0; j < BOARD_SIZE - 1; j++) {
-          // Try horizontal swap
-          const temp = board[i][j];
-          board[i][j] = board[i][j+1];
-          board[i][j+1] = temp;
-          
-          if (findMatches().length > 0) {
-            // Revert swap
-            board[i][j+1] = board[i][j];
-            board[i][j] = temp;
-            
-            elements.gameMessage.textContent = `💡 Try swapping row ${i+1}, columns ${j+1} and ${j+2}!`;
-            saveGameState();
-            updateDisplay();
-            return;
-          }
-          
-          // Revert swap
-          board[i][j+1] = board[i][j];
-          board[i][j] = temp;
-        }
-      }
-      
-      elements.gameMessage.textContent = "🔮 The crystal ball is cloudy... try different combinations!";
+      document.getElementById('game-status').textContent = '💡 Look for pieces that can form a line when swapped!';
+      setTimeout(() => {
+        document.getElementById('game-status').textContent = 'Match 3+ pieces in a row or column!';
+      }, 3000);
       saveGameState();
       updateDisplay();
     }
     
-    // Update game UI
-    function updateGameUI() {
-      elements.gameScore.textContent = gameScore;
-      elements.movesLeft.textContent = movesLeft;
+    // Update game stats
+    function updateGameStats() {
+      document.getElementById('game-score').textContent = gamePoints;
+      document.getElementById('moves-left').textContent = gameMoves;
       
-      if (movesLeft <= 0) {
+      if (gameMoves <= 0) {
         let bonus = 0;
-        if (gameScore >= 300) bonus = 25;
-        else if (gameScore >= 150) bonus = 10;
-        else if (gameScore >= 75) bonus = 5;
+        if (gamePoints >= 150) bonus = 15;
+        else if (gamePoints >= 100) bonus = 10;
+        else if (gamePoints >= 50) bonus = 5;
         
         if (bonus > 0) {
           gameState.points += bonus;
-          elements.gameMessage.textContent = `🏆 Game over! Bonus: +${bonus} house points!`;
+          document.getElementById('game-status').textContent = `🏆 Game over! Bonus: +${bonus} house points!`;
           showToast(`🎉 Game complete! +${bonus} bonus house points!`);
         } else {
-          elements.gameMessage.textContent = "🎮 Game over! Try brewing better potions next time!";
+          document.getElementById('game-status').textContent = '🎮 Game over! Try again for better magical combinations!';
         }
         
         saveGameState();
         updateDisplay();
       }
     }
+    
+    // Make functions globally accessible
+    window.initGame = initGame;
+    window.clickCell = clickCell;
+    window.getGameHint = getGameHint;
 
     // Initialize the app when page loads
     document.addEventListener('DOMContentLoaded', init);
