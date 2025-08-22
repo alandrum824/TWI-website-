@@ -463,10 +463,20 @@
       <!-- House Points & Level -->
       <div class="magical-card">
         <h2 class="card-title">🏆 House Championship</h2>
+        <div id="house-selection" style="display: none;">
+          <p>🏰 Choose Your Hogwarts House:</p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;">
+            <button class="magical-btn house-btn" data-house="Gryffindor">🦁 Gryffindor</button>
+            <button class="magical-btn house-btn" data-house="Hufflepuff">🦡 Hufflepuff</button>
+            <button class="magical-btn house-btn" data-house="Ravenclaw">🦅 Ravenclaw</button>
+            <button class="magical-btn house-btn" data-house="Slytherin">🐍 Slytherin</button>
+          </div>
+        </div>
         <div id="house-display">
           <p><strong>Your House:</strong> <span id="house-name" class="house-badge">Choose your house!</span></p>
           <p><strong>House Points:</strong> <span id="house-points" class="points-display">0</span></p>
           <p><strong>Wizard Level:</strong> <span id="wizard-level" class="level-display">Apprentice (1)</span></p>
+          <button id="change-house" class="magical-btn" style="font-size: 0.8rem; padding: 5px 10px;">Change House</button>
         </div>
         <button id="daily-bonus" class="magical-btn">🧪 Claim Daily Elixir (50 pts)</button>
       </div>
@@ -614,7 +624,10 @@
       trophyShop: document.getElementById('trophy-shop'),
       trophyCase: document.getElementById('trophy-case'),
       toast: document.getElementById('toast'),
-      headerTitle: document.getElementById('header-title')
+      headerTitle: document.getElementById('header-title'),
+      houseSelection: document.getElementById('house-selection'),
+      houseDisplay: document.getElementById('house-display'),
+      changeHouse: document.getElementById('change-house')
     };
 
     // Initialize the app
@@ -622,12 +635,10 @@
       createStars();
       loadGameState();
       setupEventListeners();
-      if (!gameState.house) {
-        chooseHouse();
-      }
       updateDisplay();
       renderTrophyShop();
       renderTrophyCase();
+      showHouseSelection();
     }
 
     // Create twinkling stars background
@@ -643,30 +654,25 @@
       }
     }
 
-    // House selection
-    function chooseHouse() {
-      let houseChoice = null;
-      while (!houseChoice || !CONFIG.HOUSES.includes(houseChoice)) {
-        houseChoice = prompt(`🏰 Welcome to Hogwarts, young wizard! 
-        
-Which house calls to your magical soul?
-        
-🦁 Gryffindor - Brave and daring
-🦡 Hufflepuff - Loyal and kind  
-🦅 Ravenclaw - Wise and clever
-🐍 Slytherin - Ambitious and cunning
-
-Type your house name:`);
-        
-        if (houseChoice) {
-          houseChoice = houseChoice.charAt(0).toUpperCase() + houseChoice.slice(1).toLowerCase();
-        }
+    // Show/hide house selection
+    function showHouseSelection() {
+      if (!gameState.house) {
+        elements.houseSelection.style.display = 'block';
+        elements.houseDisplay.style.display = 'none';
+      } else {
+        elements.houseSelection.style.display = 'none';
+        elements.houseDisplay.style.display = 'block';
+        updateHouseDisplay();
       }
-      
-      gameState.house = houseChoice;
+    }
+
+    // Select house
+    function selectHouse(houseName) {
+      gameState.house = houseName;
       saveGameState();
       updateHouseDisplay();
-      showToast(`🎉 Welcome to ${houseChoice}! Your magical journey begins now!`);
+      showHouseSelection();
+      showToast(`🎉 Welcome to ${houseName}! Your magical journey begins now!`);
     }
 
     // Update house display
@@ -691,6 +697,18 @@ Type your house name:`);
       elements.addBtn.addEventListener('click', addToLog);
       elements.clearLog.addEventListener('click', clearDailyLog);
       elements.dailyBonus.addEventListener('click', claimDailyBonus);
+      elements.changeHouse.addEventListener('click', () => {
+        elements.houseSelection.style.display = 'block';
+        elements.houseDisplay.style.display = 'none';
+      });
+      
+      // House selection buttons
+      document.querySelectorAll('.house-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const house = e.target.dataset.house;
+          selectHouse(house);
+        });
+      });
       
       // Auto-estimate on input
       elements.foodName.addEventListener('input', () => {
