@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -320,54 +321,39 @@
     }
     
     /* Match-3 Game Styles */
-    #game-board {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 3px;
-      max-width: 300px;
-      margin: 0 auto;
-      background: rgba(0,0,0,0.5);
-      padding: 15px;
-      border-radius: 15px;
-      border: 2px solid rgba(255,215,0,0.4);
-    }
-    
-    .game-piece {
-      width: 45px;
-      height: 45px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
+    #game-board td {
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      font-size: 1.8rem;
       background: linear-gradient(145deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
       border: 2px solid rgba(255,215,0,0.3);
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
       transition: all 0.3s ease;
       user-select: none;
     }
     
-    .game-piece:hover {
+    #game-board td:hover {
       transform: scale(1.1);
       border-color: rgba(255,215,0,0.8);
       box-shadow: 0 0 15px rgba(255,215,0,0.5);
     }
     
-    .game-piece.selected {
+    #game-board td.selected {
       background: linear-gradient(45deg, #ffd700, #ffed4e);
       transform: scale(1.15);
       border-color: #ffd700;
       box-shadow: 0 0 20px rgba(255,215,0,0.8);
     }
     
-    .game-piece.matching {
-      animation: matchGlow 0.8s ease-in-out;
-      background: linear-gradient(45deg, #ff6b6b, #ffd700);
+    #game-board td.matched {
+      animation: matchGlow 0.8s ease-in-out forwards;
     }
     
     @keyframes matchGlow {
       0% { transform: scale(1); }
-      50% { transform: scale(1.3); box-shadow: 0 0 30px #ffd700; }
+      50% { transform: scale(1.3); background: linear-gradient(45deg, #ff6b6b, #ffd700); }
       100% { transform: scale(0); opacity: 0; }
     }
     
@@ -509,16 +495,19 @@
       <h2 class="card-title">🎮 Magical Potions Match</h2>
       <p>Match 3+ magical items to earn house points!</p>
       <div style="text-align: center; margin-bottom: 15px;">
-        <div><strong>Game Score:</strong> <span id="game-score" class="points-display">0</span></div>
-        <div><strong>Moves Left:</strong> <span id="moves-left" class="points-display">15</span></div>
+        <div><strong>Score:</strong> <span id="game-score" class="points-display">0</span></div>
+        <div><strong>Moves:</strong> <span id="moves-left" class="points-display">15</span></div>
       </div>
-      <div id="game-container" style="text-align: center;">
-        <div id="game-board"></div>
+      
+      <div style="text-align: center;">
+        <table id="game-board" style="margin: 0 auto; border-collapse: separate; border-spacing: 3px; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 10px;">
+        </table>
+        
         <div style="margin-top: 15px;">
           <button id="new-game" class="magical-btn">🆕 New Game</button>
           <button id="hint-btn" class="magical-btn">💡 Hint (5 pts)</button>
         </div>
-        <div id="game-message" style="color: #ffd700; margin-top: 10px; font-weight: bold;"></div>
+        <div id="game-message" style="color: #ffd700; margin-top: 10px; font-weight: bold;">Click pieces to match 3+ in a row!</div>
       </div>
     </div>
 
@@ -633,4 +622,799 @@
       // Common Foods
       'pizza': 266, 'burger': 354, 'sandwich': 215, 'salad': 33, 'soup': 36,
       'french fries': 365, 'chips': 536, 'crackers': 488, 'cookies': 502, 'cake': 257,
-      'chocolate': 546, 'candy': 400, 'granola bar': 471, 'protein bar': 38
+      'chocolate': 546, 'candy': 400, 'granola bar': 471, 'protein bar': 384,
+      'smoothie': 63, 'juice': 45, 'soda': 41, 'beer': 43, 'wine': 83, 'coffee': 2, 'tea': 1
+    };
+
+    // Magical Artifacts (Trophies)
+    const MAGICAL_ARTIFACTS = [
+      { name: 'Chocolate Frog', emoji: '🐸', cost: 25, description: 'Your first magical treat from Honeydukes!' },
+      { name: 'Butterbeer Mug', emoji: '🍺', cost: 100, description: 'Perfect for Three Broomsticks celebrations!' },
+      { name: 'Quidditch Snitch', emoji: '🏐', cost: 250, description: 'The seeker\'s ultimate prize!' },
+      { name: 'House Scarf', emoji: '🧣', cost: 400, description: 'Show your house colors with pride!' },
+      { name: 'Wizard\'s Wand', emoji: '🪄', cost: 750, description: '11 inches, phoenix feather core!' },
+      { name: 'Sorting Hat', emoji: '🎩', cost: 1000, description: 'Holds the wisdom of Hogwarts founders!' },
+      { name: 'Marauder\'s Map', emoji: '🗺️', cost: 1500, description: 'I solemnly swear I am up to no good!' },
+      { name: 'Invisibility Cloak', emoji: '👻', cost: 2000, description: 'One of the Deathly Hallows!' },
+      { name: 'Time Turner', emoji: '⏰', cost: 3000, description: 'Turn back time with Hermione\'s device!' },
+      { name: 'Elder Wand', emoji: '⚡', cost: 5000, description: 'The most powerful wand in existence!' },
+      { name: 'Philosopher\'s Stone', emoji: '💎', cost: 10000, description: 'Nicolas Flamel\'s legendary creation!' }
+    ];
+
+    // Motivational Messages
+    const MOTIVATIONAL_MESSAGES = [
+      "Brilliant feast planning! Even Hermione would be impressed! 📚✨",
+      "You're showing the dedication of a true Gryffindor! 🦁⚡",
+      "Magical balance achieved! Your potion-making skills are legendary! 🧪",
+      "Outstanding! Professor McGonagall awards you full marks! 🏆",
+      "Your feast log is more organized than the Hogwarts library! 📖",
+      "Dumbledore himself would applaud your commitment! 🧙‍♂️✨",
+      "You're mastering the art of magical nutrition! Keep soaring! 🦅",
+      "Like brewing a perfect Polyjuice Potion - precise and powerful! 💫",
+      "Your dedication rivals that of the greatest Hogwarts students! 🌟",
+      "Accio success! You're on the path to wizarding greatness! ⚡🪄"
+    ];
+
+    // Simple Match-3 Game
+    const pieces = ['🧪', '⚡', '🔮', '🕯️', '⭐', '💎'];
+    let grid = [];
+    let selected = null;
+    let score = 0;
+    let moves = 15;
+    const size = 6;
+
+    // Game State
+    let gameState = {
+      house: null,
+      points: 0,
+      level: 1,
+      dailyLog: [],
+      ownedArtifacts: [],
+      lastBonusClaim: null,
+      totalCalories: 0,
+      totalItems: 0
+    };
+
+    // DOM Elements
+    const elements = {
+      mealTime: document.getElementById('meal-time'),
+      foodName: document.getElementById('food-name'),
+      foodCalories: document.getElementById('food-calories'),
+      calorieEst: document.getElementById('calorie-suggestion'),
+      estimateBtn: document.getElementById('estimate-btn'),
+      addBtn: document.getElementById('add-btn'),
+      feastLog: document.getElementById('feast-log'),
+      clearLog: document.getElementById('clear-log'),
+      magicFill: document.getElementById('magic-fill'),
+      totalCalories: document.getElementById('total-calories'),
+      totalItems: document.getElementById('total-items'),
+      statusMessage: document.getElementById('status-message'),
+      motivation: document.getElementById('motivation'),
+      houseName: document.getElementById('house-name'),
+      housePoints: document.getElementById('house-points'),
+      wizardLevel: document.getElementById('wizard-level'),
+      dailyBonus: document.getElementById('daily-bonus'),
+      trophyShop: document.getElementById('trophy-shop'),
+      trophyCase: document.getElementById('trophy-case'),
+      toast: document.getElementById('toast'),
+      headerTitle: document.getElementById('header-title'),
+      houseSelection: document.getElementById('house-selection'),
+      houseDisplay: document.getElementById('house-display'),
+      changeHouse: document.getElementById('change-house'),
+      gameBoard: document.getElementById('game-board'),
+      gameScore: document.getElementById('game-score'),
+      movesLeft: document.getElementById('moves-left'),
+      newGame: document.getElementById('new-game'),
+      hintBtn: document.getElementById('hint-btn'),
+      gameMessage: document.getElementById('game-message')
+    };
+
+    // Initialize the app
+    function init() {
+      createStars();
+      loadGameState();
+      setupEventListeners();
+      updateDisplay();
+      renderTrophyShop();
+      renderTrophyCase();
+      showHouseSelection();
+      createGame();
+    }
+
+    // Create twinkling stars background
+    function createStars() {
+      const starsContainer = document.getElementById('stars');
+      for (let i = 0; i < 100; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 2 + 's';
+        starsContainer.appendChild(star);
+      }
+    }
+
+    // Show/hide house selection
+    function showHouseSelection() {
+      if (!gameState.house) {
+        elements.houseSelection.style.display = 'block';
+        elements.houseDisplay.style.display = 'none';
+      } else {
+        elements.houseSelection.style.display = 'none';
+        elements.houseDisplay.style.display = 'block';
+        updateHouseDisplay();
+      }
+    }
+
+    // Select house
+    function selectHouse(houseName) {
+      gameState.house = houseName;
+      saveGameState();
+      updateHouseDisplay();
+      showHouseSelection();
+      showToast(`🎉 Welcome to ${houseName}! Your magical journey begins now!`);
+    }
+
+    // Update house display
+    function updateHouseDisplay() {
+      if (gameState.house) {
+        const emoji = CONFIG.HOUSE_EMOJIS[gameState.house];
+        const color = CONFIG.HOUSE_COLORS[gameState.house];
+        
+        elements.houseName.textContent = `${emoji} ${gameState.house}`;
+        elements.houseName.style.backgroundColor = color;
+        elements.headerTitle.textContent = `Hogwarts Feast Tracker ${emoji}`;
+        
+        // Update header background
+        document.querySelector('header').style.background = 
+          `linear-gradient(135deg, ${color}, #d4af37, #0a1172)`;
+      }
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+      elements.estimateBtn.addEventListener('click', estimateCalories);
+      elements.addBtn.addEventListener('click', addToLog);
+      elements.clearLog.addEventListener('click', clearDailyLog);
+      elements.dailyBonus.addEventListener('click', claimDailyBonus);
+      elements.changeHouse.addEventListener('click', () => {
+        elements.houseSelection.style.display = 'block';
+        elements.houseDisplay.style.display = 'none';
+      });
+      
+      // Game event listeners
+      elements.newGame.addEventListener('click', createGame);
+      elements.hintBtn.addEventListener('click', getHint);
+      
+      // House selection buttons
+      document.querySelectorAll('.house-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const house = e.target.dataset.house;
+          selectHouse(house);
+        });
+      });
+      
+      // Auto-estimate on input
+      elements.foodName.addEventListener('input', () => {
+        if (elements.foodName.value.trim()) {
+          setTimeout(estimateCalories, 500);
+        }
+      });
+    }
+
+    // Enhanced calorie estimation
+    function estimateCalories() {
+      const foodName = elements.foodName.value.trim().toLowerCase();
+      if (!foodName) {
+        showToast('🔮 Tell me what magical feast you enjoyed first!');
+        return;
+      }
+
+      let estimatedCalories = 0;
+      let matchedFood = '';
+      let maxMatch = 0;
+
+      // Find best match in database
+      for (const [food, calories] of Object.entries(CALORIE_DB)) {
+        if (foodName.includes(food) && food.length > maxMatch) {
+          maxMatch = food.length;
+          estimatedCalories = calories;
+          matchedFood = food;
+        }
+      }
+
+      // Fallback estimation based on food type keywords
+      if (!estimatedCalories) {
+        if (foodName.includes('chocolate') || foodName.includes('cake') || foodName.includes('cookie')) {
+          estimatedCalories = 400;
+          matchedFood = 'sweet treat';
+        } else if (foodName.includes('salad') || foodName.includes('vegetables')) {
+          estimatedCalories = 50;
+          matchedFood = 'fresh vegetables';
+        } else if (foodName.includes('meat') || foodName.includes('chicken') || foodName.includes('beef')) {
+          estimatedCalories = 200;
+          matchedFood = 'protein source';
+        } else if (foodName.includes('fruit')) {
+          estimatedCalories = 60;
+          matchedFood = 'fresh fruit';
+        } else {
+          estimatedCalories = 150;
+          matchedFood = 'general food item';
+        }
+      }
+
+      elements.foodCalories.value = estimatedCalories;
+      elements.calorieEst.style.display = 'block';
+      elements.calorieEst.innerHTML = `🔮 Ancient grimoire suggests: <strong>${estimatedCalories} calories</strong><br>
+        <small>Based on: ${matchedFood}</small>`;
+      
+      showToast(`✨ Calories divined: ${estimatedCalories} for "${matchedFood}"!`);
+    }
+
+    // Add food to log
+    function addToLog() {
+      const mealTime = elements.mealTime.value;
+      const foodName = elements.foodName.value.trim();
+      const calories = parseInt(elements.foodCalories.value) || 0;
+
+      if (!foodName) {
+        showToast('🪄 Cast your food name into the magical field first!');
+        return;
+      }
+
+      if (calories <= 0) {
+        showToast('🔮 Let me divine the calories first!');
+        estimateCalories();
+        return;
+      }
+
+      // Check for forbidden ingredients (allergens)
+      const forbiddenIngredients = ['walnut', 'shellfish', 'onion', 'garlic', 'dairy'];
+      const containsForbidden = forbiddenIngredients.some(ingredient => 
+        foodName.toLowerCase().includes(ingredient)
+      );
+
+      if (containsForbidden) {
+        showToast('🛡️ Protective charm activated! This contains forbidden ingredients for your quest.');
+        return;
+      }
+
+      const logEntry = {
+        id: Date.now(),
+        mealTime,
+        foodName,
+        calories,
+        timestamp: new Date().toLocaleTimeString()
+      };
+
+      gameState.dailyLog.push(logEntry);
+      gameState.points += 10;
+      updateTotalStats();
+      saveGameState();
+      updateDisplay();
+      clearInputs();
+      
+      showToast(`🎉 ${foodName} added to your feast log! +10 house points!`);
+    }
+
+    // Update total statistics
+    function updateTotalStats() {
+      gameState.totalCalories = gameState.dailyLog.reduce((sum, entry) => sum + entry.calories, 0);
+      gameState.totalItems = gameState.dailyLog.length;
+      gameState.level = Math.floor(gameState.points / 500) + 1;
+    }
+
+    // Clear input fields
+    function clearInputs() {
+      elements.foodName.value = '';
+      elements.foodCalories.value = '';
+      elements.calorieEst.style.display = 'none';
+    }
+
+    // Remove item from log
+    function removeFromLog(itemId) {
+      const index = gameState.dailyLog.findIndex(entry => entry.id === itemId);
+      if (index !== -1) {
+        gameState.dailyLog.splice(index, 1);
+        gameState.points = Math.max(0, gameState.points - 10);
+        updateTotalStats();
+        saveGameState();
+        updateDisplay();
+        showToast('🗑️ Item banished from your log... -10 points');
+      }
+    }
+
+    // Clear daily log
+    function clearDailyLog() {
+      if (confirm('🌅 Cast a new day incantation? This will clear your feast log but preserve your points and artifacts!')) {
+        gameState.dailyLog = [];
+        gameState.lastBonusClaim = null;
+        updateTotalStats();
+        saveGameState();
+        updateDisplay();
+        showToast('🌟 A new magical day dawns at Hogwarts!');
+      }
+    }
+
+    // Claim daily bonus
+    function claimDailyBonus() {
+      const today = new Date().toDateString();
+      const isInRange = gameState.totalCalories >= CONFIG.TARGET_MIN && 
+                       gameState.totalCalories <= CONFIG.TARGET_MAX;
+      const hasEnoughItems = gameState.totalItems >= 5;
+      const canClaim = gameState.lastBonusClaim !== today;
+
+      if (isInRange && hasEnoughItems && canClaim) {
+        gameState.points += 50;
+        gameState.lastBonusClaim = today;
+        saveGameState();
+        updateDisplay();
+        showToast('🧪 Daily Elixir claimed! +50 points to your house! Well done!');
+      } else if (!canClaim) {
+        showToast('⏰ You\'ve already claimed today\'s elixir! Return tomorrow!');
+      } else if (!isInRange) {
+        showToast('⚖️ Balance your magical energy within 1800-2200 calories first!');
+      } else {
+        showToast('📝 Log at least 5 feast items to claim your daily elixir!');
+      }
+    }
+
+    // Purchase artifact
+    function purchaseArtifact(artifactIndex) {
+      const artifact = MAGICAL_ARTIFACTS[artifactIndex];
+      if (gameState.points >= artifact.cost && !gameState.ownedArtifacts.includes(artifactIndex)) {
+        gameState.points -= artifact.cost;
+        gameState.ownedArtifacts.push(artifactIndex);
+        saveGameState();
+        updateDisplay();
+        renderTrophyShop();
+        renderTrophyCase();
+        showToast(`🎉 ${artifact.emoji} ${artifact.name} acquired! ${artifact.description}`);
+      } else if (gameState.ownedArtifacts.includes(artifactIndex)) {
+        showToast('✨ You already possess this magical artifact!');
+      } else {
+        showToast(`💰 You need ${artifact.cost - gameState.points} more points for this artifact!`);
+      }
+    }
+
+    // Render trophy shop
+    function renderTrophyShop() {
+      elements.trophyShop.innerHTML = '';
+      MAGICAL_ARTIFACTS.forEach((artifact, index) => {
+        const isOwned = gameState.ownedArtifacts.includes(index);
+        const canAfford = gameState.points >= artifact.cost;
+        
+        const trophyDiv = document.createElement('div');
+        trophyDiv.className = `trophy-item ${isOwned ? 'trophy-owned' : ''}`;
+        trophyDiv.innerHTML = `
+          <span class="trophy-emoji">${artifact.emoji}</span>
+          <div style="font-size: 0.8rem; margin-bottom: 5px;">${artifact.name}</div>
+          <div class="trophy-cost">${isOwned ? '✅ Owned' : `${artifact.cost} pts`}</div>
+        `;
+        
+        if (!isOwned) {
+          trophyDiv.style.opacity = canAfford ? '1' : '0.5';
+          trophyDiv.addEventListener('click', () => purchaseArtifact(index));
+        }
+        
+        elements.trophyShop.appendChild(trophyDiv);
+      });
+    }
+
+    // Render trophy case
+    function renderTrophyCase() {
+      elements.trophyCase.innerHTML = '';
+      if (gameState.ownedArtifacts.length === 0) {
+        elements.trophyCase.innerHTML = '<p style="text-align: center; color: #888;">Your magical collection awaits your first artifact!</p>';
+        return;
+      }
+
+      gameState.ownedArtifacts.forEach(artifactIndex => {
+        const artifact = MAGICAL_ARTIFACTS[artifactIndex];
+        const trophyDiv = document.createElement('div');
+        trophyDiv.className = 'owned-trophy';
+        trophyDiv.innerHTML = `
+          <div style="font-size: 2rem;">${artifact.emoji}</div>
+          <div style="font-size: 0.8rem;">${artifact.name}</div>
+        `;
+        trophyDiv.title = artifact.description;
+        elements.trophyCase.appendChild(trophyDiv);
+      });
+    }
+
+    // Update all displays
+    function updateDisplay() {
+      updateHouseDisplay();
+      renderFeastLog();
+      updateMagicMeter();
+      updateStats();
+      updateMotivation();
+      renderTrophyShop();
+      renderTrophyCase();
+    }
+
+    // Render feast log
+    function renderFeastLog() {
+      elements.feastLog.innerHTML = '';
+      
+      if (gameState.dailyLog.length === 0) {
+        elements.feastLog.innerHTML = '<p style="text-align: center; color: #888;">Your magical feast log awaits your first entry!</p>';
+        return;
+      }
+
+      gameState.dailyLog.forEach(entry => {
+        const logDiv = document.createElement('div');
+        logDiv.className = 'feast-item';
+        logDiv.innerHTML = `
+          <div>
+            <strong>${entry.mealTime}:</strong> ${entry.foodName}<br>
+            <small>${entry.timestamp} • ${entry.calories} calories</small>
+          </div>
+          <button onclick="removeFromLog(${entry.id})" class="magical-btn" style="background: #7f0909;">✖</button>
+        `;
+        elements.feastLog.appendChild(logDiv);
+      });
+    }
+
+    // Update magic meter
+    function updateMagicMeter() {
+      const percentage = Math.min(100, (gameState.totalCalories / 3000) * 100);
+      elements.magicFill.style.width = percentage + '%';
+    }
+
+    // Update stats display
+    function updateStats() {
+      elements.totalCalories.textContent = gameState.totalCalories;
+      elements.totalItems.textContent = gameState.totalItems;
+      elements.housePoints.textContent = gameState.points;
+      elements.wizardLevel.textContent = `Level ${gameState.level}`;
+
+      // Update status message
+      if (gameState.totalCalories < CONFIG.TARGET_MIN) {
+        elements.statusMessage.textContent = '⚡ Summon more magical energy to your feast!';
+        elements.statusMessage.className = 'status-warning';
+      } else if (gameState.totalCalories > CONFIG.TARGET_MAX) {
+        elements.statusMessage.textContent = '🔥 Powerful magic! Consider balancing your feast.';
+        elements.statusMessage.className = 'status-warning';
+      } else {
+        elements.statusMessage.textContent = '✨ Perfect magical balance achieved!';
+        elements.statusMessage.className = 'status-good';
+      }
+
+      // Update daily bonus button
+      const today = new Date().toDateString();
+      const canClaim = gameState.lastBonusClaim !== today &&
+                      gameState.totalCalories >= CONFIG.TARGET_MIN &&
+                      gameState.totalCalories <= CONFIG.TARGET_MAX &&
+                      gameState.totalItems >= 5;
+      
+      elements.dailyBonus.disabled = !canClaim;
+      elements.dailyBonus.textContent = canClaim ? '🧪 Claim Daily Elixir (50 pts)' : 
+        gameState.lastBonusClaim === today ? '✅ Elixir Claimed Today' : '🧪 Complete Daily Quest First';
+    }
+
+    // Update motivation message
+    function updateMotivation() {
+      if (gameState.totalCalories >= CONFIG.TARGET_MIN && gameState.totalCalories <= CONFIG.TARGET_MAX) {
+        const randomMessage = MOTIVATIONAL_MESSAGES[Math.floor(Math.random() * MOTIVATIONAL_MESSAGES.length)];
+        elements.motivation.textContent = randomMessage;
+        elements.motivation.style.display = 'block';
+      } else {
+        elements.motivation.style.display = 'none';
+      }
+    }
+
+    // Show toast notification
+    function showToast(message) {
+      elements.toast.textContent = message;
+      elements.toast.classList.add('show');
+      setTimeout(() => {
+        elements.toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Save game state to localStorage
+    function saveGameState() {
+      localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(gameState));
+    }
+
+    // Load game state from localStorage
+    function loadGameState() {
+      const saved = localStorage.getItem(CONFIG.STORAGE_KEY);
+      if (saved) {
+        gameState = { ...gameState, ...JSON.parse(saved) };
+        updateTotalStats();
+      }
+    }
+
+    // Make removeFromLog globally accessible
+    window.removeFromLog = removeFromLog;
+
+    // ===== SIMPLE MATCH-3 GAME =====
+    
+    // Start new game
+    function startNewGame() {
+      gameScore = 0;
+      movesLeft = 15;
+      selectedCell = null;
+      board = [];
+      
+      // Create board
+      for (let i = 0; i < BOARD_SIZE; i++) {
+        board[i] = [];
+        for (let j = 0; j < BOARD_SIZE; j++) {
+          board[i][j] = GAME_PIECES[Math.floor(Math.random() * GAME_PIECES.length)];
+        }
+      }
+      
+      renderBoard();
+      updateGameUI();
+      elements.gameMessage.textContent = "Match 3+ magical items in a row!";
+    }
+    
+    // Render the game board
+    function renderBoard() {
+      elements.gameBoard.innerHTML = '';
+      
+      for (let i = 0; i < BOARD_SIZE; i++) {
+        for (let j = 0; j < BOARD_SIZE; j++) {
+          const cell = document.createElement('div');
+          cell.className = 'game-piece';
+          cell.textContent = board[i][j];
+          cell.dataset.row = i;
+          cell.dataset.col = j;
+          cell.addEventListener('click', () => handleCellClick(i, j));
+          elements.gameBoard.appendChild(cell);
+        }
+      }
+    }
+    
+    // Handle cell click
+    function handleCellClick(row, col) {
+      if (movesLeft <= 0) return;
+      
+      const clickedCell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+      
+      if (!selectedCell) {
+        // Select first cell
+        selectedCell = { row, col };
+        clickedCell.classList.add('selected');
+      } else if (selectedCell.row === row && selectedCell.col === col) {
+        // Deselect same cell
+        clickedCell.classList.remove('selected');
+        selectedCell = null;
+      } else if (areAdjacent(selectedCell.row, selectedCell.col, row, col)) {
+        // Swap adjacent cells
+        const prevSelected = document.querySelector(`[data-row="${selectedCell.row}"][data-col="${selectedCell.col}"]`);
+        prevSelected.classList.remove('selected');
+        
+        swapCells(selectedCell.row, selectedCell.col, row, col);
+        selectedCell = null;
+      } else {
+        // Select new cell
+        document.querySelectorAll('.game-piece').forEach(cell => cell.classList.remove('selected'));
+        selectedCell = { row, col };
+        clickedCell.classList.add('selected');
+      }
+    }
+    
+    // Check if cells are adjacent
+    function areAdjacent(row1, col1, row2, col2) {
+      const rowDiff = Math.abs(row1 - row2);
+      const colDiff = Math.abs(col1 - col2);
+      return (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1);
+    }
+    
+    // Swap two cells
+    function swapCells(row1, col1, row2, col2) {
+      const temp = board[row1][col1];
+      board[row1][col1] = board[row2][col2];
+      board[row2][col2] = temp;
+      
+      const matches = findMatches();
+      if (matches.length > 0) {
+        movesLeft--;
+        processMatches(matches);
+      } else {
+        // Swap back if no matches
+        board[row1][col1] = board[row2][col2];
+        board[row2][col2] = temp;
+        elements.gameMessage.textContent = "No matches found! Try a different spell.";
+        setTimeout(() => {
+          elements.gameMessage.textContent = "Match 3+ magical items in a row!";
+        }, 2000);
+      }
+      
+      renderBoard();
+      updateGameUI();
+    }
+    
+    // Find all matches on board
+    function findMatches() {
+      const matches = [];
+      
+      // Check horizontal matches
+      for (let i = 0; i < BOARD_SIZE; i++) {
+        for (let j = 0; j < BOARD_SIZE - 2; j++) {
+          if (board[i][j] === board[i][j+1] && board[i][j] === board[i][j+2]) {
+            matches.push({row: i, col: j});
+            matches.push({row: i, col: j+1});
+            matches.push({row: i, col: j+2});
+            
+            // Check for longer matches
+            let k = j + 3;
+            while (k < BOARD_SIZE && board[i][k] === board[i][j]) {
+              matches.push({row: i, col: k});
+              k++;
+            }
+          }
+        }
+      }
+      
+      // Check vertical matches
+      for (let i = 0; i < BOARD_SIZE - 2; i++) {
+        for (let j = 0; j < BOARD_SIZE; j++) {
+          if (board[i][j] === board[i+1][j] && board[i][j] === board[i+2][j]) {
+            matches.push({row: i, col: j});
+            matches.push({row: i+1, col: j});
+            matches.push({row: i+2, col: j});
+            
+            // Check for longer matches
+            let k = i + 3;
+            while (k < BOARD_SIZE && board[k][j] === board[i][j]) {
+              matches.push({row: k, col: j});
+              k++;
+            }
+          }
+        }
+      }
+      
+      // Remove duplicates
+      const uniqueMatches = [];
+      matches.forEach(match => {
+        if (!uniqueMatches.some(m => m.row === match.row && m.col === match.col)) {
+          uniqueMatches.push(match);
+        }
+      });
+      
+      return uniqueMatches;
+    }
+    
+    // Process matches
+    function processMatches(matches) {
+      // Calculate score
+      const points = matches.length * 10;
+      gameScore += points;
+      gameState.points += Math.floor(points / 2);
+      
+      // Animate matches
+      matches.forEach(match => {
+        const cell = document.querySelector(`[data-row="${match.row}"][data-col="${match.col}"]`);
+        if (cell) {
+          cell.classList.add('matching');
+        }
+      });
+      
+      setTimeout(() => {
+        // Remove matched pieces
+        matches.forEach(match => {
+          board[match.row][match.col] = null;
+        });
+        
+        // Drop pieces down
+        dropPieces();
+        
+        // Fill empty spaces
+        fillEmpty();
+        
+        renderBoard();
+        
+        // Check for new matches
+        const newMatches = findMatches();
+        if (newMatches.length > 0) {
+          setTimeout(() => processMatches(newMatches), 500);
+        }
+        
+        updateGameUI();
+        saveGameState();
+      }, 800);
+      
+      elements.gameMessage.textContent = `Magical! +${points} game points, +${Math.floor(points/2)} house points!`;
+      showToast(`🎉 ${matches.length} piece match! +${Math.floor(points/2)} house points!`);
+    }
+    
+    // Drop pieces down
+    function dropPieces() {
+      for (let j = 0; j < BOARD_SIZE; j++) {
+        let writePos = BOARD_SIZE - 1;
+        for (let i = BOARD_SIZE - 1; i >= 0; i--) {
+          if (board[i][j] !== null) {
+            board[writePos][j] = board[i][j];
+            if (writePos !== i) {
+              board[i][j] = null;
+            }
+            writePos--;
+          }
+        }
+      }
+    }
+    
+    // Fill empty spaces
+    function fillEmpty() {
+      for (let i = 0; i < BOARD_SIZE; i++) {
+        for (let j = 0; j < BOARD_SIZE; j++) {
+          if (board[i][j] === null) {
+            board[i][j] = GAME_PIECES[Math.floor(Math.random() * GAME_PIECES.length)];
+          }
+        }
+      }
+    }
+    
+    // Use hint
+    function useHint() {
+      if (gameState.points < 5) {
+        showToast('💰 You need at least 5 house points for a hint!');
+        return;
+      }
+      
+      gameState.points -= 5;
+      
+      // Find possible match
+      for (let i = 0; i < BOARD_SIZE; i++) {
+        for (let j = 0; j < BOARD_SIZE - 1; j++) {
+          // Try horizontal swap
+          const temp = board[i][j];
+          board[i][j] = board[i][j+1];
+          board[i][j+1] = temp;
+          
+          if (findMatches().length > 0) {
+            // Revert swap
+            board[i][j+1] = board[i][j];
+            board[i][j] = temp;
+            
+            elements.gameMessage.textContent = `💡 Try swapping row ${i+1}, columns ${j+1} and ${j+2}!`;
+            saveGameState();
+            updateDisplay();
+            return;
+          }
+          
+          // Revert swap
+          board[i][j+1] = board[i][j];
+          board[i][j] = temp;
+        }
+      }
+      
+      elements.gameMessage.textContent = "🔮 The crystal ball is cloudy... try different combinations!";
+      saveGameState();
+      updateDisplay();
+    }
+    
+    // Update game UI
+    function updateGameUI() {
+      elements.gameScore.textContent = gameScore;
+      elements.movesLeft.textContent = movesLeft;
+      
+      if (movesLeft <= 0) {
+        let bonus = 0;
+        if (gameScore >= 300) bonus = 25;
+        else if (gameScore >= 150) bonus = 10;
+        else if (gameScore >= 75) bonus = 5;
+        
+        if (bonus > 0) {
+          gameState.points += bonus;
+          elements.gameMessage.textContent = `🏆 Game over! Bonus: +${bonus} house points!`;
+          showToast(`🎉 Game complete! +${bonus} bonus house points!`);
+        } else {
+          elements.gameMessage.textContent = "🎮 Game over! Try brewing better potions next time!";
+        }
+        
+        saveGameState();
+        updateDisplay();
+      }
+    }
+
+    // Initialize the app when page loads
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
