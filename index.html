@@ -1426,7 +1426,7 @@
         
         // Check for matches
         const matches = checkMatches();
-        if (matches.length >= 3) {
+        if (matches.length > 0) {  // Changed from >= 3 to > 0
           gameMoves--;
           handleMatches(matches);
         } else {
@@ -1450,59 +1450,80 @@
       }
     }
     
-    // Check for matches
+    // Check for matches - FIXED VERSION
     function checkMatches() {
-      const matches = [];
+      const matches = new Set(); // Use Set to avoid duplicates
       
-      // Check horizontal
-      for (let i = 0; i < gridSize; i++) {
-        let count = 1;
-        for (let j = 1; j < gridSize; j++) {
-          if (gameGrid[i][j] === gameGrid[i][j-1]) {
-            count++;
+      // Check horizontal matches
+      for (let row = 0; row < gridSize; row++) {
+        let consecutiveCount = 1;
+        let currentPiece = gameGrid[row][0];
+        
+        for (let col = 1; col < gridSize; col++) {
+          if (gameGrid[row][col] === currentPiece) {
+            consecutiveCount++;
           } else {
-            if (count >= 3) {
-              for (let k = j - count; k < j; k++) {
-                matches.push({row: i, col: k});
+            // Check if we have a match
+            if (consecutiveCount >= 3) {
+              for (let k = col - consecutiveCount; k < col; k++) {
+                matches.add(`${row}-${k}`);
               }
             }
-            count = 1;
+            currentPiece = gameGrid[row][col];
+            consecutiveCount = 1;
           }
         }
-        if (count >= 3) {
-          for (let k = gridSize - count; k < gridSize; k++) {
-            matches.push({row: i, col: k});
+        
+        // Check the last sequence
+        if (consecutiveCount >= 3) {
+          for (let k = gridSize - consecutiveCount; k < gridSize; k++) {
+            matches.add(`${row}-${k}`);
           }
         }
       }
       
-      // Check vertical
-      for (let j = 0; j < gridSize; j++) {
-        let count = 1;
-        for (let i = 1; i < gridSize; i++) {
-          if (gameGrid[i][j] === gameGrid[i-1][j]) {
-            count++;
+      // Check vertical matches
+      for (let col = 0; col < gridSize; col++) {
+        let consecutiveCount = 1;
+        let currentPiece = gameGrid[0][col];
+        
+        for (let row = 1; row < gridSize; row++) {
+          if (gameGrid[row][col] === currentPiece) {
+            consecutiveCount++;
           } else {
-            if (count >= 3) {
-              for (let k = i - count; k < i; k++) {
-                matches.push({row: k, col: j});
+            // Check if we have a match
+            if (consecutiveCount >= 3) {
+              for (let k = row - consecutiveCount; k < row; k++) {
+                matches.add(`${k}-${col}`);
               }
             }
-            count = 1;
+            currentPiece = gameGrid[row][col];
+            consecutiveCount = 1;
           }
         }
-        if (count >= 3) {
-          for (let k = gridSize - count; k < gridSize; k++) {
-            matches.push({row: k, col: j});
+        
+        // Check the last sequence
+        if (consecutiveCount >= 3) {
+          for (let k = gridSize - consecutiveCount; k < gridSize; k++) {
+            matches.add(`${k}-${col}`);
           }
         }
       }
       
-      return matches;
+      // Convert Set back to array of objects
+      const matchArray = [];
+      matches.forEach(match => {
+        const [row, col] = match.split('-').map(Number);
+        matchArray.push({row, col});
+      });
+      
+      return matchArray;
     }
     
     // Handle matches
     function handleMatches(matches) {
+      if (matches.length === 0) return; // Safety check
+      
       // Calculate points
       const points = matches.length * 10;
       gamePoints += points;
@@ -1545,9 +1566,9 @@
         
         drawGame();
         
-        // Check for new matches
+        // Check for new matches (chain reactions)
         const newMatches = checkMatches();
-        if (newMatches.length >= 3) {
+        if (newMatches.length > 0) {  // Changed from >= 3 to > 0
           setTimeout(() => handleMatches(newMatches), 500);
         }
         
