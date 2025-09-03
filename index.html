@@ -1,1965 +1,244 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hogwarts Feast Tracker ⚡</title>
+  <title>EasyCast Fishing Lessons — Friendly, Affordable Shore Trips</title>
+  <meta name="description" content="Affordable shore fishing lessons and clinics for beginners, families, and seniors. Patient teaching, simple gear, local lakes & piers. Book today!" />
+  <meta property="og:title" content="EasyCast Fishing Lessons" />
+  <meta property="og:description" content="Affordable shore fishing lessons and clinics. Patient, beginner-friendly, local lakes & piers." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1470165510424-ff3a1e1f0a1b?q=80&w=1200&auto=format&fit=crop" />
+  <meta name="theme-color" content="#1f4f7f" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: linear-gradient(135deg, #0c1445 0%, #1a1a2e 50%, #16213e 100%);
-      color: #fff;
-      font-family: 'Crimson Text', serif;
-      min-height: 100vh;
-      animation: fadeIn 1s ease-in;
-    }
-    
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes sparkle { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.1) rotate(5deg); } }
-    @keyframes glow { 0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); } 50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); } }
-    @keyframes floatUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(-10px); } }
-    
-    .stars {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-    }
-    
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: #fff;
-      border-radius: 50%;
-      animation: twinkle 2s infinite;
-    }
-    
-    @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-    
-    header {
-      position: relative;
-      z-index: 10;
-      padding: 30px 20px;
-      text-align: center;
-      background: linear-gradient(135deg, #7f0909, #d4af37, #0a1172);
-      border-bottom: 3px solid #ffd700;
-      box-shadow: 0 0 30px rgba(0,0,0,0.5);
-    }
-    
-    h1 {
-      font-family: 'Cinzel', serif;
-      margin: 0;
-      font-weight: 900;
-      font-size: 3rem;
-      text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
-      background: linear-gradient(45deg, #ffd700, #fff, #ffd700);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .subtitle {
-      font-size: 1.2rem;
-      margin-top: 10px;
-      font-style: italic;
-      color: #ffd700;
-    }
-    
-    .main-container {
-      position: relative;
-      z-index: 10;
-      max-width: 1800px;
-      margin: 30px auto;
-      padding: 0 20px 150px;
-      display: grid;
-      gap: 25px;
-      grid-template-columns: 1fr 1fr 1fr 350px 350px;
-    }
-    
-    .magical-card {
-      background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-      border: 2px solid rgba(255, 215, 0, 0.3);
-      border-radius: 20px;
-      padding: 25px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .magical-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(45deg, transparent, rgba(255,215,0,0.1), transparent);
-      transform: rotate(-45deg);
-      transition: all 0.6s ease;
-      opacity: 0;
-    }
-    
-    .magical-card:hover::before {
-      opacity: 1;
-      transform: rotate(-45deg) translate(50%, 50%);
-    }
-    
-    .magical-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(255, 215, 0, 0.6);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    }
-    
-    .card-title {
-      font-family: 'Cinzel', serif;
-      font-size: 1.5rem;
-      color: #ffd700;
-      margin: 0 0 20px 0;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    }
-    
-    .input-group {
-      margin-bottom: 15px;
-    }
-    
-    .magical-input, .magical-select {
-      width: 100%;
-      padding: 12px 15px;
-      border: 2px solid rgba(255, 215, 0, 0.3);
-      border-radius: 10px;
-      background: rgba(0,0,0,0.3);
-      color: #fff;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-    }
-    
-    .magical-input:focus, .magical-select:focus {
-      outline: none;
-      border-color: #ffd700;
-      box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-    }
-    
-    .magical-btn {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 10px;
-      background: linear-gradient(45deg, #7f0909, #d4af37);
-      color: #fff;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin: 5px;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .magical-btn::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      background: rgba(255,255,255,0.2);
-      border-radius: 50%;
-      transition: all 0.3s ease;
-      transform: translate(-50%, -50%);
-    }
-    
-    .magical-btn:hover::before {
-      width: 300px;
-      height: 300px;
-    }
-    
-    .magical-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-    
-    .feast-log {
-      max-height: 400px;
-      overflow-y: auto;
-      padding-right: 10px;
-    }
-    
-    .feast-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px;
-      margin-bottom: 10px;
-      background: rgba(255,215,0,0.1);
-      border: 1px solid rgba(255,215,0,0.3);
-      border-radius: 10px;
-      transition: all 0.3s ease;
-      animation: floatUp 0.5s ease;
-    }
-    
-    .feast-item:hover {
-      background: rgba(255,215,0,0.2);
-      transform: translateX(5px);
-    }
-    
-    .magic-meter {
-      height: 25px;
-      background: linear-gradient(90deg, #000, #333);
-      border-radius: 15px;
-      overflow: hidden;
-      margin: 15px 0;
-      border: 2px solid #ffd700;
-      position: relative;
-    }
-    
-    .magic-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #7f0909, #d4af37, #0a1172);
-      transition: width 0.8s ease;
-      border-radius: 15px;
-      position: relative;
-    }
-    
-    .magic-fill::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-      animation: shimmer 2s infinite;
-    }
-    
-    @keyframes shimmer {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
-    }
-    
-    .status-good { color: #4CAF50; font-weight: bold; }
-    .status-warning { color: #FF9800; font-weight: bold; }
-    .status-danger { color: #F44336; font-weight: bold; }
-    
-    .trophy-case {
-      background: linear-gradient(145deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
-      border: 3px solid #ffd700;
-      border-radius: 15px;
-      padding: 20px;
-      margin-top: 20px;
-    }
-    
-    .trophy-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-      gap: 15px;
-      margin-top: 15px;
-    }
-    
-    .trophy-item {
-      text-align: center;
-      padding: 15px;
-      background: rgba(255,215,0,0.1);
-      border: 2px solid rgba(255,215,0,0.3);
-      border-radius: 10px;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-    
-    .trophy-item:hover {
-      transform: scale(1.05);
-      background: rgba(255,215,0,0.2);
-      animation: glow 1s infinite;
-    }
-    
-    .trophy-emoji {
-      font-size: 2.5rem;
-      display: block;
-      margin-bottom: 8px;
-      filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
-    }
-    
-    .trophy-owned .trophy-emoji {
-      animation: sparkle 2s infinite;
-    }
-    
-    .trophy-cost {
-      font-size: 0.9rem;
-      color: #ffd700;
-      font-weight: bold;
-    }
-    
-    .trophy-owned .trophy-cost {
-      color: #4CAF50;
-    }
-    
-    .owned-display {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 10px;
-      margin-top: 15px;
-    }
-    
-    .owned-trophy {
-      text-align: center;
-      padding: 10px;
-      background: linear-gradient(45deg, #ffd700, #ffed4e);
-      border-radius: 10px;
-      color: #000;
-      font-weight: bold;
-      box-shadow: 0 5px 15px rgba(255,215,0,0.3);
-      animation: glow 3s infinite;
-    }
-    
-    /* Working Match-3 Game Styles */
-    .game-board-container {
-      display: inline-block;
-      background: linear-gradient(145deg, rgba(0,0,0,0.6), rgba(0,0,0,0.3));
-      padding: 20px;
-      border-radius: 15px;
-      border: 3px solid #ffd700;
-      margin-bottom: 25px;
-      position: relative;
-      z-index: 2;
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-    }
-    
-    .game-row {
-      display: flex;
-      margin: 0;
-      padding: 0;
-    }
-    
-    .game-cell {
-      width: 35px;
-      height: 35px;
-      margin: 2px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      background: linear-gradient(145deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
-      border: 2px solid rgba(255,215,0,0.3);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      user-select: none;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .game-cell::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,215,0,0.4), transparent);
-      transition: left 0.6s ease;
-    }
-    
-    .game-cell:hover::before {
-      left: 100%;
-    }
-    
-    .game-cell:hover {
-      transform: scale(1.1);
-      border-color: rgba(255,215,0,0.8);
-      box-shadow: 0 0 15px rgba(255,215,0,0.5);
-    }
-    
-    .game-cell.selected {
-      background: linear-gradient(45deg, #ffd700, #ffed4e);
-      border-color: #ffd700;
-      box-shadow: 0 0 20px rgba(255,215,0,0.8);
-      transform: scale(1.15);
-      animation: pulse 1s infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 20px rgba(255,215,0,0.8); }
-      50% { box-shadow: 0 0 30px rgba(255,215,0,1); }
-    }
-    
-    .game-cell.matched {
-      animation: magicalMatch 0.8s ease-in-out forwards;
-    }
-    
-    .game-cell.falling {
-      animation: magicalFall 0.6s ease-in forwards;
-    }
-    
-    @keyframes magicalMatch {
-      0% { transform: scale(1); }
-      30% { transform: scale(1.4); background: linear-gradient(45deg, #ffd700, #ff6b6b); }
-      70% { transform: scale(1.6); background: linear-gradient(45deg, #ff6b6b, #ffd93d); opacity: 0.8; }
-      100% { transform: scale(0); opacity: 0; }
-    }
-    
-    @keyframes magicalFall {
-      from { transform: translateY(-150px) rotate(180deg); opacity: 0; }
-      to { transform: translateY(0) rotate(0deg); opacity: 1; }
-    }
-    
-    .motivation-quote {
-      text-align: center;
-      font-style: italic;
-      color: #ffd700;
-      font-size: 1.1rem;
-      margin-top: 15px;
-      padding: 15px;
-      background: rgba(255,215,0,0.1);
-      border-radius: 10px;
-      border: 1px solid rgba(255,215,0,0.3);
-    }
-    
-    .magical-toast {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: linear-gradient(45deg, #7f0909, #d4af37);
-      color: #fff;
-      padding: 15px 20px;
-      border-radius: 10px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      transform: translateX(400px);
-      transition: transform 0.3s ease;
-      z-index: 1000;
-      max-width: 300px;
-    }
-    
-    .magical-toast.show {
-      transform: translateX(0);
-    }
-    
-    .house-badge {
-      display: inline-block;
-      padding: 8px 15px;
-      border-radius: 20px;
-      font-weight: bold;
-      margin: 5px;
-    }
-    
-    .level-display {
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #ffd700;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    }
-    
-    .points-display {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #ffd700;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    }
-    
-    .calorie-estimate {
-      background: rgba(255,215,0,0.2);
-      border: 1px solid #ffd700;
-      border-radius: 8px;
-      padding: 10px;
-      margin-top: 10px;
-      font-weight: bold;
-      color: #ffd700;
-    }
-    
-    /* Quest Tracker Styles */
-    .quest-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 12px;
-      padding: 10px;
-      background: rgba(0,0,0,0.2);
-      border-radius: 8px;
-      border: 1px solid rgba(255,215,0,0.2);
-    }
-    
-    .quest-icon {
-      font-size: 1.5rem;
-      margin-right: 12px;
-      min-width: 30px;
-    }
-    
-    .quest-details {
-      flex: 1;
-    }
-    
-    .quest-title {
-      font-weight: bold;
-      color: #ffd700;
-      margin-bottom: 2px;
-    }
-    
-    .quest-desc {
-      font-size: 0.85rem;
-      color: #ccc;
-      margin-bottom: 3px;
-    }
-    
-    .quest-progress {
-      font-size: 0.8rem;
-      color: #999;
-    }
-    
-    .quest-status {
-      font-size: 1.2rem;
-      margin-left: 10px;
-    }
-    
-    .quest-btn {
-      width: 100%;
-      font-size: 1.1rem;
-      padding: 15px;
-      background: linear-gradient(45deg, #7f0909, #d4af37);
-      transition: all 0.3s ease;
-    }
-    
-    .quest-btn:disabled {
-      background: linear-gradient(45deg, #555, #777);
-      cursor: not-allowed;
-      opacity: 0.6;
-    }
-    
-    .quest-btn.ready {
-      background: linear-gradient(45deg, #0d6217, #ffd700);
-      animation: questPulse 2s infinite;
-    }
-    
-    @keyframes questPulse {
-      0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255,215,0,0.3); }
-      50% { transform: scale(1.02); box-shadow: 0 0 30px rgba(255,215,0,0.6); }
-    }
-    
-    @media (max-width: 1600px) {
-      .main-container {
-        grid-template-columns: 1fr 1fr 1fr 350px;
-      }
-    }
-    
-    @media (max-width: 1200px) {
-      .main-container {
-        grid-template-columns: 1fr 1fr 1fr;
-      }
-    }
-    
-    @media (max-width: 900px) {
-      .main-container {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .main-container {
-        grid-template-columns: 1fr;
-      }
-      h1 { font-size: 2rem; }
-      .game-cell { width: 30px; height: 30px; font-size: 1.4rem; }
-    }
+    :root{
+      --bg:#0c1a27; --bg2:#0f2234; --card:#12283f; --accent:#2aa3ff; --text:#e9f2fb; --muted:#9fb7cc; --ok:#22c55e; --warn:#f59e0b;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:linear-gradient(180deg,var(--bg),var(--bg2));color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    header{position:sticky;top:0;z-index:50;background:rgba(12,26,39,.8);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+    .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
+    .fish{width:28px;height:28px;display:inline-block}
+    nav a{margin-left:16px;font-weight:600;color:var(--muted)}
+    nav a:hover{color:var(--text)}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;padding:48px 0 28px}
+    .card{background:linear-gradient(180deg,#132a41,#0f2336);border:1px solid rgba(255,255,255,.07);border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    .hero .card{padding:26px}
+    .pill{display:inline-flex;align-items:center;padding:6px 12px;border-radius:999px;background:rgba(42,163,255,.15);border:1px solid rgba(42,163,255,.35);color:#cfeaff;font-weight:600;font-size:13px;margin-bottom:12px}
+    h1{font-size:40px;line-height:1.1;margin:8px 0 12px}
+    .lead{color:var(--muted);font-size:18px;line-height:1.6}
+    .cta{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#1a3552;color:#e9f2fb;font-weight:700;}
+    .btn.primary{background:linear-gradient(180deg,#2aa3ff,#2087d6);border:none}
+    .btn:hover{filter:brightness(1.05)}
+    .heroimg{border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.07)}
+    .heroimg img{width:100%;height:auto;display:block}
+    section{padding:36px 0}
+    h2{font-size:28px;margin:0 0 14px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .svc{padding:18px}
+    .svc h3{margin:8px 0 8px}
+    .price{font-weight:800;font-size:20px}
+    .muted{color:var(--muted)}
+    .testi{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    blockquote{margin:0;padding:18px;border-left:4px solid rgba(255,255,255,.12);background:#0d2031;border-radius:12px}
+    .faq details{background:#0f2336;border:1px solid rgba(255,255,255,.07);padding:14px 16px;border-radius:12px}
+    .faq details+details{margin-top:10px}
+    .bar{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);margin:28px 0}
+    .contact-card{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+    footer{padding:24px 0 40px;color:#b7ccde}
+    .tiny{font-size:12px;color:#89a4bc}
+    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .gallery img{width:100%;height:170px;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,.08)}
+    @media (max-width:900px){.hero{grid-template-columns:1fr}.grid,.testi,.contact-card,.gallery{grid-template-columns:1fr}.heroimg{order:-1}}
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "EasyCast Fishing Lessons",
+    "description": "Patient, affordable shore fishing lessons for beginners, families, and seniors.",
+    "areaServed": "YOUR CITY, YOUR STATE",
+    "telephone": "+1-000-000-0000",
+    "email": "bookings@easycast.example",
+    "priceRange": "$",
+    "url": "https://easycast.example",
+    "sameAs": ["https://www.facebook.com/yourpage","https://www.instagram.com/yourpage"]
+  }
+  </script>
 </head>
 <body>
-  <div class="stars" id="stars"></div>
-  
   <header>
-    <h1 id="header-title">Hogwarts Feast Tracker ⚡</h1>
-    <div class="subtitle">Master the Art of Magical Nutrition & Fitness</div>
-    <p>Chronicle your daily feasts, balance your magical energy (1800-2200 calories), earn house points, and unlock legendary artifacts!</p>
-  </header>
-
-  <div class="main-container">
-    <!-- Food Input Section -->
-    <div class="magical-card">
-      <h2 class="card-title">🪄 Conjure Your Feast</h2>
-      <p>Simply whisper what delicious morsel you've enjoyed, and our ancient grimoire will divine its magical essence!</p>
-      
-      <div class="input-group">
-        <select id="meal-time" class="magical-select">
-          <option value="Custom">Any Magical Moment</option>
-          <option value="Breakfast">Breakfast in the Great Hall</option>
-          <option value="Morning Snack">Morning Potion Break</option>
-          <option value="Lunch">Midday Feast with Friends</option>
-          <option value="Afternoon Snack">Afternoon Enchantment</option>
-          <option value="Dinner">Evening Grand Banquet</option>
-          <option value="Late Snack">Midnight Kitchen Raid</option>
-        </select>
+    <div class="wrap nav">
+      <div class="brand">
+        <svg class="fish" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 12c3-4 9-6 13-3 1 1 2 2 3 1l2-1-1 2c-1 2 0 3 1 4l1 2-2-1c-1-1-2 0-3 1-4 3-10 1-13-3Z" stroke="#2aa3ff" stroke-width="1.5"/><circle cx="8.8" cy="12" r="1.2" fill="#2aa3ff"/></svg>
+        <span>EasyCast Fishing Lessons</span>
       </div>
-      
-      <div class="input-group">
-        <input id="food-name" class="magical-input" placeholder="What magical feast did you enjoy? (e.g., roasted chicken, chocolate cake, apple)" />
-      </div>
-      
-      <div class="input-group">
-        <input id="food-calories" class="magical-input" placeholder="Calories (leave empty for auto-divination)" type="number" />
-      </div>
-      
-      <div id="calorie-suggestion" class="calorie-estimate" style="display: none;"></div>
-      
-      <button id="estimate-btn" class="magical-btn">🔮 Divine Calories</button>
-      <button id="add-btn" class="magical-btn">✨ Add to Feast Log</button>
+      <nav aria-label="Main">
+        <a href="#services">Services</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </nav>
     </div>
+  </header>  <main class="wrap">
+    <section class="hero">
+      <div class="card">
+        <span class="pill">Beginner‑friendly • Patient • Local</span>
+        <h1>Catch your first fish with a friendly guide — no boat needed</h1>
+        <p class="lead">Shore and pier lessons for kids, families, and seniors. I bring simple gear, teach safe knots and casts, and fish local lakes and parks. <strong>IT‑savvy help</strong> with fish finders, apps, and basic setup included.</p>
+        <div class="cta">
+          <a class="btn primary" id="bookNow" href="mailto:bookings@easycast.example?subject=Fishing%20Lesson%20Request&body=Name%3A%0APhone%3A%0APreferred%20date%2Ftime%3A%0AExperience%20level%3A%0AParticipants%3A%0ALocation%20(prefered)%3A%0A">Book a Lesson</a>
+          <a class="btn" href="tel:+10000000000">Call/Text: (000) 000‑0000</a>
+        </div>
+        <p class="tiny" style="margin-top:10px">Serving <strong>YOUR CITY & nearby parks</strong>. Fully shore‑based lessons. Verify local fishing license requirements.</p>
+      </div>
+      <div class="heroimg">
+        <img alt="Smiling angler landing a fish from the shore at sunset" src="https://images.unsplash.com/photo-1516909265231-4f71ca4fbc03?q=80&w=1200&auto=format&fit=crop"/>
+      </div>
+    </section><section id="services">
+  <h2>What I Offer</h2>
+  <div class="grid">
+    <article class="card svc" aria-labelledby="svc1">
+      <h3 id="svc1">First Fish Lesson (Shore)</h3>
+      <p class="muted">90‑minute patient lesson: knots, casting, baiting, safe handling, catch‑and‑release basics. Kid‑friendly.</p>
+    </article>
+    <article class="card svc" aria-labelledby="svc2">
+      <h3 id="svc2">Knot & Rig Clinic</h3>
+      <p class="muted">Hands‑on clinic: improved clinch, Palomar, loop knots; simple rigs for local species. Includes take‑home cheat sheet.</p>
+    </article>
+    <article class="card svc" aria-labelledby="svc3">
+      <h3 id="svc3">Rod & Reel Tune‑Up</h3>
+      <p class="muted">Clean and basic maintenance on your gear so it casts smooth. Optional line spooling (line cost extra).</p>
+    </article>
+    <article class="card svc" aria-labelledby="svc4">
+      <h3 id="svc4">Tech Setup Help</h3>
+      <p class="muted">Fish finder / app setup, GPS waypoints, and simple weather & barometer tools. Leverages 20+ years in IT.</p>
+    </article>
+    <article class="card svc" aria-labelledby="svc5">
+      <h3 id="svc5">Family & Senior Days</h3>
+      <p class="muted">Gentle pace, light gear, shaded spots. Patient teaching and seating as needed.</p>
+    </article>
+    <article class="card svc" aria-labelledby="svc6">
+      <h3 id="svc6">Gift Certificates</h3>
+      <p class="muted">Perfect for birthdays and holidays. Email delivery, easy to redeem.</p>
+    </article>
+  </div>
+</section>
 
-    <!-- Fitness Tracking Section -->
-    <div class="magical-card">
-      <h2 class="card-title">🏃‍♂️ Magical Training Grounds</h2>
-      <p>Track your magical fitness activities and earn extra house points for staying active!</p>
-      
-      <div class="input-group">
-        <select id="fitness-activity" class="magical-select">
-          <option value="Quidditch Practice">🏆 Quidditch Practice</option>
-          <option value="Magical Combat Training">⚔️ Defense Against Dark Arts</option>
-          <option value="Herbology Gardening">🌿 Herbology Greenhouse Work</option>
-          <option value="Castle Stairs Climbing">🏰 Castle Stairs Expedition</option>
-          <option value="Flying Lessons">🧙‍♂️ Broomstick Flying</option>
-          <option value="Care of Magical Creatures">🐉 Care of Magical Creatures</option>
-          <option value="Forbidden Forest Trek">🌲 Forbidden Forest Adventure</option>
-          <option value="Dueling Club">⚡ Dueling Club Practice</option>
-          <option value="Lake Swimming">🏊‍♂️ Black Lake Swimming</option>
-          <option value="Wizard Chess">♟️ Wizard Chess Tournament</option>
-          <option value="Other Training">🎯 Other Magical Training</option>
-        </select>
-      </div>
-      
-      <div class="input-group">
-        <input id="fitness-duration" class="magical-input" placeholder="Duration (minutes)" type="number" />
-      </div>
-      
-      <div class="input-group">
-        <select id="fitness-intensity" class="magical-select">
-          <option value="light">🌟 Light Training (Beginner)</option>
-          <option value="moderate">⚡ Moderate Training (Intermediate)</option>
-          <option value="vigorous">🔥 Vigorous Training (Advanced)</option>
-          <option value="extreme">💥 Extreme Training (Master Level)</option>
-        </select>
-      </div>
-      
-      <button id="add-fitness-btn" class="magical-btn">💪 Log Training Session</button>
-      
-      <div id="fitness-points-display" style="margin-top: 15px; padding: 10px; background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.3); border-radius: 8px; text-align: center; color: #ffd700; font-weight: bold; display: none;">
-        <div>Session Points: <span id="session-points">0</span></div>
-        <div>Daily Fitness: <span id="daily-fitness">0</span> minutes</div>
-      </div>
+<section id="pricing">
+  <h2>Simple Pricing</h2>
+  <div class="grid">
+    <div class="card svc">
+      <h3>Intro Lesson — 90 min</h3>
+      <p class="price">$49 <span class="muted">(1 person)</span></p>
+      <p class="muted">Add a second person for <strong>$20</strong>. Basic gear included for lesson. Park/parking fees not included.</p>
+      <a class="btn" href="#contact">Book this</a>
     </div>
-
-    <!-- Working Match-3 Magical Game -->
-    <div class="magical-card">
-      <h2 class="card-title">🎮 Hogwarts Magic Match</h2>
-      <p>Match 3+ magical symbols to brew powerful spells and earn house points!</p>
-      
-      <div style="display: flex; justify-content: space-around; margin-bottom: 20px; padding: 15px; background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.3); border-radius: 10px;">
-        <div style="text-align: center;">
-          <div style="color: #ffd700; margin-bottom: 5px;">Spell Power</div>
-          <div id="game-score" class="points-display">0</div>
-        </div>
-        <div style="text-align: center;">
-          <div style="color: #ffd700; margin-bottom: 5px;">Magic Left</div>
-          <div id="moves-left" class="points-display">15</div>
-        </div>
-      </div>
-      
-      <div id="game-board" class="game-board-container">
-        <!-- Game board will be generated here -->
-      </div>
-      
-      <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 15px;">
-        <button id="new-game" class="magical-btn">🪄 New Spell</button>
-        <button id="game-hint" class="magical-btn">🔮 Divination</button>
-      </div>
-      
-      <div id="game-status" style="color: #ffd700; font-weight: bold; font-size: 1rem; margin-top: 10px; text-align: center; min-height: 25px;">Cast your first spell to begin!</div>
+    <div class="card svc">
+      <h3>Knot & Rig Clinic — 60 min</h3>
+      <p class="price">$35 <span class="muted">per person</span></p>
+      <p class="muted">Small groups welcome (3–6). Includes printed cheat sheet.</p>
+      <a class="btn" href="#contact">Book this</a>
     </div>
-
-    <!-- Stats and Progress Sidebar -->
-    <div>
-      <!-- Magic Meter -->
-      <div class="magical-card">
-        <h2 class="card-title">⚡ Daily Magic Meter</h2>
-        <div class="magic-meter">
-          <div id="magic-fill" class="magic-fill"></div>
-        </div>
-        <p><strong>Total Energy:</strong> <span id="total-calories" class="points-display">0</span> calories</p>
-        <p><strong>Feast Items:</strong> <span id="total-items">0</span></p>
-        <p id="status-message" class="status-good">Ready for magical adventures!</p>
-        <div id="motivation" class="motivation-quote"></div>
-      </div>
-
-      <!-- Daily Log Section -->
-      <div class="magical-card">
-        <h2 class="card-title">📜 Today's Magical Chronicle</h2>
-        <div id="feast-log" class="feast-log"></div>
-        <div style="text-align: center; margin-top: 20px;">
-          <button id="clear-log" class="magical-btn">🌟 New Day Incantation</button>
-        </div>
-      </div>
-
-      <!-- Fitness Log Section -->
-      <div class="magical-card">
-        <h2 class="card-title">🏋️‍♂️ Training Chronicles</h2>
-        <div id="fitness-log" class="feast-log"></div>
-        <div style="text-align: center; margin-top: 15px;">
-          <div style="color: #ffd700; font-weight: bold;">
-            <div>Today's Training: <span id="total-fitness-time">0</span> minutes</div>
-            <div>Fitness Points: <span id="total-fitness-points">0</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- House & Trophy Sidebar -->
-    <div>
-      <!-- House Points & Level -->
-      <div class="magical-card">
-        <h2 class="card-title">🏆 House Championship</h2>
-        <div id="house-selection" style="display: none;">
-          <p>🏰 Choose Your Hogwarts House:</p>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;">
-            <button class="magical-btn house-btn" data-house="Gryffindor">🦁 Gryffindor</button>
-            <button class="magical-btn house-btn" data-house="Hufflepuff">🦡 Hufflepuff</button>
-            <button class="magical-btn house-btn" data-house="Ravenclaw">🦅 Ravenclaw</button>
-            <button class="magical-btn house-btn" data-house="Slytherin">🐍 Slytherin</button>
-          </div>
-        </div>
-        <div id="house-display">
-          <p><strong>Your House:</strong> <span id="house-name" class="house-badge">Choose your house!</span></p>
-          <p><strong>House Points:</strong> <span id="house-points" class="points-display">0</span></p>
-          <p><strong>Wizard Level:</strong> <span id="wizard-level" class="level-display">Apprentice (1)</span></p>
-          <button id="change-house" class="magical-btn" style="font-size: 0.8rem; padding: 5px 10px;">Change House</button>
-        </div>
-        
-        <!-- Daily Quest Tracker -->
-        <div style="margin: 20px 0; padding: 15px; background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.3); border-radius: 10px;">
-          <h3 style="margin: 0 0 15px 0; color: #ffd700; text-align: center; font-family: 'Cinzel', serif;">🌟 Daily Quest Progress</h3>
-          
-          <div id="quest-nutrition" class="quest-item">
-            <span class="quest-icon">🍽️</span>
-            <div class="quest-details">
-              <div class="quest-title">Balanced Nutrition</div>
-              <div class="quest-desc">1800-2200 calories & 5+ meals</div>
-              <div class="quest-progress" id="nutrition-progress">0/1800 calories, 0/5 meals</div>
-            </div>
-            <div class="quest-status" id="nutrition-status">❌</div>
-          </div>
-          
-          <div id="quest-fitness" class="quest-item">
-            <span class="quest-icon">💪</span>
-            <div class="quest-details">
-              <div class="quest-title">Physical Training</div>
-              <div class="quest-desc">30+ minutes of exercise</div>
-              <div class="quest-progress" id="fitness-progress">0/30 minutes</div>
-            </div>
-            <div class="quest-status" id="fitness-status">❌</div>
-          </div>
-          
-          <div id="quest-bonus" class="quest-item">
-            <span class="quest-icon">🧪</span>
-            <div class="quest-details">
-              <div class="quest-title">Daily Elixir</div>
-              <div class="quest-desc">Complete both above tasks</div>
-              <div class="quest-progress" id="bonus-progress">Awaiting completion</div>
-            </div>
-            <div class="quest-status" id="bonus-status">❌</div>
-          </div>
-        </div>
-        
-        <button id="daily-bonus" class="magical-btn quest-btn">🧪 Complete Daily Quest (100 pts)</button>
-      </div>
-
-      <!-- Trophy Shop -->
-      <div class="magical-card">
-        <h2 class="card-title">🏪 Magical Artifacts Shop</h2>
-        <p>Transmute your hard-earned points into legendary treasures!</p>
-        <div id="trophy-shop" class="trophy-grid"></div>
-      </div>
-
-      <!-- Trophy Case -->
-      <div class="magical-card">
-        <h2 class="card-title">🎖️ Your Trophy Case</h2>
-        <p>Behold your collection of magical artifacts!</p>
-        <div id="trophy-case" class="owned-display"></div>
-      </div>
+    <div class="card svc">
+      <h3>Rod/Reel Tune‑Up</h3>
+      <p class="price">$25 <span class="muted">per reel</span></p>
+      <p class="muted">Cleaning, lubrication, and function check. Line spooling +$8 (plus line).</p>
+      <a class="btn" href="#contact">Book this</a>
     </div>
   </div>
-
-  <div id="toast" class="magical-toast"></div>
-
-  <script>
-    // Configuration and Constants
-    const CONFIG = {
-      TARGET_MIN: 1800,
-      TARGET_MAX: 2200,
-      STORAGE_KEY: 'hogwarts_feast_tracker',
-      HOUSES: ['Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin'],
-      HOUSE_COLORS: {
-        'Gryffindor': '#7f0909',
-        'Hufflepuff': '#d4af37', 
-        'Ravenclaw': '#0a1172',
-        'Slytherin': '#0d6217'
-      },
-      HOUSE_EMOJIS: {
-        'Gryffindor': '🦁',
-        'Hufflepuff': '🦡',
-        'Ravenclaw': '🦅',
-        'Slytherin': '🐍'
-      }
-    };
-
-    // Expanded Calorie Database
-    const CALORIE_DB = {
-      // Proteins
-      'chicken breast': 165, 'chicken thigh': 209, 'turkey': 189, 'beef': 250, 'pork': 242,
-      'salmon': 206, 'tuna': 132, 'cod': 82, 'shrimp': 99, 'crab': 97, 'eggs': 155,
-      'egg whites': 52, 'tofu': 70, 'tempeh': 193, 'chicken': 165, 'beef steak': 271,
-      'ground beef': 254, 'lamb': 294, 'bacon': 541, 'ham': 145, 'sausage': 346,
-      
-      // Carbohydrates  
-      'rice': 130, 'quinoa': 120, 'pasta': 131, 'bread': 265, 'oats': 389, 'cereal': 379,
-      'potato': 77, 'sweet potato': 86, 'corn': 96, 'barley': 123, 'bulgur': 83,
-      'couscous': 112, 'noodles': 138, 'bagel': 245, 'muffin': 377, 'pancakes': 227,
-      
-      // Fruits
-      'apple': 52, 'banana': 89, 'orange': 47, 'grapes': 67, 'strawberries': 32,
-      'blueberries': 57, 'raspberries': 52, 'blackberries': 43, 'pineapple': 50,
-      'mango': 60, 'peach': 39, 'pear': 57, 'plum': 46, 'watermelon': 30,
-      'cantaloupe': 34, 'honeydew': 36, 'kiwi': 61, 'papaya': 43, 'avocado': 160,
-      
-      // Vegetables
-      'broccoli': 34, 'spinach': 23, 'kale': 33, 'carrots': 41, 'bell peppers': 31,
-      'tomatoes': 18, 'cucumber': 16, 'lettuce': 15, 'onion': 40, 'garlic': 149,
-      'mushrooms': 22, 'asparagus': 20, 'green beans': 31, 'peas': 81, 'brussels sprouts': 43,
-      'cauliflower': 25, 'cabbage': 25, 'zucchini': 17, 'eggplant': 25, 'beets': 43,
-      
-      // Dairy & Alternatives
-      'milk': 42, 'yogurt': 59, 'cheese': 113, 'cottage cheese': 98, 'cream cheese': 342,
-      'butter': 717, 'almond milk': 17, 'soy milk': 33, 'coconut milk': 230, 'ice cream': 207,
-      
-      // Nuts & Seeds
-      'almonds': 579, 'walnuts': 654, 'peanuts': 567, 'cashews': 553, 'pistachios': 560,
-      'peanut butter': 588, 'almond butter': 614, 'sunflower seeds': 584, 'chia seeds': 486,
-      'flax seeds': 534, 'pumpkin seeds': 446, 'sesame seeds': 573,
-      
-      // Common Foods
-      'pizza': 266, 'burger': 354, 'sandwich': 215, 'salad': 33, 'soup': 36,
-      'french fries': 365, 'chips': 536, 'crackers': 488, 'cookies': 502, 'cake': 257,
-      'chocolate': 546, 'candy': 400, 'granola bar': 471, 'protein bar': 384,
-      'smoothie': 63, 'juice': 45, 'soda': 41, 'beer': 43, 'wine': 83, 'coffee': 2, 'tea': 1
-    };
-
-    // Magical Artifacts (Trophies)
-    const MAGICAL_ARTIFACTS = [
-      { name: 'Chocolate Frog', emoji: '🐸', cost: 25, description: 'Your first magical treat from Honeydukes!' },
-      { name: 'Butterbeer Mug', emoji: '🍺', cost: 100, description: 'Perfect for Three Broomsticks celebrations!' },
-      { name: 'Quidditch Snitch', emoji: '🏐', cost: 250, description: 'The seeker\'s ultimate prize!' },
-      { name: 'House Scarf', emoji: '🧣', cost: 400, description: 'Show your house colors with pride!' },
-      { name: 'Wizard\'s Wand', emoji: '🪄', cost: 750, description: '11 inches, phoenix feather core!' },
-      { name: 'Sorting Hat', emoji: '🎩', cost: 1000, description: 'Holds the wisdom of Hogwarts founders!' },
-      { name: 'Marauder\'s Map', emoji: '🗺️', cost: 1500, description: 'I solemnly swear I am up to no good!' },
-      { name: 'Invisibility Cloak', emoji: '👻', cost: 2000, description: 'One of the Deathly Hallows!' },
-      { name: 'Time Turner', emoji: '⏰', cost: 3000, description: 'Turn back time with Hermione\'s device!' },
-      { name: 'Elder Wand', emoji: '⚡', cost: 5000, description: 'The most powerful wand in existence!' },
-      { name: 'Philosopher\'s Stone', emoji: '💎', cost: 10000, description: 'Nicolas Flamel\'s legendary creation!' }
-    ];
-
-    // Motivational Messages
-    const MOTIVATIONAL_MESSAGES = [
-      "Brilliant feast planning! Even Hermione would be impressed! 📚✨",
-      "You're showing the dedication of a true Gryffindor! 🦁⚡",
-      "Magical balance achieved! Your potion-making skills are legendary! 🧪",
-      "Outstanding! Professor McGonagall awards you full marks! 🏆",
-      "Your feast log is more organized than the Hogwarts library! 📖",
-      "Dumbledore himself would applaud your commitment! 🧙‍♂️✨",
-      "You're mastering the art of magical nutrition! Keep soaring! 🦅",
-      "Like brewing a perfect Polyjuice Potion - precise and powerful! 💫",
-      "Your dedication rivals that of the greatest Hogwarts students! 🌟",
-      "Accio success! You're on the path to wizarding greatness! ⚡🪄",
-      "Your training would make even Madam Hooch proud! 🏆💪",
-      "Balancing nutrition and fitness like a true magical master! ⚖️✨",
-      "Professor Sprout would be amazed at your healthy growth! 🌱💚",
-      "You're building strength worthy of a Quidditch champion! 🏃‍♂️⚡"
-    ];
-
-    // Game State
-    let gameState = {
-      house: null,
-      points: 0,
-      level: 1,
-      dailyLog: [],
-      fitnessLog: [],
-      ownedArtifacts: [],
-      lastBonusClaim: null,
-      totalCalories: 0,
-      totalItems: 0,
-      totalFitnessTime: 0,
-      totalFitnessPoints: 0
-    };
-
-    // Working Match-3 Game Variables
-    let magicGameState = {
-      board: [],
-      score: 0,
-      movesLeft: 15,
-      selectedCell: null,
-      gameActive: false,
-      boardSize: 8
-    };
-
-    // Magical Harry Potter symbols for the game
-    const magicalSymbols = ['⚡', '🪄', '🔮', '🧪', '🦉', '⭐'];
-
-    // DOM Elements
-    const elements = {
-      mealTime: document.getElementById('meal-time'),
-      foodName: document.getElementById('food-name'),
-      foodCalories: document.getElementById('food-calories'),
-      calorieEst: document.getElementById('calorie-suggestion'),
-      estimateBtn: document.getElementById('estimate-btn'),
-      addBtn: document.getElementById('add-btn'),
-      feastLog: document.getElementById('feast-log'),
-      clearLog: document.getElementById('clear-log'),
-      magicFill: document.getElementById('magic-fill'),
-      totalCalories: document.getElementById('total-calories'),
-      totalItems: document.getElementById('total-items'),
-      statusMessage: document.getElementById('status-message'),
-      motivation: document.getElementById('motivation'),
-      houseName: document.getElementById('house-name'),
-      housePoints: document.getElementById('house-points'),
-      wizardLevel: document.getElementById('wizard-level'),
-      dailyBonus: document.getElementById('daily-bonus'),
-      trophyShop: document.getElementById('trophy-shop'),
-      trophyCase: document.getElementById('trophy-case'),
-      toast: document.getElementById('toast'),
-      headerTitle: document.getElementById('header-title'),
-      houseSelection: document.getElementById('house-selection'),
-      houseDisplay: document.getElementById('house-display'),
-      changeHouse: document.getElementById('change-house'),
-      // Fitness elements
-      fitnessActivity: document.getElementById('fitness-activity'),
-      fitnessDuration: document.getElementById('fitness-duration'),
-      fitnessIntensity: document.getElementById('fitness-intensity'),
-      addFitnessBtn: document.getElementById('add-fitness-btn'),
-      fitnessLog: document.getElementById('fitness-log'),
-      fitnessPointsDisplay: document.getElementById('fitness-points-display'),
-      sessionPoints: document.getElementById('session-points'),
-      dailyFitness: document.getElementById('daily-fitness'),
-      totalFitnessTime: document.getElementById('total-fitness-time'),
-      totalFitnessPoints: document.getElementById('total-fitness-points'),
-      // Game elements
-      gameBoard: document.getElementById('game-board'),
-      gameScore: document.getElementById('game-score'),
-      movesLeft: document.getElementById('moves-left'),
-      newGame: document.getElementById('new-game'),
-      gameHint: document.getElementById('game-hint'),
-      gameStatus: document.getElementById('game-status')
-    };
-
-    // Initialize the app
-    function init() {
-      createStars();
-      loadGameState();
-      setupEventListeners();
-      updateDisplay();
-      renderTrophyShop();
-      renderTrophyCase();
-      showHouseSelection();
-      initGame(); // Initialize the working match-3 game
-    }
-
-    // Create twinkling stars background
-    function createStars() {
-      const starsContainer = document.getElementById('stars');
-      for (let i = 0; i < 100; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        star.style.animationDelay = Math.random() * 2 + 's';
-        starsContainer.appendChild(star);
-      }
-    }
-
-    // Show/hide house selection
-    function showHouseSelection() {
-      if (!gameState.house) {
-        elements.houseSelection.style.display = 'block';
-        elements.houseDisplay.style.display = 'none';
-      } else {
-        elements.houseSelection.style.display = 'none';
-        elements.houseDisplay.style.display = 'block';
-        updateHouseDisplay();
-      }
-    }
-
-    // Select house
-    function selectHouse(houseName) {
-      gameState.house = houseName;
-      saveGameState();
-      updateHouseDisplay();
-      showHouseSelection();
-      showToast(`🎉 Welcome to ${houseName}! Your magical journey begins now!`);
-    }
-
-    // Update house display
-    function updateHouseDisplay() {
-      if (gameState.house) {
-        const emoji = CONFIG.HOUSE_EMOJIS[gameState.house];
-        const color = CONFIG.HOUSE_COLORS[gameState.house];
-        
-        elements.houseName.textContent = `${emoji} ${gameState.house}`;
-        elements.houseName.style.backgroundColor = color;
-        elements.headerTitle.textContent = `Hogwarts Feast Tracker ${emoji}`;
-        
-        // Update header background
-        document.querySelector('header').style.background = 
-          `linear-gradient(135deg, ${color}, #d4af37, #0a1172)`;
-      }
-    }
-
-    // Setup event listeners
-    function setupEventListeners() {
-      elements.estimateBtn.addEventListener('click', estimateCalories);
-      elements.addBtn.addEventListener('click', addToLog);
-      elements.clearLog.addEventListener('click', clearDailyLog);
-      
-      // Daily bonus with feedback even when disabled
-      elements.dailyBonus.addEventListener('click', (e) => {
-        claimDailyBonus();
-      });
-      
-      elements.changeHouse.addEventListener('click', () => {
-        elements.houseSelection.style.display = 'block';
-        elements.houseDisplay.style.display = 'none';
-      });
-      
-      // Fitness event listeners
-      elements.addFitnessBtn.addEventListener('click', addFitnessActivity);
-      elements.fitnessDuration.addEventListener('input', calculateFitnessPoints);
-      elements.fitnessIntensity.addEventListener('change', calculateFitnessPoints);
-      
-      // Game event listeners
-      elements.newGame.addEventListener('click', initGame);
-      elements.gameHint.addEventListener('click', getGameHint);
-      
-      // House selection buttons
-      document.querySelectorAll('.house-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const house = e.target.dataset.house;
-          selectHouse(house);
-        });
-      });
-      
-      // Auto-estimate on input
-      elements.foodName.addEventListener('input', () => {
-        if (elements.foodName.value.trim()) {
-          setTimeout(estimateCalories, 500);
-        }
-      });
-    }
-
-    // ===== WORKING MATCH-3 GAME FUNCTIONS =====
-    
-    // Initialize new game
-    function initGame() {
-      magicGameState = {
-        board: [],
-        score: 0,
-        movesLeft: 15,
-        selectedCell: null,
-        gameActive: true,
-        boardSize: 8
-      };
-      
-      // Create initial board without matches
-      do {
-        magicGameState.board = [];
-        for (let i = 0; i < magicGameState.boardSize * magicGameState.boardSize; i++) {
-          magicGameState.board.push(magicalSymbols[Math.floor(Math.random() * magicalSymbols.length)]);
-        }
-      } while (findMatches().length > 0);
-      
-      renderGame();
-      updateGameDisplay();
-      elements.gameStatus.textContent = 'Your magical journey begins! Cast your first spell!';
-    }
-
-    // Render the game board
-    function renderGame() {
-      const board = elements.gameBoard;
-      board.innerHTML = '';
-      
-      for (let row = 0; row < magicGameState.boardSize; row++) {
-        const rowDiv = document.createElement('div');
-        rowDiv.className = 'game-row';
-        
-        for (let col = 0; col < magicGameState.boardSize; col++) {
-          const index = row * magicGameState.boardSize + col;
-          const cell = document.createElement('div');
-          cell.className = 'game-cell';
-          cell.textContent = magicGameState.board[index];
-          cell.dataset.index = index;
-          cell.addEventListener('click', () => selectCell(index));
-          rowDiv.appendChild(cell);
-        }
-        
-        board.appendChild(rowDiv);
-      }
-    }
-
-    // Handle cell selection and swapping
-    function selectCell(index) {
-      if (!magicGameState.gameActive) return;
-      
-      const cells = document.querySelectorAll('.game-cell');
-      
-      if (magicGameState.selectedCell === null) {
-        magicGameState.selectedCell = index;
-        cells[index].classList.add('selected');
-        elements.gameStatus.textContent = 'Symbol selected! Choose an adjacent symbol to swap.';
-      } else if (magicGameState.selectedCell === index) {
-        cells[index].classList.remove('selected');
-        magicGameState.selectedCell = null;
-        elements.gameStatus.textContent = 'Selection cleared. Choose a symbol to begin casting.';
-      } else {
-        // Check if cells are adjacent
-        if (isAdjacent(magicGameState.selectedCell, index)) {
-          // Remove selection highlight
-          cells[magicGameState.selectedCell].classList.remove('selected');
-          
-          // Swap cells
-          const temp = magicGameState.board[magicGameState.selectedCell];
-          magicGameState.board[magicGameState.selectedCell] = magicGameState.board[index];
-          magicGameState.board[index] = temp;
-          
-          // Check if swap creates matches
-          const matches = findMatches();
-          if (matches.length > 0) {
-            magicGameState.movesLeft--;
-            renderGame();
-            setTimeout(() => {
-              processMatches();
-            }, 300);
-          } else {
-            // Swap back if no matches
-            magicGameState.board[index] = magicGameState.board[magicGameState.selectedCell];
-            magicGameState.board[magicGameState.selectedCell] = temp;
-            elements.gameStatus.textContent = 'No magical combinations found! Try a different spell.';
-          }
-          
-          magicGameState.selectedCell = null;
-          updateGameDisplay();
-          
-          if (magicGameState.movesLeft <= 0) {
-            setTimeout(endGame, 1000);
-          }
-        } else {
-          cells[magicGameState.selectedCell].classList.remove('selected');
-          magicGameState.selectedCell = index;
-          cells[index].classList.add('selected');
-          elements.gameStatus.textContent = 'New symbol selected! Choose an adjacent symbol to swap.';
-        }
-      }
-    }
-
-    // Check if two cells are adjacent
-    function isAdjacent(index1, index2) {
-      const row1 = Math.floor(index1 / magicGameState.boardSize);
-      const col1 = index1 % magicGameState.boardSize;
-      const row2 = Math.floor(index2 / magicGameState.boardSize);
-      const col2 = index2 % magicGameState.boardSize;
-      
-      return (Math.abs(row1 - row2) === 1 && col1 === col2) ||
-             (Math.abs(col1 - col2) === 1 && row1 === row2);
-    }
-
-    // Find all matches on the board
-    function findMatches() {
-      const matches = new Set();
-      
-      // Check horizontal matches
-      for (let row = 0; row < magicGameState.boardSize; row++) {
-        let count = 1;
-        let current = magicGameState.board[row * magicGameState.boardSize];
-        
-        for (let col = 1; col < magicGameState.boardSize; col++) {
-          const index = row * magicGameState.boardSize + col;
-          if (magicGameState.board[index] === current) {
-            count++;
-          } else {
-            if (count >= 3) {
-              for (let i = col - count; i < col; i++) {
-                matches.add(row * magicGameState.boardSize + i);
-              }
-            }
-            current = magicGameState.board[index];
-            count = 1;
-          }
-        }
-        
-        if (count >= 3) {
-          for (let i = magicGameState.boardSize - count; i < magicGameState.boardSize; i++) {
-            matches.add(row * magicGameState.boardSize + i);
-          }
-        }
-      }
-      
-      // Check vertical matches
-      for (let col = 0; col < magicGameState.boardSize; col++) {
-        let count = 1;
-        let current = magicGameState.board[col];
-        
-        for (let row = 1; row < magicGameState.boardSize; row++) {
-          const index = row * magicGameState.boardSize + col;
-          if (magicGameState.board[index] === current) {
-            count++;
-          } else {
-            if (count >= 3) {
-              for (let i = row - count; i < row; i++) {
-                matches.add(i * magicGameState.boardSize + col);
-              }
-            }
-            current = magicGameState.board[index];
-            count = 1;
-          }
-        }
-        
-        if (count >= 3) {
-          for (let i = magicGameState.boardSize - count; i < magicGameState.boardSize; i++) {
-            matches.add(i * magicGameState.boardSize + col);
-          }
-        }
-      }
-      
-      return Array.from(matches);
-    }
-
-    // Process matches and handle cascading
-    function processMatches() {
-      const matches = findMatches();
-      if (matches.length === 0) return;
-      
-      const basePoints = matches.length * 10;
-      magicGameState.score += basePoints;
-      gameState.points += Math.floor(basePoints / 2); // Add to house points
-      
-      // Bonus messages based on match size
-      let spellMessage = '';
-      if (matches.length >= 8) {
-        spellMessage = `🌟 LEGENDARY SPELL! ${matches.length} symbols vanquished!`;
-      } else if (matches.length >= 6) {
-        spellMessage = `⚡ POWERFUL MAGIC! ${matches.length} symbols destroyed!`;
-      } else if (matches.length >= 4) {
-        spellMessage = `🔥 EXCELLENT SPELL! ${matches.length} symbols matched!`;
-      } else {
-        spellMessage = `✨ Magical! ${matches.length} symbols matched!`;
-      }
-      
-      elements.gameStatus.textContent = spellMessage;
-      
-      // Animate matched cells
-      const cells = document.querySelectorAll('.game-cell');
-      matches.forEach(index => {
-        cells[index].classList.add('matched');
-      });
-      
-      setTimeout(() => {
-        // Remove matched symbols and apply gravity
-        applyGravity(matches);
-        renderGame();
-        
-        // Add falling animation to new pieces
-        const newCells = document.querySelectorAll('.game-cell');
-        matches.forEach(index => {
-          newCells[index].classList.add('falling');
-        });
-        
-        // Check for chain reactions
-        setTimeout(() => {
-          const newMatches = findMatches();
-          if (newMatches.length > 0) {
-            elements.gameStatus.textContent = '🎆 Chain reaction! More spells brewing!';
-            setTimeout(() => {
-              processMatches();
-            }, 300);
-          }
-        }, 700);
-      }, 800);
-      
-      // Update displays
-      updateGameDisplay();
-      saveGameState();
-      updateDisplay();
-      showToast(`⚡ ${matches.length} spell match! +${Math.floor(basePoints/2)} house points!`);
-    }
-
-    // Apply gravity to make symbols fall
-    function applyGravity(matchedIndices) {
-      const newBoard = [...magicGameState.board];
-      
-      for (let col = 0; col < magicGameState.boardSize; col++) {
-        // Collect non-matched symbols in this column
-        const columnSymbols = [];
-        for (let row = magicGameState.boardSize - 1; row >= 0; row--) {
-          const index = row * magicGameState.boardSize + col;
-          if (!matchedIndices.includes(index)) {
-            columnSymbols.push(magicGameState.board[index]);
-          }
-        }
-        
-        // Fill column from bottom up
-        for (let row = magicGameState.boardSize - 1; row >= 0; row--) {
-          const index = row * magicGameState.boardSize + col;
-          if (columnSymbols.length > 0) {
-            newBoard[index] = columnSymbols.shift();
-          } else {
-            // Add new random symbol at top
-            newBoard[index] = magicalSymbols[Math.floor(Math.random() * magicalSymbols.length)];
-          }
-        }
-      }
-      
-      magicGameState.board = newBoard;
-    }
-
-    // Update game display
-    function updateGameDisplay() {
-      elements.gameScore.textContent = magicGameState.score;
-      elements.movesLeft.textContent = magicGameState.movesLeft;
-    }
-
-    // End the game
-    function endGame() {
-      magicGameState.gameActive = false;
-      let endMessage = '';
-      let bonus = 0;
-      
-      if (magicGameState.score >= 500) {
-        endMessage = `🏆 MASTER WIZARD! Final Spell Power: ${magicGameState.score}`;
-        bonus = 50;
-      } else if (magicGameState.score >= 300) {
-        endMessage = `⭐ SKILLED SORCERER! Final Spell Power: ${magicGameState.score}`;
-        bonus = 25;
-      } else if (magicGameState.score >= 150) {
-        endMessage = `🪄 APPRENTICE MAGE! Final Spell Power: ${magicGameState.score}`;
-        bonus = 10;
-      } else {
-        endMessage = `🧙‍♂️ Practice makes perfect! Final Spell Power: ${magicGameState.score}`;
-      }
-      
-      if (bonus > 0) {
-        gameState.points += bonus;
-        endMessage += ` +${bonus} bonus house points!`;
-        saveGameState();
-        updateDisplay();
-      }
-      
-      elements.gameStatus.textContent = endMessage;
-    }
-
-    // Provide a magical hint to the player
-    function getGameHint() {
-      if (!magicGameState.gameActive) {
-        elements.gameStatus.textContent = 'Begin a new magical quest first!';
-        return;
-      }
-      
-      // Look for possible moves
-      let hintGiven = false;
-      for (let i = 0; i < magicGameState.board.length && !hintGiven; i++) {
-        for (let j = i + 1; j < magicGameState.board.length && !hintGiven; j++) {
-          if (isAdjacent(i, j)) {
-            // Temporarily swap
-            const temp = magicGameState.board[i];
-            magicGameState.board[i] = magicGameState.board[j];
-            magicGameState.board[j] = temp;
-            
-            const matches = findMatches();
-            
-            // Swap back
-            magicGameState.board[j] = magicGameState.board[i];
-            magicGameState.board[i] = temp;
-            
-            if (matches.length > 0) {
-              const row1 = Math.floor(i / magicGameState.boardSize);
-              const col1 = i % magicGameState.boardSize;
-              elements.gameStatus.textContent = 
-                `🔮 The crystal ball reveals: Try enchanting row ${row1 + 1}, column ${col1 + 1}!`;
-              hintGiven = true;
-            }
-          }
-        }
-      }
-      
-      if (!hintGiven) {
-        const mysticalAdvice = [
-          '🔮 Seek symbols that yearn to unite in groups of three or more!',
-          '⚡ The ancient magic flows where similar symbols align!',
-          '🌟 Look closely - magical patterns await your discovery!',
-          '🦉 Wisdom suggests examining the corners and edges first!',
-          '🪄 Sometimes the most powerful spells require patience!'
-        ];
-        
-        const randomAdvice = mysticalAdvice[Math.floor(Math.random() * mysticalAdvice.length)];
-        elements.gameStatus.textContent = randomAdvice;
-      }
-    }
-
-    // ===== MEAL TRACKING FUNCTIONS =====
-
-    // Enhanced calorie estimation
-    function estimateCalories() {
-      const foodName = elements.foodName.value.trim().toLowerCase();
-      if (!foodName) {
-        showToast('🔮 Tell me what magical feast you enjoyed first!');
-        return;
-      }
-
-      let estimatedCalories = 0;
-      let matchedFood = '';
-      let maxMatch = 0;
-
-      // Find best match in database
-      for (const [food, calories] of Object.entries(CALORIE_DB)) {
-        if (foodName.includes(food) && food.length > maxMatch) {
-          maxMatch = food.length;
-          estimatedCalories = calories;
-          matchedFood = food;
-        }
-      }
-
-      // Fallback estimation based on food type keywords
-      if (!estimatedCalories) {
-        if (foodName.includes('chocolate') || foodName.includes('cake') || foodName.includes('cookie')) {
-          estimatedCalories = 400;
-          matchedFood = 'sweet treat';
-        } else if (foodName.includes('salad') || foodName.includes('vegetables')) {
-          estimatedCalories = 50;
-          matchedFood = 'fresh vegetables';
-        } else if (foodName.includes('meat') || foodName.includes('chicken') || foodName.includes('beef')) {
-          estimatedCalories = 200;
-          matchedFood = 'protein source';
-        } else if (foodName.includes('fruit')) {
-          estimatedCalories = 60;
-          matchedFood = 'fresh fruit';
-        } else {
-          estimatedCalories = 150;
-          matchedFood = 'general food item';
-        }
-      }
-
-      elements.foodCalories.value = estimatedCalories;
-      elements.calorieEst.style.display = 'block';
-      elements.calorieEst.innerHTML = `🔮 Ancient grimoire suggests: <strong>${estimatedCalories} calories</strong><br>
-        <small>Based on: ${matchedFood}</small>`;
-      
-      showToast(`✨ Calories divined: ${estimatedCalories} for "${matchedFood}"!`);
-    }
-
-    // Add food to log
-    function addToLog() {
-      const mealTime = elements.mealTime.value;
-      const foodName = elements.foodName.value.trim();
-      const calories = parseInt(elements.foodCalories.value) || 0;
-
-      if (!foodName) {
-        showToast('🪄 Cast your food name into the magical field first!');
-        return;
-      }
-
-      if (calories <= 0) {
-        showToast('🔮 Let me divine the calories first!');
-        estimateCalories();
-        return;
-      }
-
-      // Check for forbidden ingredients (allergens)
-      const forbiddenIngredients = ['walnut', 'shellfish', 'onion', 'garlic', 'dairy'];
-      const containsForbidden = forbiddenIngredients.some(ingredient => 
-        foodName.toLowerCase().includes(ingredient)
-      );
-
-      if (containsForbidden) {
-        showToast('🛡️ Protective charm activated! This contains forbidden ingredients for your quest.');
-        return;
-      }
-
-      const logEntry = {
-        id: Date.now(),
-        mealTime,
-        foodName,
-        calories,
-        timestamp: new Date().toLocaleTimeString()
-      };
-
-      gameState.dailyLog.push(logEntry);
-      gameState.points += 10;
-      updateTotalStats();
-      saveGameState();
-      updateDisplay();
-      clearInputs();
-      
-      showToast(`🎉 ${foodName} added to your feast log! +10 house points!`);
-    }
-
-    // ===== FITNESS TRACKING FUNCTIONS =====
-    
-    // Calculate fitness points based on duration and intensity
-    function calculateFitnessPoints() {
-      const duration = parseInt(elements.fitnessDuration.value) || 0;
-      const intensity = elements.fitnessIntensity.value;
-      
-      if (duration <= 0) {
-        elements.fitnessPointsDisplay.style.display = 'none';
-        return;
-      }
-      
-      let multiplier = 1;
-      switch (intensity) {
-        case 'light': multiplier = 1; break;
-        case 'moderate': multiplier = 1.5; break;
-        case 'vigorous': multiplier = 2; break;
-        case 'extreme': multiplier = 3; break;
-      }
-      
-      const points = Math.floor(duration * multiplier);
-      
-      elements.sessionPoints.textContent = points;
-      elements.dailyFitness.textContent = gameState.totalFitnessTime + duration;
-      elements.fitnessPointsDisplay.style.display = 'block';
-    }
-    
-    // Add fitness activity to log
-    function addFitnessActivity() {
-      const activity = elements.fitnessActivity.value;
-      const duration = parseInt(elements.fitnessDuration.value);
-      const intensity = elements.fitnessIntensity.value;
-      
-      if (!duration || duration <= 0) {
-        showToast('⏱️ Enter your training duration in minutes!');
-        return;
-      }
-      
-      let multiplier = 1;
-      switch (intensity) {
-        case 'light': multiplier = 1; break;
-        case 'moderate': multiplier = 1.5; break;
-        case 'vigorous': multiplier = 2; break;
-        case 'extreme': multiplier = 3; break;
-      }
-      
-      const points = Math.floor(duration * multiplier);
-      const fitnessEntry = {
-        id: Date.now(),
-        activity,
-        duration,
-        intensity,
-        points,
-        timestamp: new Date().toLocaleTimeString()
-      };
-      
-      gameState.fitnessLog.push(fitnessEntry);
-      gameState.points += points;
-      updateTotalStats();
-      saveGameState();
-      updateDisplay();
-      renderFitnessLog();
-      clearFitnessInputs();
-      
-      const intensityText = {
-        light: 'light training',
-        moderate: 'moderate training', 
-        vigorous: 'vigorous training',
-        extreme: 'extreme training'
-      };
-      
-      showToast(`💪 ${activity} logged! ${duration} min of ${intensityText[intensity]} = +${points} house points!`);
-    }
-
-    // Update total statistics
-    function updateTotalStats() {
-      gameState.totalCalories = gameState.dailyLog.reduce((sum, entry) => sum + entry.calories, 0);
-      gameState.totalItems = gameState.dailyLog.length;
-      gameState.totalFitnessTime = gameState.fitnessLog.reduce((sum, entry) => sum + entry.duration, 0);
-      gameState.totalFitnessPoints = gameState.fitnessLog.reduce((sum, entry) => sum + entry.points, 0);
-      gameState.level = Math.floor(gameState.points / 500) + 1;
-    }
-
-    // Clear input fields
-    function clearInputs() {
-      elements.foodName.value = '';
-      elements.foodCalories.value = '';
-      elements.calorieEst.style.display = 'none';
-    }
-
-    // Clear fitness input fields
-    function clearFitnessInputs() {
-      elements.fitnessDuration.value = '';
-      elements.fitnessPointsDisplay.style.display = 'none';
-    }
-
-    // Remove item from log
-    function removeFromLog(itemId) {
-      const index = gameState.dailyLog.findIndex(entry => entry.id === itemId);
-      if (index !== -1) {
-        gameState.dailyLog.splice(index, 1);
-        gameState.points = Math.max(0, gameState.points - 10);
-        updateTotalStats();
-        saveGameState();
-        updateDisplay();
-        showToast('🗑️ Item banished from your log... -10 points');
-      }
-    }
-
-    // Remove fitness activity from log
-    function removeFitnessActivity(itemId) {
-      const index = gameState.fitnessLog.findIndex(entry => entry.id === itemId);
-      if (index !== -1) {
-        const removedActivity = gameState.fitnessLog[index];
-        gameState.fitnessLog.splice(index, 1);
-        gameState.points = Math.max(0, gameState.points - removedActivity.points);
-        updateTotalStats();
-        saveGameState();
-        updateDisplay();
-        renderFitnessLog();
-        showToast(`🗑️ Training session removed... -${removedActivity.points} points`);
-      }
-    }
-
-    // Clear daily log
-    function clearDailyLog() {
-      if (confirm('🌅 Cast a new day incantation? This will clear your feast and training logs but preserve your points and artifacts!')) {
-        gameState.dailyLog = [];
-        gameState.fitnessLog = [];
-        gameState.lastBonusClaim = null;
-        updateTotalStats();
-        saveGameState();
-        updateDisplay();
-        showToast('🌟 A new magical day dawns at Hogwarts! Your daily quests have been reset!');
-      }
-    }
-
-    // Claim daily bonus
-    function claimDailyBonus() {
-      const today = new Date().toDateString();
-      const isInRange = gameState.totalCalories >= CONFIG.TARGET_MIN && 
-                       gameState.totalCalories <= CONFIG.TARGET_MAX;
-      const hasEnoughItems = gameState.totalItems >= 5;
-      const hasEnoughFitness = gameState.totalFitnessTime >= 30; // 30 minutes minimum
-      const canClaim = gameState.lastBonusClaim !== today;
-
-      // Always provide feedback, even if button is disabled
-      if (!canClaim) {
-        showToast('⏰ You\'ve already claimed today\'s elixir! Return tomorrow for a new quest!');
-        return;
-      }
-
-      if (!isInRange) {
-        if (gameState.totalCalories < CONFIG.TARGET_MIN) {
-          showToast(`🍽️ You need ${CONFIG.TARGET_MIN - gameState.totalCalories} more calories for balanced nutrition!`);
-        } else {
-          showToast(`🍽️ You have ${gameState.totalCalories - CONFIG.TARGET_MAX} calories too many! Try to stay within 1800-2200.`);
-        }
-        return;
-      }
-
-      if (!hasEnoughItems) {
-        showToast(`📝 You need ${5 - gameState.totalItems} more meal entries to complete the nutrition quest!`);
-        return;
-      }
-
-      if (!hasEnoughFitness) {
-        showToast(`💪 You need ${30 - gameState.totalFitnessTime} more minutes of training to complete the fitness quest!`);
-        return;
-      }
-
-      // All requirements met - grant the bonus!
-      if (isInRange && hasEnoughItems && hasEnoughFitness && canClaim) {
-        gameState.points += 100;
-        gameState.lastBonusClaim = today;
-        saveGameState();
-        updateDisplay();
-        
-        // Special celebration for completing daily quest
-        showToast('🎉🧪 DAILY QUEST COMPLETED! Perfect balance of nutrition and training! +100 house points! 🏆');
-        
-        // Update button immediately
-        elements.dailyBonus.textContent = '✅ Quest Completed Today!';
-        elements.dailyBonus.disabled = true;
-        elements.dailyBonus.classList.remove('ready');
-      }
-    }
-
-    // Purchase artifact
-    function purchaseArtifact(artifactIndex) {
-      const artifact = MAGICAL_ARTIFACTS[artifactIndex];
-      if (gameState.points >= artifact.cost && !gameState.ownedArtifacts.includes(artifactIndex)) {
-        gameState.points -= artifact.cost;
-        gameState.ownedArtifacts.push(artifactIndex);
-        saveGameState();
-        updateDisplay();
-        renderTrophyShop();
-        renderTrophyCase();
-        showToast(`🎉 ${artifact.emoji} ${artifact.name} acquired! ${artifact.description}`);
-      } else if (gameState.ownedArtifacts.includes(artifactIndex)) {
-        showToast('✨ You already possess this magical artifact!');
-      } else {
-        showToast(`💰 You need ${artifact.cost - gameState.points} more points for this artifact!`);
-      }
-    }
-
-    // Render trophy shop
-    function renderTrophyShop() {
-      elements.trophyShop.innerHTML = '';
-      MAGICAL_ARTIFACTS.forEach((artifact, index) => {
-        const isOwned = gameState.ownedArtifacts.includes(index);
-        const canAfford = gameState.points >= artifact.cost;
-        
-        const trophyDiv = document.createElement('div');
-        trophyDiv.className = `trophy-item ${isOwned ? 'trophy-owned' : ''}`;
-        trophyDiv.innerHTML = `
-          <span class="trophy-emoji">${artifact.emoji}</span>
-          <div style="font-size: 0.8rem; margin-bottom: 5px;">${artifact.name}</div>
-          <div class="trophy-cost">${isOwned ? '✅ Owned' : `${artifact.cost} pts`}</div>
-        `;
-        
-        if (!isOwned) {
-          trophyDiv.style.opacity = canAfford ? '1' : '0.5';
-          trophyDiv.addEventListener('click', () => purchaseArtifact(index));
-        }
-        
-        elements.trophyShop.appendChild(trophyDiv);
-      });
-    }
-
-    // Render trophy case
-    function renderTrophyCase() {
-      elements.trophyCase.innerHTML = '';
-      if (gameState.ownedArtifacts.length === 0) {
-        elements.trophyCase.innerHTML = '<p style="text-align: center; color: #888;">Your magical collection awaits your first artifact!</p>';
-        return;
-      }
-
-      gameState.ownedArtifacts.forEach(artifactIndex => {
-        const artifact = MAGICAL_ARTIFACTS[artifactIndex];
-        const trophyDiv = document.createElement('div');
-        trophyDiv.className = 'owned-trophy';
-        trophyDiv.innerHTML = `
-          <div style="font-size: 2rem;">${artifact.emoji}</div>
-          <div style="font-size: 0.8rem;">${artifact.name}</div>
-        `;
-        trophyDiv.title = artifact.description;
-        elements.trophyCase.appendChild(trophyDiv);
-      });
-    }
-
-    // Update all displays
-    function updateDisplay() {
-      updateHouseDisplay();
-      renderFeastLog();
-      renderFitnessLog();
-      updateMagicMeter();
-      updateStats();
-      updateMotivation();
-      renderTrophyShop();
-      renderTrophyCase();
-    }
-
-    // Render feast log
-    function renderFeastLog() {
-      elements.feastLog.innerHTML = '';
-      
-      if (gameState.dailyLog.length === 0) {
-        elements.feastLog.innerHTML = '<p style="text-align: center; color: #888;">Your magical feast log awaits your first entry!</p>';
-        return;
-      }
-
-      gameState.dailyLog.forEach(entry => {
-        const logDiv = document.createElement('div');
-        logDiv.className = 'feast-item';
-        logDiv.innerHTML = `
-          <div>
-            <strong>${entry.mealTime}:</strong> ${entry.foodName}<br>
-            <small>${entry.timestamp} • ${entry.calories} calories</small>
-          </div>
-          <button onclick="removeFromLog(${entry.id})" class="magical-btn" style="background: #7f0909;">✖</button>
-        `;
-        elements.feastLog.appendChild(logDiv);
-      });
-    }
-
-    // Render fitness log
-    function renderFitnessLog() {
-      elements.fitnessLog.innerHTML = '';
-      
-      if (gameState.fitnessLog.length === 0) {
-        elements.fitnessLog.innerHTML = '<p style="text-align: center; color: #888;">No training sessions logged today. Time to get moving!</p>';
-        elements.totalFitnessTime.textContent = '0';
-        elements.totalFitnessPoints.textContent = '0';
-        return;
-      }
-      
-      gameState.fitnessLog.forEach(entry => {
-        const logDiv = document.createElement('div');
-        logDiv.className = 'feast-item';
-        
-        const intensityEmoji = {
-          light: '🌟',
-          moderate: '⚡',
-          vigorous: '🔥',
-          extreme: '💥'
-        };
-        
-        logDiv.innerHTML = `
-          <div>
-            <strong>${entry.activity}</strong> ${intensityEmoji[entry.intensity]}<br>
-            <small>${entry.timestamp} • ${entry.duration} min • +${entry.points} pts</small>
-          </div>
-          <button onclick="removeFitnessActivity(${entry.id})" class="magical-btn" style="background: #7f0909;">✖</button>
-        `;
-        elements.fitnessLog.appendChild(logDiv);
-      });
-      
-      elements.totalFitnessTime.textContent = gameState.totalFitnessTime;
-      elements.totalFitnessPoints.textContent = gameState.totalFitnessPoints;
-    }
-
-    // Update magic meter
-    function updateMagicMeter() {
-      const percentage = Math.min(100, (gameState.totalCalories / 3000) * 100);
-      elements.magicFill.style.width = percentage + '%';
-    }
-
-    // Update stats display
-    function updateStats() {
-      elements.totalCalories.textContent = gameState.totalCalories;
-      elements.totalItems.textContent = gameState.totalItems;
-      elements.housePoints.textContent = gameState.points;
-      elements.wizardLevel.textContent = `Level ${gameState.level}`;
-
-      // Update status message
-      if (gameState.totalCalories < CONFIG.TARGET_MIN) {
-        elements.statusMessage.textContent = '⚡ Summon more magical energy to your feast!';
-        elements.statusMessage.className = 'status-warning';
-      } else if (gameState.totalCalories > CONFIG.TARGET_MAX) {
-        elements.statusMessage.textContent = '🔥 Powerful magic! Consider balancing your feast.';
-        elements.statusMessage.className = 'status-warning';
-      } else {
-        elements.statusMessage.textContent = '✨ Perfect magical balance achieved!';
-        elements.statusMessage.className = 'status-good';
-      }
-
-      // Update quest tracker
-      updateQuestTracker();
-    }
-
-    // Update quest tracker display
-    function updateQuestTracker() {
-      const today = new Date().toDateString();
-      const isInRange = gameState.totalCalories >= CONFIG.TARGET_MIN &&
-                       gameState.totalCalories <= CONFIG.TARGET_MAX;
-      const hasEnoughItems = gameState.totalItems >= 5;
-      const hasEnoughFitness = gameState.totalFitnessTime >= 30;
-      const canClaim = gameState.lastBonusClaim !== today;
-      
-      // Update nutrition quest
-      const nutritionComplete = isInRange && hasEnoughItems;
-      document.getElementById('nutrition-progress').textContent = 
-        `${gameState.totalCalories}/${CONFIG.TARGET_MIN}-${CONFIG.TARGET_MAX} calories, ${gameState.totalItems}/5 meals`;
-      document.getElementById('nutrition-status').textContent = nutritionComplete ? '✅' : '❌';
-      
-      // Update fitness quest
-      const fitnessComplete = hasEnoughFitness;
-      document.getElementById('fitness-progress').textContent = 
-        `${gameState.totalFitnessTime}/30 minutes`;
-      document.getElementById('fitness-status').textContent = fitnessComplete ? '✅' : '❌';
-      
-      // Update bonus quest
-      const allComplete = nutritionComplete && fitnessComplete;
-      const alreadyClaimed = !canClaim;
-      
-      if (alreadyClaimed) {
-        document.getElementById('bonus-progress').textContent = 'Completed today! ✨';
-        document.getElementById('bonus-status').textContent = '🏆';
-      } else if (allComplete) {
-        document.getElementById('bonus-progress').textContent = 'Ready to claim! 🎉';
-        document.getElementById('bonus-status').textContent = '🧪';
-      } else {
-        document.getElementById('bonus-progress').textContent = 'Complete both quests above';
-        document.getElementById('bonus-status').textContent = '❌';
-      }
-      
-      // Update daily bonus button
-      const buttonReady = allComplete && canClaim;
-      
-      elements.dailyBonus.disabled = !buttonReady;
-      
-      if (alreadyClaimed) {
-        elements.dailyBonus.textContent = '✅ Quest Completed Today!';
-        elements.dailyBonus.classList.remove('ready');
-      } else if (buttonReady) {
-        elements.dailyBonus.textContent = '🎉 Claim Daily Quest Reward! (100 pts)';
-        elements.dailyBonus.classList.add('ready');
-      } else {
-        elements.dailyBonus.textContent = '🧪 Complete Daily Quests First';
-        elements.dailyBonus.classList.remove('ready');
-      }
-    }
-
-    // Update motivation message
-    function updateMotivation() {
-      const hasGoodNutrition = gameState.totalCalories >= CONFIG.TARGET_MIN && gameState.totalCalories <= CONFIG.TARGET_MAX;
-      const hasGoodFitness = gameState.totalFitnessTime >= 30;
-      
-      if (hasGoodNutrition && hasGoodFitness) {
-        const randomMessage = MOTIVATIONAL_MESSAGES[Math.floor(Math.random() * MOTIVATIONAL_MESSAGES.length)];
-        elements.motivation.textContent = randomMessage;
-        elements.motivation.style.display = 'block';
-      } else if (hasGoodNutrition) {
-        elements.motivation.textContent = "🍽️ Great nutrition! Now add some magical training to complete your quest! 💪";
-        elements.motivation.style.display = 'block';
-      } else if (hasGoodFitness) {
-        elements.motivation.textContent = "💪 Excellent training! Now balance your magical nutrition for the perfect day! 🍽️";
-        elements.motivation.style.display = 'block';
-      } else {
-        elements.motivation.style.display = 'none';
-      }
-    }
-
-    // Show toast notification
-    function showToast(message) {
-      elements.toast.textContent = message;
-      elements.toast.classList.add('show');
-      setTimeout(() => {
-        elements.toast.classList.remove('show');
-      }, 3000);
-    }
-
-    // Save game state to localStorage
-    function saveGameState() {
-      localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(gameState));
-    }
-
-    // Load game state from localStorage
-    function loadGameState() {
-      const saved = localStorage.getItem(CONFIG.STORAGE_KEY);
-      if (saved) {
-        gameState = { ...gameState, ...JSON.parse(saved) };
-        updateTotalStats();
-      }
-    }
-
-    // Make functions globally accessible
-    window.removeFromLog = removeFromLog;
-    window.removeFitnessActivity = removeFitnessActivity;
-
-    // Initialize the app when page loads
-    document.addEventListener('DOMContentLoaded', init);
-  </script>
-</body>
+  <p class="tiny" style="margin-top:8px">* Ask about senior discounts and family bundles. Shore‑based instruction only. Follow all local fishing rules.</p>
+</section>
+
+<div class="bar"></div>
+
+<section aria-labelledby="reviews">
+  <h2 id="reviews">Happy Anglers</h2>
+  <div class="testi">
+    <blockquote>
+      “I finally caught my first bluegill! Patient and kind teacher. My son had a blast.”<br><strong>— M. Rivera</strong>
+    </blockquote>
+    <blockquote>
+      “Great intro to knots and rigs. The cheat sheet was super helpful.”<br><strong>— M. Chen</strong>
+    </blockquote>
+    <blockquote>
+      “He set up my fish‑finder and showed me how to read it. Worth every penny.”<br><strong>— M. Thompson</strong>
+    </blockquote>
+  </div>
+</section>
+
+<section aria-labelledby="gallery">
+  <h2 id="gallery">Photos</h2>
+  <div class="gallery">
+    <img src="https://images.unsplash.com/photo-1524190419387-c75de7bd89bd?q=80&w=800&auto=format&fit=crop" alt="Beginner holding a small fish with a big smile">
+    <img src="https://images.unsplash.com/photo-1505128645342-2d5f7d3b82fe?q=80&w=800&auto=format&fit=crop" alt="Hands tying a fishing knot on a line">
+    <img src="https://images.unsplash.com/photo-1508182311256-259f3f5b2b41?q=80&w=800&auto=format&fit=crop" alt="Calm lakeside pier at sunset">
+  </div>
+</section>
+
+<section class="faq" id="faq" aria-labelledby="faq-title">
+  <h2 id="faq-title">FAQ</h2>
+  <details>
+    <summary>Do I need a fishing license?</summary>
+    <p class="muted">Most areas require a state fishing license for participants over a certain age. We’ll help you find the right link for your state.</p>
+  </details>
+  <details>
+    <summary>Where do we meet?</summary>
+    <p class="muted">We use local parks, lakes, and piers with safe, easy access. We’ll confirm a spot when you book.</p>
+  </details>
+  <details>
+    <summary>What if the weather is bad?</summary>
+    <p class="muted">Light rain is fine; heavy rain or unsafe conditions will be rescheduled at no charge.</p>
+  </details>
+  <details>
+    <summary>Do you provide gear?</summary>
+    <p class="muted">For lessons, basic gear is available to borrow. You’re welcome to bring your own rod and reel.</p>
+  </details>
+</section>
+
+<div class="bar"></div>
+
+<section id="contact" aria-labelledby="contact-title">
+  <h2 id="contact-title">Contact & Booking</h2>
+  <div class="contact-card">
+    <div class="card" style="padding:18px">
+      <p><strong>Email:</strong> <a href="mailto:bookings@easycast.example">bookings@easycast.example</a></p>
+      <p><strong>Call/Text:</strong> <a href="tel:+10000000000">(000) 000‑0000</a></p>
+      <p><strong>Service Area:</strong> YOUR CITY & nearby parks</p>
+      <div class="cta" style="margin-top:10px">
+        <a class="btn primary" href="mailto:bookings@easycast.example?subject=Fishing%20Lesson%20Request&body=Name%3A%0APhone%3A%0APreferred%20date%2Ftime%3A%0AExperience%20level%3A%0AParticipants%3A%0ALocation%20(prefered)%3A%0A">Book by Email</a>
+        <a class="btn" href="https://calendly.com/yourname/fishing-lesson" target="_blank" rel="noopener">View Calendar</a>
+      </div>
+    </div>
+    <div class="card" style="padding:18px">
+      <h3 style="margin-top:0">Before You Book</h3>
+      <ul>
+        <li>All lessons are from shore or piers (no boat).</li>
+        <li>Please bring water, hat, sunscreen, and a fishing license if required.</li>
+        <li>Minors must be accompanied by a parent/guardian.</li>
+        <li>We follow local rules and practice safe, respectful fishing.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="tiny" style="margin-top:10px">Not a charter or commercial fishing operation. Instructional services only.</p>
+</section>
+
+<footer>
+  <div class="bar"></div>
+  <div class="wrap">
+    <p>© <span id="year"></span> EasyCast Fishing Lessons • Patient shore fishing lessons by YOUR DAD’S NAME</p>
+    <p class="tiny">This website is informational. Always check current fishing regulations. By booking, you agree to basic safety rules and an assumption of risk waiver.</p>
+  </div>
+</footer>
+
+  </main>  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script></body>
 </html>
