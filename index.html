@@ -2,243 +2,99 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EasyCast Fishing Lessons — Friendly, Affordable Shore Trips</title>
-  <meta name="description" content="Affordable shore fishing lessons and clinics for beginners, families, and seniors. Patient teaching, simple gear, local lakes & piers. Book today!" />
-  <meta property="og:title" content="EasyCast Fishing Lessons" />
-  <meta property="og:description" content="Affordable shore fishing lessons and clinics. Patient, beginner-friendly, local lakes & piers." />
+  <title>Texas Shore Fishing Lessons — Fort Worth Family Fun</title>
+  <meta name="description" content="Family-friendly fishing lessons in Fort Worth, Texas. Traditional Texas fishing, patient teaching, fun for kids and families." />
+  <meta property="og:title" content="Texas Shore Fishing Lessons" />
+  <meta property="og:description" content="Traditional Texas fishing lessons for kids, families, and seniors. Born and raised in Corpus Christi, now teaching in Fort Worth." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://images.unsplash.com/photo-1470165510424-ff3a1e1f0a1b?q=80&w=1200&auto=format&fit=crop" />
-  <meta name="theme-color" content="#1f4f7f" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1508182311256-259f3f5b2b41?q=80&w=1200&auto=format&fit=crop" />
+  <meta name="theme-color" content="#8b2f2f" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&family=Rye&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#0c1a27; --bg2:#0f2234; --card:#12283f; --accent:#2aa3ff; --text:#e9f2fb; --muted:#9fb7cc; --ok:#22c55e; --warn:#f59e0b;
+    :root {
+      --bg:#fffaf5; --accent:#8b2f2f; --text:#1a1a1a; --muted:#555; --card:#fff2e5;
     }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:linear-gradient(180deg,var(--bg),var(--bg2));color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;}
-    a{color:var(--accent);text-decoration:none}
-    a:hover{text-decoration:underline}
-    header{position:sticky;top:0;z-index:50;background:rgba(12,26,39,.8);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08)}
-    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
-    .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
-    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
-    .fish{width:28px;height:28px;display:inline-block}
-    nav a{margin-left:16px;font-weight:600;color:var(--muted)}
-    nav a:hover{color:var(--text)}
-    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;padding:48px 0 28px}
-    .card{background:linear-gradient(180deg,#132a41,#0f2336);border:1px solid rgba(255,255,255,.07);border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
-    .hero .card{padding:26px}
-    .pill{display:inline-flex;align-items:center;padding:6px 12px;border-radius:999px;background:rgba(42,163,255,.15);border:1px solid rgba(42,163,255,.35);color:#cfeaff;font-weight:600;font-size:13px;margin-bottom:12px}
-    h1{font-size:40px;line-height:1.1;margin:8px 0 12px}
-    .lead{color:var(--muted);font-size:18px;line-height:1.6}
-    .cta{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
-    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#1a3552;color:#e9f2fb;font-weight:700;}
-    .btn.primary{background:linear-gradient(180deg,#2aa3ff,#2087d6);border:none}
-    .btn:hover{filter:brightness(1.05)}
-    .heroimg{border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.07)}
-    .heroimg img{width:100%;height:auto;display:block}
-    section{padding:36px 0}
-    h2{font-size:28px;margin:0 0 14px}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .svc{padding:18px}
-    .svc h3{margin:8px 0 8px}
-    .price{font-weight:800;font-size:20px}
-    .muted{color:var(--muted)}
-    .testi{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    blockquote{margin:0;padding:18px;border-left:4px solid rgba(255,255,255,.12);background:#0d2031;border-radius:12px}
-    .faq details{background:#0f2336;border:1px solid rgba(255,255,255,.07);padding:14px 16px;border-radius:12px}
-    .faq details+details{margin-top:10px}
-    .bar{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);margin:28px 0}
-    .contact-card{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
-    footer{padding:24px 0 40px;color:#b7ccde}
-    .tiny{font-size:12px;color:#89a4bc}
-    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    .gallery img{width:100%;height:170px;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,.08)}
-    @media (max-width:900px){.hero{grid-template-columns:1fr}.grid,.testi,.contact-card,.gallery{grid-template-columns:1fr}.heroimg{order:-1}}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Roboto, sans-serif;background:var(--bg);color:var(--text)}
+    header{background:var(--accent);color:#fff;padding:18px 0;text-align:center}
+    header h1{font-family:'Rye',cursive;font-size:36px;margin:0}
+    nav{margin-top:8px}
+    nav a{color:#fff;margin:0 10px;font-weight:700;text-decoration:none}
+    nav a:hover{text-decoration:underline}
+    .hero{padding:40px 20px;text-align:center;background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop') center/cover;color:#fff}
+    .hero h2{font-family:'Rye',cursive;font-size:40px;margin-bottom:12px;text-shadow:2px 2px 4px #000}
+    .hero p{font-size:20px;max-width:600px;margin:0 auto;text-shadow:1px 1px 3px #000}
+    .btn{display:inline-block;margin-top:20px;padding:12px 22px;border-radius:6px;background:#fff;color:var(--accent);font-weight:800;text-decoration:none}
+    section{padding:50px 20px;max-width:1000px;margin:0 auto}
+    h2{font-family:'Rye',cursive;font-size:32px;text-align:center;margin-bottom:20px;color:var(--accent)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+    .card{background:var(--card);padding:20px;border-radius:10px;border:2px solid #e6c7b1;text-align:center}
+    .card h3{font-family:'Rye',cursive;font-size:22px;margin-bottom:10px;color:var(--accent)}
+    .muted{color:var(--muted);font-size:15px}
+    blockquote{background:var(--card);padding:20px;border-left:6px solid var(--accent);border-radius:6px;font-style:italic}
+    .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+    .gallery img{width:100%;border-radius:10px;border:3px solid #e6c7b1}
+    footer{background:var(--accent);color:#fff;text-align:center;padding:20px;margin-top:40px}
+    footer p{margin:6px 0}
   </style>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "EasyCast Fishing Lessons",
-    "description": "Patient, affordable shore fishing lessons for beginners, families, and seniors.",
-    "areaServed": "YOUR CITY, YOUR STATE",
-    "telephone": "+1-000-000-0000",
-    "email": "bookings@easycast.example",
-    "priceRange": "$",
-    "url": "https://easycast.example",
-    "sameAs": ["https://www.facebook.com/yourpage","https://www.instagram.com/yourpage"]
-  }
-  </script>
 </head>
 <body>
   <header>
-    <div class="wrap nav">
-      <div class="brand">
-        <svg class="fish" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 12c3-4 9-6 13-3 1 1 2 2 3 1l2-1-1 2c-1 2 0 3 1 4l1 2-2-1c-1-1-2 0-3 1-4 3-10 1-13-3Z" stroke="#2aa3ff" stroke-width="1.5"/><circle cx="8.8" cy="12" r="1.2" fill="#2aa3ff"/></svg>
-        <span>EasyCast Fishing Lessons</span>
-      </div>
-      <nav aria-label="Main">
-        <a href="#services">Services</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#faq">FAQ</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </div>
-  </header>  <main class="wrap">
-    <section class="hero">
+    <h1>Texas Shore Fishing Lessons</h1>
+    <nav>
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>  <section class="hero">
+    <h2>Fort Worth Family Fishing Fun</h2>
+    <p>Learn traditional Texas fishing from a dad, granddad, and true Texan—born in Corpus Christi, now teaching families in Fort Worth. Patient, family-friendly, and full of good jokes.</p>
+    <a class="btn" href="#contact">Book a Lesson</a>
+  </section>  <section id="services">
+    <h2>What We Do</h2>
+    <div class="grid">
       <div class="card">
-        <span class="pill">Beginner‑friendly • Patient • Local</span>
-        <h1>Catch your first fish with a friendly guide — no boat needed</h1>
-        <p class="lead">Shore and pier lessons for kids, families, and seniors. I bring simple gear, teach safe knots and casts, and fish local lakes and parks. <strong>IT‑savvy help</strong> with fish finders, apps, and basic setup included.</p>
-        <div class="cta">
-          <a class="btn primary" id="bookNow" href="mailto:bookings@easycast.example?subject=Fishing%20Lesson%20Request&body=Name%3A%0APhone%3A%0APreferred%20date%2Ftime%3A%0AExperience%20level%3A%0AParticipants%3A%0ALocation%20(prefered)%3A%0A">Book a Lesson</a>
-          <a class="btn" href="tel:+10000000000">Call/Text: (000) 000‑0000</a>
-        </div>
-        <p class="tiny" style="margin-top:10px">Serving <strong>YOUR CITY & nearby parks</strong>. Fully shore‑based lessons. Verify local fishing license requirements.</p>
+        <h3>First Catch Lesson</h3>
+        <p class="muted">Step-by-step shore lesson for beginners. Learn casting, knots, baiting, and safe handling. Perfect for kids and families.</p>
       </div>
-      <div class="heroimg">
-        <img alt="Smiling angler landing a fish from the shore at sunset" src="https://images.unsplash.com/photo-1516909265231-4f71ca4fbc03?q=80&w=1200&auto=format&fit=crop"/>
+      <div class="card">
+        <h3>Kids’ Fishing Day</h3>
+        <p class="muted">Fun, safety-first fishing designed just for kids (with parents/guardians). Casting games and fish stories included.</p>
       </div>
-    </section><section id="services">
-  <h2>What I Offer</h2>
-  <div class="grid">
-    <article class="card svc" aria-labelledby="svc1">
-      <h3 id="svc1">First Fish Lesson (Shore)</h3>
-      <p class="muted">90‑minute patient lesson: knots, casting, baiting, safe handling, catch‑and‑release basics. Kid‑friendly.</p>
-    </article>
-    <article class="card svc" aria-labelledby="svc2">
-      <h3 id="svc2">Knot & Rig Clinic</h3>
-      <p class="muted">Hands‑on clinic: improved clinch, Palomar, loop knots; simple rigs for local species. Includes take‑home cheat sheet.</p>
-    </article>
-    <article class="card svc" aria-labelledby="svc3">
-      <h3 id="svc3">Rod & Reel Tune‑Up</h3>
-      <p class="muted">Clean and basic maintenance on your gear so it casts smooth. Optional line spooling (line cost extra).</p>
-    </article>
-    <article class="card svc" aria-labelledby="svc4">
-      <h3 id="svc4">Tech Setup Help</h3>
-      <p class="muted">Fish finder / app setup, GPS waypoints, and simple weather & barometer tools. Leverages 20+ years in IT.</p>
-    </article>
-    <article class="card svc" aria-labelledby="svc5">
-      <h3 id="svc5">Family & Senior Days</h3>
-      <p class="muted">Gentle pace, light gear, shaded spots. Patient teaching and seating as needed.</p>
-    </article>
-    <article class="card svc" aria-labelledby="svc6">
-      <h3 id="svc6">Gift Certificates</h3>
-      <p class="muted">Perfect for birthdays and holidays. Email delivery, easy to redeem.</p>
-    </article>
-  </div>
-</section>
-
-<section id="pricing">
-  <h2>Simple Pricing</h2>
-  <div class="grid">
-    <div class="card svc">
-      <h3>Intro Lesson — 90 min</h3>
-      <p class="price">$49 <span class="muted">(1 person)</span></p>
-      <p class="muted">Add a second person for <strong>$20</strong>. Basic gear included for lesson. Park/parking fees not included.</p>
-      <a class="btn" href="#contact">Book this</a>
+      <div class="card">
+        <h3>Family Adventures</h3>
+        <p class="muted">Bring the whole family for a relaxed morning on the shore. Chairs, shade, and plenty of laughs provided.</p>
+      </div>
+      <div class="card">
+        <h3>Texas Know-How</h3>
+        <p class="muted">More than just fishing—you’ll hear Texas stories, life lessons, and outdoor tips passed down the old-fashioned way.</p>
+      </div>
     </div>
-    <div class="card svc">
-      <h3>Knot & Rig Clinic — 60 min</h3>
-      <p class="price">$35 <span class="muted">per person</span></p>
-      <p class="muted">Small groups welcome (3–6). Includes printed cheat sheet.</p>
-      <a class="btn" href="#contact">Book this</a>
+  </section>  <section id="about">
+    <h2>Meet Your Guide</h2>
+    <div class="card">
+      <p><strong>Born in Corpus Christi and now living in Fort Worth</strong>, your guide is a proud dad and granddad with a heart for teaching. He’s known for his patience, humor, and passion for the outdoors. With him, you’ll learn not just how to fish, but how to enjoy a true Texas day by the water—family, fun, and a few tall tales included.</p>
     </div>
-    <div class="card svc">
-      <h3>Rod/Reel Tune‑Up</h3>
-      <p class="price">$25 <span class="muted">per reel</span></p>
-      <p class="muted">Cleaning, lubrication, and function check. Line spooling +$8 (plus line).</p>
-      <a class="btn" href="#contact">Book this</a>
+  </section>  <section id="gallery">
+    <h2>Gallery</h2>
+    <div class="gallery">
+      <img src="https://images.unsplash.com/photo-1524190419387-c75de7bd89bd?q=80&w=800&auto=format&fit=crop" alt="Smiling child holding a fish">
+      <img src="https://images.unsplash.com/photo-1505128645342-2d5f7d3b82fe?q=80&w=800&auto=format&fit=crop" alt="Hands tying a knot on a line">
+      <img src="https://images.unsplash.com/photo-1516909265231-4f71ca4fbc03?q=80&w=800&auto=format&fit=crop" alt="Family fishing on a Texas lake">
     </div>
-  </div>
-  <p class="tiny" style="margin-top:8px">* Ask about senior discounts and family bundles. Shore‑based instruction only. Follow all local fishing rules.</p>
-</section>
-
-<div class="bar"></div>
-
-<section aria-labelledby="reviews">
-  <h2 id="reviews">Happy Anglers</h2>
-  <div class="testi">
-    <blockquote>
-      “I finally caught my first bluegill! Patient and kind teacher. My son had a blast.”<br><strong>— M. Rivera</strong>
-    </blockquote>
-    <blockquote>
-      “Great intro to knots and rigs. The cheat sheet was super helpful.”<br><strong>— M. Chen</strong>
-    </blockquote>
-    <blockquote>
-      “He set up my fish‑finder and showed me how to read it. Worth every penny.”<br><strong>— M. Thompson</strong>
-    </blockquote>
-  </div>
-</section>
-
-<section aria-labelledby="gallery">
-  <h2 id="gallery">Photos</h2>
-  <div class="gallery">
-    <img src="https://images.unsplash.com/photo-1524190419387-c75de7bd89bd?q=80&w=800&auto=format&fit=crop" alt="Beginner holding a small fish with a big smile">
-    <img src="https://images.unsplash.com/photo-1505128645342-2d5f7d3b82fe?q=80&w=800&auto=format&fit=crop" alt="Hands tying a fishing knot on a line">
-    <img src="https://images.unsplash.com/photo-1508182311256-259f3f5b2b41?q=80&w=800&auto=format&fit=crop" alt="Calm lakeside pier at sunset">
-  </div>
-</section>
-
-<section class="faq" id="faq" aria-labelledby="faq-title">
-  <h2 id="faq-title">FAQ</h2>
-  <details>
-    <summary>Do I need a fishing license?</summary>
-    <p class="muted">Most areas require a state fishing license for participants over a certain age. We’ll help you find the right link for your state.</p>
-  </details>
-  <details>
-    <summary>Where do we meet?</summary>
-    <p class="muted">We use local parks, lakes, and piers with safe, easy access. We’ll confirm a spot when you book.</p>
-  </details>
-  <details>
-    <summary>What if the weather is bad?</summary>
-    <p class="muted">Light rain is fine; heavy rain or unsafe conditions will be rescheduled at no charge.</p>
-  </details>
-  <details>
-    <summary>Do you provide gear?</summary>
-    <p class="muted">For lessons, basic gear is available to borrow. You’re welcome to bring your own rod and reel.</p>
-  </details>
-</section>
-
-<div class="bar"></div>
-
-<section id="contact" aria-labelledby="contact-title">
-  <h2 id="contact-title">Contact & Booking</h2>
-  <div class="contact-card">
-    <div class="card" style="padding:18px">
+  </section>  <section id="contact">
+    <h2>Book Your Lesson</h2>
+    <div class="card">
       <p><strong>Email:</strong> <a href="mailto:bookings@easycast.example">bookings@easycast.example</a></p>
-      <p><strong>Call/Text:</strong> <a href="tel:+10000000000">(000) 000‑0000</a></p>
-      <p><strong>Service Area:</strong> YOUR CITY & nearby parks</p>
-      <div class="cta" style="margin-top:10px">
-        <a class="btn primary" href="mailto:bookings@easycast.example?subject=Fishing%20Lesson%20Request&body=Name%3A%0APhone%3A%0APreferred%20date%2Ftime%3A%0AExperience%20level%3A%0AParticipants%3A%0ALocation%20(prefered)%3A%0A">Book by Email</a>
-        <a class="btn" href="https://calendly.com/yourname/fishing-lesson" target="_blank" rel="noopener">View Calendar</a>
-      </div>
+      <p><strong>Phone:</strong> <a href="tel:+10000000000">(000) 000‑0000</a></p>
+      <p><strong>Location:</strong> Fort Worth, Texas & nearby lakes</p>
+      <a class="btn" href="mailto:bookings@easycast.example?subject=Fishing%20Lesson%20Request">Email to Book</a>
     </div>
-    <div class="card" style="padding:18px">
-      <h3 style="margin-top:0">Before You Book</h3>
-      <ul>
-        <li>All lessons are from shore or piers (no boat).</li>
-        <li>Please bring water, hat, sunscreen, and a fishing license if required.</li>
-        <li>Minors must be accompanied by a parent/guardian.</li>
-        <li>We follow local rules and practice safe, respectful fishing.</li>
-      </ul>
-    </div>
-  </div>
-  <p class="tiny" style="margin-top:10px">Not a charter or commercial fishing operation. Instructional services only.</p>
-</section>
-
-<footer>
-  <div class="bar"></div>
-  <div class="wrap">
-    <p>© <span id="year"></span> EasyCast Fishing Lessons • Patient shore fishing lessons by YOUR DAD’S NAME</p>
-    <p class="tiny">This website is informational. Always check current fishing regulations. By booking, you agree to basic safety rules and an assumption of risk waiver.</p>
-  </div>
-</footer>
-
-  </main>  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script></body>
+  </section>  <footer>
+    <p>© <span id="year"></span> Texas Shore Fishing Lessons</p>
+    <p>Teaching families the joy of fishing, Texas style.</p>
+  </footer>  <script>document.getElementById('year').textContent=new Date().getFullYear()</script></body>
 </html>
